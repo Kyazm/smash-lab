@@ -1,0 +1,68 @@
+[
+  {
+    "id": "900000000000000050",
+    "channel_id": "1001",
+    "content": "反射があるのでパラライザーは根本狙い。空N置きが強い。",
+    "timestamp": "2024-05-03T10:00:00.000000+00:00",
+    "edited_timestamp": "2024-05-03T10:05:00.000000+00:00",
+    "author": { "id": "u1", "username": "me" },
+    "attachments": [],
+    "type": 0
+  },
+  {
+    "id": "900000000000000040",
+    "channel_id": "1001",
+    "content": "崖上がりの読み合い。下B展開が刺さる。",
+    "timestamp": "2024-05-02T09:00:00.000000+00:00",
+    "edited_timestamp": null,
+    "author": { "id": "u1", "username": "me" },
+    "attachments": [
+      {
+        "id": "att777",
+        "filename": "ledge_setup.png",
+        "size": 12345,
+        "url": "https://cdn.discordapp.com/attachments/1001/att777/ledge_setup.png",
+        "content_type": "image/png"
+      }
+    ],
+    "type": 0
+  },
+  {
+    "id": "900000000000000060",
+    "channel_id": "1001",
+    "content": "参考クリップ",
+    "timestamp": "2024-05-03T11:00:00.000000+00:00",
+    "edited_timestamp": null,
+    "author": { "id": "u1", "username": "me" },
+    "attachments": [
+      {
+        "id": "att888",
+        "filename": "combo.mp4",
+        "size": 999999,
+        "url": "https://cdn.discordapp.com/attachments/1001/att888/combo.mp4",
+        "content_type": "video/mp4"
+      }
+    ],
+    "type": 0
+  },
+  {
+    "id": "900000000000000070",
+    "channel_id": "1001",
+    "content": "botの自動投稿（除外されるべき）",
+    "timestamp": "2024-05-03T12:00:00.000000+00:00",
+    "edited_timestamp": null,
+    "author": { "id": "bot1", "username": "SomeBot", "bot": true },
+    "attachments": [],
+    "type": 0
+  },
+  {
+    "id": "900000000000000080",
+    "channel_id": "1001",
+    "content": "",
+    "timestamp": "2024-05-03T13:00:00.000000+00:00",
+    "edited_timestamp": null,
+    "author": { "id": "u1", "username": "me" },
+    "attachments": [],
+    "type": 6
+  }
+]
