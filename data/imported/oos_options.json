@@ -1,0 +1,3362 @@
+[
+  {
+    "id": "4a20f21b-8bfd-5ad4-b8d6-ddca2220b36a",
+    "move_id": "e2f0a133-fe13-5361-b9f0-a067e234a4a1",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "bc17f0d3-4d5c-5c64-b9a7-3a027c17bf51",
+    "move_id": "95b2f9df-8b97-5fc0-8545-9b18e04483a8",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "db19cfa2-33a7-5ee5-a4d3-90dd3d85ce13",
+    "move_id": "66f0e6b5-396d-5256-8dc9-08365e3956ec",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "f5fa9e65-61ca-5ad6-8252-d1a8488552e0",
+    "move_id": "3c60e3d0-c581-50a2-90ae-feb7652650cf",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "bb9bcbad-5c2a-539a-b965-26328148154e",
+    "move_id": "342dd928-8a6e-5722-b828-1b431b73a6d0",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "1dd91ab7-db50-5859-bbe8-fd2d039aca4c",
+    "move_id": "b7b609f3-8c5a-5f24-8579-3e803619003b",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "3307fe3c-99b3-562e-81da-4ceb6a5e73f6",
+    "move_id": "f5dc5a94-184f-56a3-b86d-20c02ef83a31",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "1c08fd2e-8262-5a3c-8853-d98c9699b1e8",
+    "move_id": "f2087ff8-14db-5106-a40a-7559856e3ec1",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "81229f3e-d1c5-5907-b700-a0b5e5c67544",
+    "move_id": "c6f30319-c349-542a-92bb-86736e856fb3",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "435428df-4037-50b8-be54-415f1d218504",
+    "move_id": "9df26d11-f904-5bfd-9ca8-1ea3906fc4d4",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "11a2fae1-c5d2-59c1-ada4-492cce6eec46",
+    "move_id": "e362a735-7140-52ad-a2da-f543ad7e3a6e",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "c6c6a610-afc1-5dfd-b513-a274007ded2f",
+    "move_id": "3edb5574-6bb8-5b60-a8af-ab1661b22343",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "b072c3f9-3029-51c2-9b96-e73a4fe2d5e5",
+    "move_id": "44223918-0900-5e8c-a9b9-e9759a2d26e2",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "bfc83a16-1445-5470-b236-6590b9b60e70",
+    "move_id": "762dc126-c328-5f1a-a067-d31b1444a05d",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "9efca5d3-04f3-52f6-accb-f2c6482ca976",
+    "move_id": "eaab3083-1b3d-5dad-9dcc-a38c95b2d35d",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "e7adf666-fb17-5bf5-9285-8f49e908b200",
+    "move_id": "58362be8-5abf-5643-8dfe-b36bb7e47efd",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "aaaba6f5-7aea-5bb2-bd2d-1cd50dd9150c",
+    "move_id": "97620917-8b24-52cf-bbd9-2447e02669cb",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "f523b1dd-bea7-5a6b-a57f-8ccb0c925a9e",
+    "move_id": "551a9c04-ad55-572a-b8b0-e6dc6dc423ff",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "c31f682b-88cb-50d1-83ba-99256ddbc4e3",
+    "move_id": "4f596379-09b2-544d-ba0d-51dbb77583a8",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "6cb9ed8a-6060-5d86-a074-2700d0bbc08e",
+    "move_id": "c50de246-1dcc-5bb9-8fc3-5be0e8e2a308",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "5f87256d-1341-5be4-9378-c0f88bb5a747",
+    "move_id": "32887f33-07a9-51ed-9105-dfcfe97a643c",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "1bdd3bdd-be88-5c64-9c8d-b5c2eedb7e84",
+    "move_id": "a0624b9d-c0b5-544d-89a6-4a4fffa82cbd",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "87ea7127-125f-5cf3-9e51-102e902a6a4c",
+    "move_id": "82f5cf4f-5fca-5f54-9229-a352a0f5f7ce",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "97d99aff-3667-562f-8d84-5ef4bf7f7565",
+    "move_id": "18b31435-1188-5d03-813b-4992f3dcb05e",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "50092108-5973-54cd-bebb-0c7031655727",
+    "move_id": "8043037e-75e0-566d-8416-d6e0b3aef0a7",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "f3a5f66a-06b8-5431-b5f6-7873e833c982",
+    "move_id": "575b848e-976e-5d5c-a2ab-1659580f58e9",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "4e5fc21a-3b36-5ca3-ab72-120dc06c466f",
+    "move_id": "36169bd5-fde6-5527-b515-b1ebd2c0ed1b",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "136e4dcd-3eaa-5d17-9c5a-3b2703906229",
+    "move_id": "730f944e-fd0f-566e-a803-44473f4070f9",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "0b0cb1f6-fe53-5ea7-ad63-9ab38940164f",
+    "move_id": "5bd25e34-d583-588b-af35-1abd1a28f114",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "212afe7d-cb8f-5a97-848c-03adb9d91a8a",
+    "move_id": "2a99b6d3-3fce-5f07-9b7f-6fcf58e77cdd",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "55cee8cf-3abe-51f9-90a8-25ce2d37d023",
+    "move_id": "d0893807-f1e3-5dd8-962c-d3339a5a56d2",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "7550ef98-8b5b-519a-860a-2c499c7f5f10",
+    "move_id": "025c1bb4-1688-5ef2-ab4c-bc9318969ae5",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "e6567857-5695-5565-932b-725dc4f4609d",
+    "move_id": "d13f403d-ba38-5422-b7d9-4cb526ff4661",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "c33fd4ce-7a62-5f0e-a9f6-89a35d3200f8",
+    "move_id": "81273bf8-604f-519f-9f86-e14eb3e58ef0",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "3b05b78c-d6c8-5906-83fa-7d3fa525fd82",
+    "move_id": "57093a60-1dfe-5b5b-b4aa-eb028399afba",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "e4ea8ed3-3071-505d-8b2d-06dedfb5198e",
+    "move_id": "5869ff7e-5e04-5326-a0a1-74895d35fccd",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "a6618372-cfe4-5343-a222-10c740ceda52",
+    "move_id": "14a289c0-14e3-5a26-9850-44a01814652d",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "ece4820d-21a4-56ab-a653-f618f516ed8b",
+    "move_id": "9c795a64-30f7-5a98-ac71-4945d769a9bd",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "673adc25-a217-5561-8ed0-9a1a9cdb1812",
+    "move_id": "eaefd3bc-1c81-599a-84c0-a949a9abc1c2",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "8e25d506-266e-54a8-b2c1-4254147ac8a6",
+    "move_id": "9a43c8b1-9103-571b-b364-fbe1b3e81416",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "72d526f3-59e0-52d5-b996-ec4f2f06fa53",
+    "move_id": "ee70dc7d-230a-5f18-bc15-8677114ec7cb",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "838b58ba-a5e7-5e2f-9302-1db17be718c7",
+    "move_id": "ef48fe91-f136-57d7-9ce1-f85d48c13ac4",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "8a839042-21e0-5351-903f-5e3337978f58",
+    "move_id": "0d90e158-4a2d-5eed-8e72-3ac840d81ffa",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "2cd410e9-02f8-5fec-a5e9-c5795a1360d1",
+    "move_id": "34aa37a7-dc1a-5a76-87af-fd359ab905c8",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "d80020aa-700c-536d-b32a-eb9adc1b9633",
+    "move_id": "355c5871-4ad7-5b86-a5dc-6508a646bdfd",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "6421e5f7-5e8e-5287-b405-1c5d2b2d175f",
+    "move_id": "57b71c6b-0c82-582d-b449-1a15f997fd72",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "0c05c571-0fc4-5f9d-98c0-d7db38e46878",
+    "move_id": "fd961cc8-2653-544c-9000-67a5b2602992",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "4929fb7e-1b00-5caa-b34e-2388feaae334",
+    "move_id": "0d7d2fd1-af61-50f6-bc99-70af092334d9",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "5a88acb0-6dcb-5916-af02-45a46ccea45d",
+    "move_id": "50c7cb84-d061-5e8f-89c7-6b91873823f1",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "bb3ffc05-f44d-5b35-8322-245b9bae4c3f",
+    "move_id": "08164c9d-8c90-5829-abcc-65e09cacb249",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "f6e20375-e5b4-5f2e-981e-790d2d49dae7",
+    "move_id": "41202845-410c-5839-b23a-e5fda66a1dd4",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "c2caa584-6e62-5c25-9cc9-63fd52c65b0d",
+    "move_id": "505a4f6e-7fb6-5a3a-b07d-4bbc3342b014",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "e462583d-e1af-5f12-b554-bc86970c6afe",
+    "move_id": "2e2d0ce4-ed73-5bda-b2eb-009e82037854",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "4176f13a-cb07-5bf1-b987-1b79548edf65",
+    "move_id": "fbf2941f-8373-5363-b922-9cfc248caa2c",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "a75a73a5-2c43-56ba-b9e5-1a0ff12e228d",
+    "move_id": "9d7b3294-15e0-525e-9f77-9bc8427be342",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "ea6ec3aa-6d7a-5849-9289-649ce7b4817a",
+    "move_id": "0b14542b-de97-5041-89b4-bee5208f1a09",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "dad8133d-89ce-5699-9533-fa0f533e014f",
+    "move_id": "ed8913c6-8207-5739-9dec-4bbef18b67b4",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "255eb811-a6db-59ec-84eb-54a1a8b89726",
+    "move_id": "855d13db-cd44-54e1-8230-d7a8279ca959",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "13d80f66-dc7b-52af-b3ea-457b8ca6cec7",
+    "move_id": "8e79e4ca-d6de-5eb0-91bd-0f510f52c344",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "b80d6564-1d99-5b44-82fb-470aefe34a63",
+    "move_id": "120d36db-563a-59e0-8a43-0e9a35c1c41a",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "a2e3dd6c-6e26-56dc-9216-b0150e16b53c",
+    "move_id": "754b2823-7bce-5b4a-b0bf-985528280de3",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "5fa8d4e3-d24f-5faa-95f5-762a7ce4821a",
+    "move_id": "823e0f3c-da67-5f27-a256-d4a6014069ad",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "511adbfb-6329-5035-8707-5cf46816fc04",
+    "move_id": "765675d3-5d25-594e-b032-e1e73bfa867d",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "3971c5e8-59e0-5702-8f3f-ebddbb090102",
+    "move_id": "57936242-b69e-56a8-89ef-87baa3151b93",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "c5d5b671-7473-5a6c-91e4-0abe34665ef7",
+    "move_id": "146d8a33-4075-5a13-8c99-0e28030487e2",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "e4fed4bb-10f0-50a2-a7c6-cd14cebb6dc7",
+    "move_id": "5f89688f-7e69-5f61-b9f7-9ef6a3e6602e",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "6c513c81-e2bb-5d92-a48f-78a6cd473dfd",
+    "move_id": "2af01c70-d49b-5ab8-baec-f0e6593e75a2",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "f623784a-6854-5a20-abc4-61f635f81c6a",
+    "move_id": "91c3365d-5a50-5ae0-99d8-d3f9a3d96a59",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "1dd9c344-0905-505c-a66a-db8443291ffb",
+    "move_id": "c6ba9439-b729-5221-a977-3c2a728432f0",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "c2c11d86-5e6f-55c6-94fb-6ea36faca866",
+    "move_id": "e5a986b1-38ce-53a7-b56e-c6d1d56e4914",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "aa20b7a8-c45a-5671-97eb-7b6791b9adca",
+    "move_id": "ac48edd3-28ec-54a5-9fac-f4672eebd280",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "cefc8bb8-8af9-5dfc-9c71-8fd96bfe5e19",
+    "move_id": "219f2d7b-f500-58e4-a64b-3e523537c985",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "3c30103e-d1e3-50e9-b2bc-6a16af0a3335",
+    "move_id": "aded2026-510f-55d7-8249-cdc87bae24b7",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "96c23705-213e-523e-b2f1-fc9da6a7b6a7",
+    "move_id": "699975c0-c6ba-543d-9295-82259a661b16",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "9be47bc5-8b04-5e45-9b45-be41c5d7d96e",
+    "move_id": "c844802e-054d-5171-8463-95d526ceef99",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "a8ce38ed-996b-57cf-9f11-0c8685666b91",
+    "move_id": "6a8b4331-c28e-5dea-bf8c-09f3ed858212",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "1fd31ffe-3cde-56c5-8519-af83a88bbccf",
+    "move_id": "7dcd7339-a7e4-5a08-9ce8-3c71c4ec98e0",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "a1194749-112d-5500-b35f-beb6d8f7342f",
+    "move_id": "78059894-5597-5f23-bac8-6d1fae05a0d2",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "a4c2ea81-3c33-5046-8cd3-d9d85dc190ed",
+    "move_id": "64333a81-98e1-5e52-ae6e-3fe4d8cef648",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "8a78a44a-2581-59a9-8b42-702def26e5be",
+    "move_id": "9359d19f-3255-5cf6-8974-9bae2528083d",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "7ff912c1-ddfc-5e19-90d4-c88450144b48",
+    "move_id": "ad63f48c-9992-5305-bb83-dfb986b45db6",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "4dff0dc1-d3d6-5e6d-8f9c-ea956f35ed51",
+    "move_id": "6e5793b2-1835-5549-99c7-b223eecfeccc",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "c67b1e3b-6064-505e-b6be-7870d0ba45d0",
+    "move_id": "79dc3224-77c0-58cb-9835-491e949c4c97",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "2227459a-dcf7-59d4-807e-372e1e351a0f",
+    "move_id": "63fb889c-c83f-5043-9d10-c9b5c66831af",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "38d91146-6cb0-5a26-8cbf-77f2e8ad67a8",
+    "move_id": "ea04c36c-8e3b-5eb4-9622-12a932af7dbc",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "d45c59ab-e36d-5f6a-b19d-1224e79dc937",
+    "move_id": "0a2c591e-f946-5658-ae3d-172dfe7b6007",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "0846dcdb-ec4e-5d01-a0ba-5acfb684c70e",
+    "move_id": "4906ce09-5d67-500c-9271-d156150c51bb",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "3915bc4a-a52a-50e4-bca2-2ab005ed98f5",
+    "move_id": "9ffae853-81ba-5478-8ff0-c63013b2f1b1",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "bb5fc391-c779-5e47-b0c0-43bba06c5ad2",
+    "move_id": "101337ff-5bd3-5e13-98dc-d986e3706b0e",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "719a42ac-962a-507c-8145-3cce9503b289",
+    "move_id": "c6ddbd2b-b2f0-54dd-bc3c-d614b38463d2",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "f5e32041-7645-5886-80e3-9744d223e2fc",
+    "move_id": "17ee2406-c223-54f2-b621-fe8c97cdd669",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "51399656-1c64-5b0e-b2d1-4a6a4dbceba9",
+    "move_id": "c408debc-71cd-5ba4-8771-0fbbab92a05b",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "1031c681-4b5d-599a-8943-634f5fc26154",
+    "move_id": "e1266c15-0517-52ad-82d2-1a9ba412d7aa",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "f705e0fe-2cf9-56ae-ac0f-0092df0b0377",
+    "move_id": "92558922-7cd5-5d4a-9c62-0f5f22bf4713",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "232e30cc-0d7c-551a-a752-d4c12782035b",
+    "move_id": "b4925bd5-5f73-588a-bc30-6a9c2789f0d2",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "beab6a5b-c26d-575b-a256-39461e1bd81a",
+    "move_id": "46d3a0ad-8bf9-5ced-b3f8-b82558a8f715",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "26a03177-b907-52df-b08f-2c6916ae84ca",
+    "move_id": "1f720e96-10a4-579b-96e3-60906d2668df",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "3f82b4da-ff18-530f-9ac6-fe4d86dae36f",
+    "move_id": "b36f0b8b-8c32-5ece-81ed-b8d9fac48e8b",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "c5ffe5fe-6a1f-50a7-b0fd-921408cb6eee",
+    "move_id": "271a4953-0c42-5ca1-a7e6-ff2493e2aecd",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "0fb88825-c7f8-5e85-aa99-7ce499a7054d",
+    "move_id": "4095fc0c-13c3-55d2-beb1-8b58d7cc5d23",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "a2c59eab-18db-5146-83f7-f15ff0d7533d",
+    "move_id": "7bfa951c-b46e-585e-bfaa-63e9f822fdc5",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "589661ee-2d8b-599a-8746-b1d35ed7e5ce",
+    "move_id": "183a0c0f-86a2-5da7-aad8-6be0eebb60df",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "30ea4029-b75b-52a4-b88e-5275a21aaa25",
+    "move_id": "bb98acc3-a694-5ac2-88bb-44740e53b695",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "75dddc99-3d5a-55c8-98c0-63a6da35b8f6",
+    "move_id": "5f6c3656-da9b-5755-a915-98a549f48c71",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "ba7048a9-65d7-5d1d-a5ef-9274bfe7beb2",
+    "move_id": "527a4828-b5b3-5b66-b409-1e43fee086e9",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "9696e717-141c-5739-bdbf-fc7af2583c73",
+    "move_id": "a598144a-6356-5c6d-9d31-7881bbb2af2f",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "c014e8b2-75de-50b9-8db3-672e206ba02d",
+    "move_id": "4dc9b68e-177d-57e5-8898-74b26045097c",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "e536ceba-4641-5ace-a2e8-66a6e02e2df9",
+    "move_id": "2cfb2a2c-c014-5973-a153-7b2d5169f5a4",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "ec2d5f70-6148-5e81-b3aa-37135b68d943",
+    "move_id": "503d226e-583d-56f8-980b-a87ad60760f5",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "66e34e11-9b69-5d6c-9747-837f31defc1e",
+    "move_id": "e4564919-6eff-5c3d-ba2c-226a19ac58ed",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "ea307a00-d203-5205-ba09-5e28c146b7e7",
+    "move_id": "46542660-30bb-52ac-92ba-b6df65101a09",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "54f52a49-9a6f-5b14-818e-ac0b1827dbf8",
+    "move_id": "b43fa24a-1442-5a90-be8c-cb82f2471cfe",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "d65e9873-813b-55ea-9ca9-72274a484a8e",
+    "move_id": "ff65c2d1-e82b-5898-80ba-e813bd755dab",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "0dd461c9-ea0d-5326-8778-b779ef69db70",
+    "move_id": "cac42df6-a1c7-520c-a06e-5d3acb6db644",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "6762fcda-634d-518a-bf06-691f24b9fd49",
+    "move_id": "e58d9281-6c3e-530b-b295-eeb86c726dbc",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "13e832ce-f4aa-5ce4-8744-d3be2715f95f",
+    "move_id": "fa4f7ce6-6f9a-5b58-8ceb-da899382b742",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "c7c3b9e5-8fad-5434-9d92-f4921e51297f",
+    "move_id": "ff44c3a3-db32-508d-8b41-42d96f036406",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "21a24fe8-31ca-5d33-ac5f-152ef48b96ec",
+    "move_id": "4e9e9714-04d0-594a-b933-478b852f39ef",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "9594c5f7-e1e7-5202-af74-297dec64c22b",
+    "move_id": "58a4f619-bf84-53c4-8939-8aad3fc2c809",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "0d9f7047-1aa3-5899-9e76-da2d516f8e6e",
+    "move_id": "c53a74b3-4317-5559-8e56-adbecc2eff1f",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "759f5319-68a6-50e7-b3f7-0f101d8daf4f",
+    "move_id": "2a84d73c-5243-5857-8e8d-a153e5a8ab32",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "cdc40af5-f24f-5ecc-be1c-da9f08cdbedd",
+    "move_id": "c46858ea-ca7c-5a4d-97a5-cab1f3152e37",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "c913824c-1ce8-561f-bc38-719fb8f329df",
+    "move_id": "3d46d0a8-c0b1-5c1d-b3b7-77e776c6876a",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "2064c11d-3422-5322-9496-8514fdd11d34",
+    "move_id": "f3235535-a0cc-52fb-a0f1-3fac815db47e",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "3d343914-cbe7-5f53-bc28-c581d21ab871",
+    "move_id": "377a0537-e4c9-5940-b5a5-72bbe1b366ec",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "5821ab4a-744a-579f-8f26-aa20a38640df",
+    "move_id": "b0319c69-4a6b-5b45-9e22-2294bbaea5c0",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "e70f97c1-2b64-5371-8456-dce1987a193c",
+    "move_id": "91bfb007-f3e4-5de5-b539-6965d3f0b974",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "fb742027-c324-5859-b9a4-56327e94dd19",
+    "move_id": "4783abc9-dd7d-5628-96c3-79f834c7262f",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "fa8a514e-ee54-582f-9d5e-427445efffcd",
+    "move_id": "c9603d44-9c6b-5ae0-acd9-4866d9c372cb",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "6b43a085-512f-550d-9ba6-3ff73586cbe0",
+    "move_id": "6818441b-30ae-563d-9861-9cb25ee81fad",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "b298a161-3c68-5cd1-8d19-864bcb6b7b67",
+    "move_id": "3e6cb698-8b47-5708-bdb3-6bf5f2bec52b",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "316d2225-dbdf-57f9-aa5f-9e428768bc1b",
+    "move_id": "8e76972d-b126-55bc-96d7-03c25120b575",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "f2ab64e6-10c0-5201-a0fc-516cf3e69e3e",
+    "move_id": "5b56b2bf-68a2-58c4-b0f0-8e4c414e8dd2",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "f86db953-f277-5495-9444-83659af54c27",
+    "move_id": "4996696f-fba3-57e2-b1e6-dea6144553e8",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "95d6abde-5035-5253-9f91-65f3954deef6",
+    "move_id": "39fe35b5-4672-5d1c-a466-0683dbf84831",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "4da7097f-d595-5507-8e94-5467caa81ebc",
+    "move_id": "e3178100-ac7f-5bb7-84f0-217348cfe446",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "cf4bacb0-d883-5b17-b261-1c74fa1fcdda",
+    "move_id": "b226dfe8-4d0c-5e2c-99fd-cd4239e509cd",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "78104e5f-7d3d-5d13-94aa-7010e5721a21",
+    "move_id": "ce05e9aa-bc5a-5ef8-8700-408d91e16a01",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "67927f5f-fefa-5f42-b748-cb15ddb5e3fe",
+    "move_id": "c9098a3d-d95d-55bc-939d-be87fbb7f7a1",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "10db2fc1-f75d-596f-8dca-331f1abd610e",
+    "move_id": "da25a53b-36f7-5bab-bcf8-670a118a3af9",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "3e759471-a9ea-550c-a8b8-092d659e5538",
+    "move_id": "b56c5174-fc0e-5aa0-941d-fcccab54fb89",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "dbd85d81-8288-5b1a-9c07-cf2f58314552",
+    "move_id": "a74b5496-e33c-5e16-b80c-7e57a6fafc63",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "e937a154-56ed-5555-8198-756b95b1f1e0",
+    "move_id": "ce628c04-0677-54f0-960f-1ae1d724baad",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "0134dfb2-f87c-520e-bde9-4893d84fcfd5",
+    "move_id": "43d58a78-b46e-5d4b-9f32-3bc3f23aa4e4",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "6d3ab583-ce64-5fd4-801f-ac7845e9471e",
+    "move_id": "3d22b142-6390-56b4-a8c7-1ba61c66a47e",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "66470d99-1147-5a12-93c2-9c75ed4e0730",
+    "move_id": "25d8f6e2-4547-5c18-b836-dc06935d8bd5",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "694287b2-69b0-5942-922c-c930bc606d98",
+    "move_id": "8719a9d8-513c-540a-a336-dedc8f6ac815",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "37f4deb1-2b35-5fa4-9861-2f45cd67efdf",
+    "move_id": "6cd3100b-2e07-595f-9f7d-7213d02fa054",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "e45c237c-f623-56a7-8517-fc3addf5bf3e",
+    "move_id": "2baf5873-e262-51c9-85d0-d523ee24284e",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "f26fdbb3-ca59-558a-87ab-bb4f75e0c1de",
+    "move_id": "bcd1e41a-8648-54ea-9779-9391461378ec",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "38e62bfd-2714-5c88-9916-59b351a00719",
+    "move_id": "d2be5240-8231-5bd6-9cd0-1e66eecf39d4",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "e8d55ed0-4d17-57f5-9221-3effd89a2039",
+    "move_id": "16c60188-38fa-503b-9cd5-b660cfd3be45",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "d7e8bb27-045b-5b46-b9e5-1f1b22580500",
+    "move_id": "e9291e0e-ee35-5095-bbde-80901d1b2cf5",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "5b90109e-e972-59d1-a293-901506e8de16",
+    "move_id": "db11952c-b1b8-5bc1-bb99-ed6d48f43450",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "510f772a-199f-571d-949b-7e0359ace2a2",
+    "move_id": "3c77994b-990b-5b0b-9c84-b16ae4cead3a",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "dbdfef11-3d7e-58ac-bc03-c856ce29067e",
+    "move_id": "1de27258-b6d1-5502-a31c-670b15d6fb8e",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "6cc6d2b1-ff8c-5f1b-b537-01e173cf4ab7",
+    "move_id": "883a48cd-804e-506e-8aa7-0fdbe3164fde",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "77fe140c-b459-59d8-bf14-e87341851b72",
+    "move_id": "9d8176b3-9e0c-508d-92e5-64b19c075932",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "fbe7dc0c-ba8c-5178-817e-299dc234aa88",
+    "move_id": "ac110710-4225-5eed-876d-2671cb43bf86",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "3958eb3a-7053-580e-b2ae-4f91afce47d4",
+    "move_id": "2a68a4bb-483c-5151-bfdf-21f1ff3ac6a2",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "10d4eba8-94bf-592c-9c97-79ad227bcbab",
+    "move_id": "30dc889f-c7d9-5854-a38c-c7bc5e2ee2d7",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "29522068-59d7-5b44-87dd-035e346c26c9",
+    "move_id": "484d489b-677e-5d29-bf02-83369e9c66b6",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "ea6ce753-f19c-578a-9ea6-b56cb45f6904",
+    "move_id": "7d1c949d-c4de-563f-bfc2-1bff51283434",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "485dc8bc-60af-5973-943c-b3fff7c88540",
+    "move_id": "f89358c8-122a-50b4-ae2e-44eb1aa9b377",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "0fe3e2c3-1b80-5616-b6e1-37c06a0fc964",
+    "move_id": "d37b36e8-45b7-5c3a-87f1-1522477d69a7",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "55665729-0176-5e27-a6f0-30030194ff4b",
+    "move_id": "43e2e947-6bb0-5326-bd26-927702984264",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "c936367f-33b5-51fa-a61d-1a6c236a1115",
+    "move_id": "e23f2cd9-344e-5817-b447-2a97ef9e5c99",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "c1c87856-b03d-5495-b1b0-0226cab5baca",
+    "move_id": "f12f5186-6a70-5a0e-b6bd-6b0c03f7abcd",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "f03107a1-6cdb-52f4-a114-93282918dfcd",
+    "move_id": "9e5d1e68-e619-506d-b898-103605f9a969",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "40e7e6c3-2d67-5417-857d-51c961db64de",
+    "move_id": "ffa4bba7-e0eb-5c19-b51b-c21391b41779",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "8b3e4d81-4f45-5577-a0e3-19fe08965ebc",
+    "move_id": "31f5f8c8-e0d5-5f05-a760-602b8669e6d5",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "e0267c2c-c4e6-5c49-96ea-499684fd4b52",
+    "move_id": "e2a8619b-6d68-55f1-a5ae-91e7bd176ea3",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "0aa7ab2a-2903-5e62-aaa0-187f7fbc56ca",
+    "move_id": "1a2e208f-bae4-5750-b95e-18d6a5b5e2b8",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "c615373c-a396-5583-acba-6f217d71e5db",
+    "move_id": "11d1493c-285e-524f-a05f-7f8bcd4f0975",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "f56c6aa8-da73-5e31-909a-e82c8dcdeefd",
+    "move_id": "bc1cf45a-0fd9-5d9e-89c5-f8855487dd37",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "18f10b24-0696-54e7-9978-f908c2a49f23",
+    "move_id": "614b377b-aed7-5d45-91d2-544efdb5a441",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "8ec7aefc-a9d6-5fa7-9a5a-9fed35e11604",
+    "move_id": "2b7b12b1-d101-58bf-933e-d213d111ac65",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "80aca814-e207-5363-a944-8c442b18eaf9",
+    "move_id": "f93e8653-3336-5441-ac3f-1b637139bfa8",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "88673682-aee0-5836-8af1-561b833fb85e",
+    "move_id": "2c1e7157-1836-5362-bb52-d047065beac4",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "c8f3afbe-6ddd-5901-96b2-f2677a27fcdf",
+    "move_id": "a8918cbf-edd8-51f3-a593-fcf16605a7c8",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "35b034d8-2325-5032-a119-9b3f7d06d391",
+    "move_id": "ccb52fec-88f4-5d26-970b-1e9cfe7de320",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "8d2d4132-11b7-5d93-8b7d-f389f38a4de3",
+    "move_id": "e3a36ad0-b525-51e8-baf5-5dafe6ae2fb3",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "28881cdb-210e-5fc1-9142-4ba9bd71d9a3",
+    "move_id": "cb803e32-3f8c-5f45-87ee-ae6ba33a29c1",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "20d60ef5-9f3c-5e21-84c4-7c8d92a0449a",
+    "move_id": "62de551d-ecce-55db-b21d-d84bb2348fd8",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "29f65458-fe4a-55cf-8deb-8ad2d2640e71",
+    "move_id": "b3de9ad2-f308-513a-81ed-c60a0b405a81",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "5b020e88-3e7e-5a96-9c78-8d5c2af3a00e",
+    "move_id": "6e2e6a4e-b4d2-54c4-8df1-40bbfbb90685",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "001fbc74-7ef3-56e1-883d-5b3cc6859a46",
+    "move_id": "3d4f8163-f26f-5056-9679-72b243a36e3c",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "28a23099-266a-5eb7-92c3-3298645c69c1",
+    "move_id": "ec366052-4e64-5eb3-85bf-744a36e48cda",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "2b5a1dae-9b6c-5b7f-8bf1-8bbea52354b1",
+    "move_id": "f7b4bf74-9602-5aa7-9b43-0f1b641ce346",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "3c7dae94-ada4-5125-83a3-d269d26fd3ae",
+    "move_id": "7e24a573-e8a4-5f49-91af-f91f2ad7f0f1",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "7309b293-9593-52bd-9e9e-b765d90dadf0",
+    "move_id": "81dfe507-c5b1-5a3a-a428-70dd3163df9d",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "8b70134c-22d2-5398-9866-74d1b81d8b92",
+    "move_id": "b58c1ee2-02d1-5e55-b7f9-ef7770ba8185",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "6c342086-69aa-59bc-b1cf-e1c9711bb41a",
+    "move_id": "46b1821a-aa18-542d-be02-e8a043ea9668",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "31cc7a85-1d66-5351-894a-7032698bdeb2",
+    "move_id": "850c8914-9465-58e7-85df-d1b12789f84f",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "3550805c-4e5a-58f5-822f-7f1ffc0c1da8",
+    "move_id": "28265646-4b4c-511e-9040-691f88cfb587",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "5ff28b5e-1903-59ee-8e7e-e090a9e0eb68",
+    "move_id": "7a1b0293-729d-5093-8562-54bf848822ff",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "539abb04-2c08-5fb6-86ff-eb941a83f4f3",
+    "move_id": "79989e83-39f6-57a0-a25b-6d4d9e0764f8",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "bddc826a-b62e-58dc-867c-9c1b3b636c14",
+    "move_id": "953ad584-0f5b-5d89-969e-3cb4d7db2add",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "c787c290-2b29-5c3f-ae61-cc3723977101",
+    "move_id": "68702a19-dc89-53c2-a622-2fd5dc5da035",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "95f9075a-c688-585e-a452-d62f4a3c2603",
+    "move_id": "39a6ed20-a009-537f-a46e-04f48a4938f5",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "668500b1-e2fc-5353-b82b-67ca42317a91",
+    "move_id": "74c6b31a-3ef0-52fa-b4bb-574de36c5b9b",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "fa352ebc-b7ec-566a-a30f-8f8c85d5d0da",
+    "move_id": "31e8d551-2f2d-5171-acd0-c9d2ee97d018",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "4151307f-5682-5cd1-ac53-d91f1a159c24",
+    "move_id": "753618ac-3bdd-517c-a96a-cdc19a54b6e2",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "5785ecda-daa7-53b6-9420-8a7587c348f2",
+    "move_id": "fa0c427b-2868-525d-8850-cd910364143a",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "487d7f26-969f-5291-aaa6-9aedc4f51a29",
+    "move_id": "16ff7f82-7272-57e9-99c6-6a92accdc784",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "2d9c3a7a-ad76-501a-8f91-d2746c919dee",
+    "move_id": "16581065-fabc-5e59-b40d-afadc4df4c70",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "f142ba76-50a0-54ed-8b03-a7e9ce2aaa3c",
+    "move_id": "554abd69-3fd8-547b-9a9d-479d000e1a0f",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "b9b2caff-12c7-51cf-9f26-bc465b26adbd",
+    "move_id": "46ec0877-b8c4-563a-ae88-9145fe1769e7",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "b1e96524-29fd-5212-9e51-44ef8bc4aa4a",
+    "move_id": "cb500cef-eba5-5e07-8ae0-e89ea6260062",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "f55051ed-7974-537d-b899-f8f4fafc429a",
+    "move_id": "4dc2a679-f61d-57c8-a005-d06365b6e9ba",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "29025f2b-49ad-5ee6-a3e6-e47bc22f2a9b",
+    "move_id": "ad869f6c-6076-59d1-a2e4-e5d4375a6c1e",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "33995afd-327a-5700-b38b-9d3debb45ead",
+    "move_id": "adec055e-e731-509a-a1da-88b3c9d6d73e",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "cd378f51-fd2a-53e8-ad4f-2669b5fa1158",
+    "move_id": "c647f747-1cb6-505e-acc8-bb5a38ae3ddb",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "1b556681-61f3-51c0-8cb4-a2c60b40513d",
+    "move_id": "4f483c78-3ed9-5a94-a61e-0a1d854d46b3",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "cf4c4dc3-5f26-5a08-b248-67389fc4037e",
+    "move_id": "fb3167fa-f302-55f6-a61a-7114e6a2429e",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "6accbdee-a50e-517f-8cbc-c2936be733d7",
+    "move_id": "35d66b60-718a-5815-b0b5-f064777fec5a",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "545a6f15-d6d0-5a2a-bad0-7258877c6854",
+    "move_id": "5b4a00d5-cff7-5431-a84a-da518f073e75",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "6a4d4f29-80fb-5b46-8a23-2c9395151002",
+    "move_id": "823d472c-26c3-5333-b716-2b7488d3aabd",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "31983c57-878d-54ed-9e42-bc18b9309df5",
+    "move_id": "8f474cad-b0c5-523c-8b52-446c6d278258",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "d2676f43-0f16-5022-92b5-7015afbf80fc",
+    "move_id": "9148e9fd-ec94-53e2-b81c-a0601c311fad",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "f7716c1b-e090-5305-83b4-37bded77625d",
+    "move_id": "16120f33-12d4-58cb-a51d-e842d0abd105",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "27877be1-5175-5688-9831-c0f20a8e1e7c",
+    "move_id": "a5df94e5-19b1-50f2-a7b7-52b4703c51c1",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "64161a03-4675-5a55-b564-390691d195a6",
+    "move_id": "0b45f104-c155-54ad-be16-2843c835c6fa",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "a8d84714-d48a-5728-ab37-7636afc62688",
+    "move_id": "01b8d727-58e2-5378-9604-8220e6217930",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "76e0d712-09c8-5ce1-8292-7720968ce4b3",
+    "move_id": "8ffbd26d-ec94-5f5c-b83a-88eab5b0486f",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "bb759c3b-937b-5da3-b779-d55d3f8a0719",
+    "move_id": "4beecb97-6d93-5885-bdd4-773c94262299",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "6e087c50-62ae-5ccb-8ea4-537dd813d231",
+    "move_id": "3392c252-3b10-5617-8ec1-02d6a216e966",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "26f497fc-171a-537b-819d-bf1437f13177",
+    "move_id": "38fccb9b-0f2d-5c80-a6e0-a5c8646481d8",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "058dc25a-fb46-5cf0-a34b-891892fbff4e",
+    "move_id": "e02922c0-03d6-5746-95fc-1e245564bee7",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "c0c56076-5392-5741-8e68-05ff527ae328",
+    "move_id": "8f7c4733-de0a-53e1-95db-7626e89bc008",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "0cecab16-dbf8-5d8e-b0a1-2219964c4562",
+    "move_id": "c980468b-b199-567a-aa98-7d2057a27abd",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "c2f12d2f-7be9-548f-a164-dc8cd51cb4b2",
+    "move_id": "e473c74d-ceb5-5b33-816a-ccdd561b4291",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "0fc7bc22-97f6-5d32-a5b1-f8c519b0b591",
+    "move_id": "d4f3a708-0328-5977-8223-73c51b0409bc",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "2da2f6fd-d5d6-56db-af15-ee7612592b6f",
+    "move_id": "ca8d4aa5-2954-5f3c-a0ff-c5b70ae3941f",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "ad07b8ab-07e7-5900-a0f3-c7f103cc7780",
+    "move_id": "f97dd238-da3d-575b-92b4-91cc3a85a500",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "e8e5b0b2-1b32-519f-b9e3-476ea6005a95",
+    "move_id": "e245b0be-312d-5dfa-9574-52224dd7e1ea",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "1f5fbe3b-9d4f-5a73-b3a7-b9c046862e8b",
+    "move_id": "0fad8e54-7896-52a7-b9a5-04ec7c6d049f",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "3b4eb94b-2db7-5fd2-8946-75b9f9a55353",
+    "move_id": "d0d7bf50-3667-5ff7-9855-0cc42a3df20f",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "e6db714f-369d-5215-b785-aa4426d22cbc",
+    "move_id": "3113d3b0-e630-5d87-b8b8-f9c6dc62deb7",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "019dfe00-b714-5bda-8e6a-c58ea7cfaea3",
+    "move_id": "48a0d23a-2679-575e-a160-6707c3e807f5",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "ec5f0214-837c-573b-ab05-3e862bd9314c",
+    "move_id": "69dacbc2-93c8-5c7d-b287-e48ef84d0ca5",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "1e2ff35d-bee8-504d-b61a-4571daa1d556",
+    "move_id": "4808368d-8dfc-52da-ab21-470b56a5db48",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "1d6253f9-97ab-5d64-a0d0-b5ed6ed89e30",
+    "move_id": "756c4273-2f42-5e38-9cef-6984ec8d3bd7",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "5ada0073-d309-5229-99a6-718e6901b079",
+    "move_id": "f2fd062a-55b5-5fca-8358-d2697a9b8313",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "6f2f1d68-8667-5b01-bf78-e2f1e79c574d",
+    "move_id": "bfc5b3f4-efe4-5d15-a04c-1efb8e5321f6",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "a61612fe-bcaa-5612-a230-7ed66c223796",
+    "move_id": "0fca5519-b79e-501d-a3e3-62ebd3ce18b6",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "6800d533-0ac2-5f42-9bd2-a2b240c40c4b",
+    "move_id": "0e8b6d68-7c9f-563f-8df7-8c749c9dec1e",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "d2e1cc2e-57d6-50b7-8399-0606a58fdbb7",
+    "move_id": "0fcbd20f-105f-51a6-999b-0ff77b512235",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "d13f020a-529f-59a5-8f2d-d4a2f7aa1e00",
+    "move_id": "3e07ddd1-026f-5a80-ac70-7af7bfb281f6",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "3dca4ed2-426b-5a7e-9d11-6adc9db3762c",
+    "move_id": "5ac8a3bf-a502-521d-b137-3dae7b98a74a",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "06978086-7d28-575b-9b67-04243bb205ba",
+    "move_id": "27e47cf3-b309-55b9-ab88-b15b04ef28f2",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "f4862935-b313-5670-9157-6301d4cc692f",
+    "move_id": "092fca5a-b7d7-512f-a56f-37a4528f03c1",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "49083bc7-a8a1-558a-8aaf-aab54e53fad2",
+    "move_id": "ae3a9b79-2bde-5950-8629-fcc10fa75846",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "8b352290-6916-5f68-8b74-988239eba311",
+    "move_id": "492a9fa3-1491-5009-be9f-5d22a4d8a9c9",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "43de6364-d442-569d-adb9-53fc65258c70",
+    "move_id": "a6234b52-b85a-55e2-9442-194d08d0bfd9",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "80fa8bfc-a6ad-5641-9e8f-fc27025ee00f",
+    "move_id": "5a6f5384-5495-5f04-af25-40ac6c72aa02",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "f98ea2e1-1fd2-5757-b035-b037113826c2",
+    "move_id": "6582e7d0-c70c-5f11-ba57-1f81197f9420",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "371478b4-70e3-5b24-96a9-ada61eacb4ae",
+    "move_id": "4f860d91-4643-5ef2-a297-18a1b7f9e40b",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "2cde2da5-db27-5c1c-acd7-f56339b865cc",
+    "move_id": "59fa6a1a-5b75-5704-962b-69714a433120",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "c9fccc04-754f-5a23-b74f-b9776929b9ce",
+    "move_id": "011cb4d7-57be-5625-ab43-9eebd2f85e1a",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "a9a9fc87-007b-5cc0-82e3-2dff7819c12c",
+    "move_id": "e49e48f3-5ede-5d1e-8483-b3721508fcbe",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "6487c7f6-7b88-5834-9515-d9eee23b967f",
+    "move_id": "9c63f101-9833-5e6e-b967-5e9ebcb25dfe",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "b9777c65-65b1-5bf8-a6c6-0c0b0a16bf31",
+    "move_id": "25dd9ebe-c227-59a7-ba49-9e18b6fa9552",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "d8eb06f8-1ea8-5c77-94bd-4d05e2383c68",
+    "move_id": "fdb2c1a1-1823-513d-bf56-e61e921b9c02",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "4833b7d7-4325-5c12-86bb-76a2f27a828b",
+    "move_id": "c6a679c9-43bb-54ef-a4c9-1507a3f18b26",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "4b07df9b-4d07-55a0-8aaf-ac93014764aa",
+    "move_id": "35356818-010c-5091-a4a7-64bd9e9a3a44",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "d6593902-2117-5f84-8229-373d1d3636d1",
+    "move_id": "ae2cfc6f-e2ca-5218-b8bd-29c8f232df33",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "ec187ca9-118d-5fd7-a7a5-4ce662e15f72",
+    "move_id": "bbfe5b5c-a0c7-55c2-bee4-6887cfd379e9",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "a349bbc3-f11d-500c-b546-78af26e14c7c",
+    "move_id": "5ed9dc0c-5738-51e7-8961-257053861d1e",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "6a1703c9-a5d0-50c7-a39a-7b5ad4e7971b",
+    "move_id": "be83bcfa-c5bf-559b-8068-cfee5a130e51",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "6d9fcb1a-6276-5413-ae1f-ead476cecaa1",
+    "move_id": "b8bdb107-55d8-5169-a491-1912d124d3d9",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "c26614d7-0da1-5d61-af8b-cc61a5a65341",
+    "move_id": "b9f7fbe2-947f-5020-9016-4e216973ca9f",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "4dd7ea69-5e4a-5949-bda4-2e39ff87216d",
+    "move_id": "96d11a2e-0382-5d78-b01e-ef62cc1a9c90",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "d2fca95c-10e1-5e93-9a79-0bfb6c4d7c67",
+    "move_id": "e78da04e-489e-51c8-ae16-b07e4a030b42",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "b9727e27-c96f-57e9-b3cd-4a7b8e915e45",
+    "move_id": "1b2b153b-6832-5b68-9b05-b494aff022d8",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "8410f532-37d6-5527-80e5-e33c8c7383aa",
+    "move_id": "fc9e044f-17f0-54eb-bf38-fe38f61cead3",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "eb0a95c4-cde8-5a14-ae99-abb985ba5251",
+    "move_id": "a8d7ef25-2c5d-5b12-ad30-83094afb4c07",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "8b4f8a73-0928-5821-9223-625b616e4a5d",
+    "move_id": "38ae5485-8a1c-56f3-9c46-666845fe9c36",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "ebc3139f-1d44-5b0d-ab8f-6a2f05bf2f8b",
+    "move_id": "fe2b06df-281e-5327-9476-d742ee770e83",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "43eb9864-1c13-5e67-9cca-34c50fb5fa80",
+    "move_id": "385f3cd8-f384-55a4-82e0-33aedfff37af",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "26455cf4-41dd-5cfd-a9be-f9bf4a46b172",
+    "move_id": "f853bbf8-f41d-5e27-84b7-894027e5adf5",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "50c30119-e4b5-52cf-9938-e918e5742d75",
+    "move_id": "a78bd091-290a-5c99-8454-5baa46ee6939",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "99d3c417-d556-5c86-82ca-25a0c67c7707",
+    "move_id": "cab1a2af-b6a1-5d81-b8dd-8887f9a5e2b4",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "94692dce-5e8f-5c8b-b470-1ada7ab687b4",
+    "move_id": "7ebc2365-8be5-5b22-adf8-6f1e18bb5e6c",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "903b2549-e744-5a8d-b9c9-09921c759211",
+    "move_id": "06b53c7d-3210-5049-a471-f359d2446a87",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "c24088c5-4492-58b5-b636-37c9596f5f33",
+    "move_id": "281073f4-fd8e-5efc-bbce-7706854d7f44",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "09c96551-d701-580b-b7d6-be96cf5f4ca9",
+    "move_id": "3051c09d-0075-52b7-8db8-eb5c4f5e9859",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "f3947c8f-06a4-577e-b85d-f672346f5cb5",
+    "move_id": "5833132e-6983-5207-9e98-553df4c9f375",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "5b17bd99-e50c-587b-9f5d-2680577d1929",
+    "move_id": "79c95bd9-d637-5d21-8d2b-a3d10ac81002",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "df3da13b-e930-51dc-afbb-c49df50a94aa",
+    "move_id": "aad7a010-8611-5b6c-a27f-3e978fa27516",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "7ca25a05-7b05-57d4-887d-216bb77a2f11",
+    "move_id": "e5cd7a87-471b-5aab-bcbc-d11b018ac9ff",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "025beea6-21d0-5e37-aead-1ef46c830ffb",
+    "move_id": "db51be24-4ddb-5809-b405-2ce27d5738ab",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "08a789a0-a6de-5b4d-bd74-22bf08df3060",
+    "move_id": "212e45d0-8991-5192-a87c-9dca378ac80f",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "78322313-7516-5e82-9c0c-0c03528c4ac6",
+    "move_id": "eee827c4-4434-53fe-81af-2c73e41d9934",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "b4383414-da70-5f03-8354-b5b970aafefb",
+    "move_id": "56b0d33f-0c07-559e-a553-7e71759ec8a6",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "7f9c8df4-f7a2-592c-966f-bca24df7dee7",
+    "move_id": "6b94bbd4-70ac-5c1f-8c0a-3184b5d7f2d2",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "0a813aa3-ee9d-59f4-a304-633c1933f157",
+    "move_id": "0797e1b5-9787-5540-96e5-05df716c00c5",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "4bd8e1aa-8998-52ce-8f14-f5edf00233e9",
+    "move_id": "2cc47bd8-5bdb-545e-b45e-78a43e43d3bf",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "df816157-bbff-5384-90f0-534741fc57a1",
+    "move_id": "137afa37-b49c-5715-ba2c-fe6fa03ffb42",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "467bc285-bd0c-53b2-9c05-63c6a0545716",
+    "move_id": "95586e97-03ff-588d-91ba-ae4546bc4048",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "64040b27-de5a-55c4-bdb2-90c543cbebc2",
+    "move_id": "1c453262-b5c7-5b29-b138-796088509a77",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "acf62f8e-1529-5868-9c63-6d6965798acc",
+    "move_id": "709b5612-ab28-59db-8ed8-7928c6e38b86",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "2ee7f836-8f53-543b-919c-5f7aebb13ac5",
+    "move_id": "7a865093-7f54-5771-80ea-6ca39db76e43",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "5075371b-0272-5c3a-93ac-388cdbddb39b",
+    "move_id": "9536d521-cd50-57c6-bd88-1c51691759c9",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "b865d56f-daac-50f2-8a23-a46aa9c28228",
+    "move_id": "d0011987-fd16-5187-ba0e-00002ac4a45b",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "b9621323-3709-5a0d-a7de-7dad60b298b1",
+    "move_id": "c7a7c259-03d1-55ef-83b5-0b9120f15ce2",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "73cf0770-90d5-59e5-acd1-6207d7b0b42b",
+    "move_id": "f28b019e-fe82-570a-b880-959ee8f01af6",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "43c659cc-b2ea-5a04-b1d7-f3b88218213e",
+    "move_id": "014d8d0b-4370-5703-80c3-f594cffd5998",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "127f5d63-2185-5ae9-aeeb-1e6419be5b74",
+    "move_id": "7df4cef9-9f91-5f7d-9824-49df3e760793",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "d6324b7d-a0fb-53a5-a47e-31b63c10c336",
+    "move_id": "8ebd4a39-ccad-5c3e-bb52-409f1d1989a9",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "3e2da6fe-e9c4-5396-b795-ea52cdb80c0a",
+    "move_id": "4984cd6e-2841-5eaa-bb2c-8dcbc7c288e5",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "6d9ce1c0-6711-5552-9b32-753b61198909",
+    "move_id": "c743995a-e81a-5064-b9f4-8a174ffc2a72",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "7f768350-bd19-5cac-9440-ece31b9302d7",
+    "move_id": "33aea661-9630-549f-8863-e1916702f2c7",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "9dcccad2-352a-5109-a845-99858d457594",
+    "move_id": "b50ea4d4-0e60-5988-b055-ade04b890540",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "a8be08bc-e510-57a9-9599-07f54046efc4",
+    "move_id": "8c5696ae-962d-5e66-83e5-20729e6088c8",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "b0d3c923-3801-5695-92d0-5a15572719b1",
+    "move_id": "bc0815fb-99a5-5d74-b7c4-6e23f916b770",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "8bfa1b95-9bb7-5f84-876a-f5360f182071",
+    "move_id": "ec06b2ff-3fcc-5b3f-b12d-57b99f2d4fa0",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "2dcd3ac1-7ede-562a-aea8-c83867afdd4a",
+    "move_id": "94e59ce7-656a-514a-aec6-8177fbb76216",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "0445d648-6c98-519b-8505-920ae3188547",
+    "move_id": "826b9d10-e1eb-5016-99f8-c147a4206ebb",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "d4740d4c-d545-5773-a3dc-38eb526e365c",
+    "move_id": "fe709f0e-340a-5086-8381-87aa69271439",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "dd9fdfd9-bc0d-5289-b401-5489442c3e65",
+    "move_id": "e68431a5-9ae8-5db5-87af-e27207257138",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "4f85aa36-7b25-57a1-9103-aea721e9faae",
+    "move_id": "f8211feb-2dd6-535b-8388-f7343a3e1cd4",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "40d5d4f0-dedb-5b20-994d-9ceb56f11077",
+    "move_id": "f4f84100-32e3-5a15-87b8-2fce0b035026",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "3a3c32ee-5339-55fb-b174-01f6af54b760",
+    "move_id": "741e2f11-c7a7-5c69-9998-dfc27ddd132f",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "542d81e0-f41a-514f-a7bd-6b01c80a104c",
+    "move_id": "bdffcfd9-d42b-546d-b940-43a921719389",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "90da21a4-b066-5bf2-b81a-254ab0c9a74b",
+    "move_id": "a3b04cf7-a130-5bea-bfa7-31e10e7f992f",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "e365fd2b-bcca-565e-a2bb-54907d76486d",
+    "move_id": "2e591673-0951-5664-a86c-c4a8dde0c614",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "1131da33-104e-5a19-9f66-333c9b921f9e",
+    "move_id": "af60de3b-a7c3-5e06-adbf-0692f9bbd741",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "8f7db892-6a6b-547e-8bc6-f8f299fa6f9b",
+    "move_id": "f84195a5-5046-586b-a7f0-4a4b04e2f69f",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "2be2affa-9527-5cbc-8c31-abb42c68796f",
+    "move_id": "5aee3054-227e-52d5-953d-b29d39064abf",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "9bed472b-93e0-5042-b108-04f8859eb3cb",
+    "move_id": "263e1ad0-8b1f-5251-a382-efbac7884b43",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "18ed4823-209e-554d-b511-478b20bce1ce",
+    "move_id": "513144d5-9a6a-5659-a536-223c0d8d2d7f",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "1de6ed8c-420d-5ecf-9859-5bc378b20088",
+    "move_id": "4af67faa-d3c4-5fc7-bb29-cf38639064b6",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "ad9e76da-9486-5ec8-a577-30a43e93fe16",
+    "move_id": "a4910a97-76ea-5d6d-b0fe-ca3e22a1dd2e",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "26b4f51f-6425-5e39-9c35-aa0fc47604bf",
+    "move_id": "a929fc73-6402-56ac-8a37-77911d5c7f01",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "aaa4949f-b495-5c61-a4da-d773606f7814",
+    "move_id": "27b2cd04-e7f0-57c4-bad6-b585d9c6e64a",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "f5e14077-eb1b-5635-892e-4f58fe51f56d",
+    "move_id": "c3339628-3d0a-507c-8b19-abf2a3ddb89b",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "c49bf946-0ba8-52ca-a6aa-647a19823b94",
+    "move_id": "98261770-f0c0-5992-b986-328087294efb",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "9cf4ff37-8c20-57c8-9bb5-ead55270adb5",
+    "move_id": "b4aeb88f-8088-54e7-b6f8-16fd6f10910e",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "69858f27-21c0-5f3e-8a5a-3b77ffd7a8c5",
+    "move_id": "51dfc33a-2b3e-5426-bbc7-c36763297209",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "9bd2236c-f052-5c33-ab39-1ce60659cf55",
+    "move_id": "3fe8097d-4f2e-51ec-9b1b-e99d5e90ef3e",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "25eeb708-c74e-5b8d-9e27-68f90abe5af2",
+    "move_id": "846872ba-0710-5470-ab0b-10b56e78ced3",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "8be547b3-82ae-5c22-a302-edfd10f48d8a",
+    "move_id": "b58ce7c8-8d27-5841-9e81-8124a87f757f",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "0bd5bac5-6ade-5a7d-91fb-141f762a72c1",
+    "move_id": "c22f22b2-db9f-5c4d-8312-2b5a5f4bf999",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "2deab4ea-5cd7-5de2-858d-ff0ec64968cc",
+    "move_id": "5e81cedb-2d53-5c83-9094-5b41fe21e1de",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "ac27e709-a55d-5f01-92f8-25a6f3a39f4d",
+    "move_id": "e38c2fb4-d2ce-5801-807d-3592f6aa40f6",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "60aa0ade-bbec-58a9-84cc-8d0a28ec8f1b",
+    "move_id": "5df5e164-5322-5394-a922-d2fc4e7538f3",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "ccb1c1cb-936b-5749-a015-9933f8d8acaf",
+    "move_id": "db8aca8a-060c-5ea9-9540-860052025f6c",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "2edf1e9e-d647-54f4-997f-2bc00a9ac959",
+    "move_id": "8b141e6f-9483-5221-b15a-a1ebe24a821f",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "c9e5a545-85f0-536b-85b1-5961924cc5fd",
+    "move_id": "584a2f4b-7e42-5d18-a914-40ff80181b78",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "39d79dc9-03ad-51a5-aaf6-9ebd39ca1229",
+    "move_id": "40df89df-2bb7-5964-9a30-160f9b097956",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "b9554a26-71a6-5816-90d6-942f447284a9",
+    "move_id": "1a7738e2-7a1e-58e1-b01a-28e41c95c268",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "c00a0586-3ec6-5752-9537-3d2d06ed611e",
+    "move_id": "6b0f79b0-9cae-59ce-a58c-d17bc9b5e7bc",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "481c4054-8ade-5135-a083-cd498ae9c3ca",
+    "move_id": "746ae760-b7dd-5571-a390-1c88fefc7041",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "36352249-c938-540c-945a-ce1a975ff094",
+    "move_id": "66298df0-1c81-5712-95ae-5025090c1861",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "bfb6df51-d616-5fa6-ad76-903d81a5f1ac",
+    "move_id": "a4bca404-87dd-5644-a04c-0589436193e7",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "cbb2e2f5-f747-522f-adbe-a3325f35db9b",
+    "move_id": "41c0d81b-2f99-58da-9385-4fd72ae4d4bc",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "82ce8cce-94ab-57f9-ab91-a27ae5ebf09b",
+    "move_id": "8946a21e-f161-570a-99de-5fa0f669b330",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "010affc8-dc27-5f66-ab44-9b8e70bb2351",
+    "move_id": "1482ca97-6a38-505e-aec5-669c3139336a",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "0715b49a-dc76-5be0-9197-5afc0ae7d8c7",
+    "move_id": "6adfec16-d73c-59da-a35a-2a4509ed2e9b",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "cb2c6bd7-ce98-52a1-a792-56d47baa643c",
+    "move_id": "f42c6e87-af3c-53c1-871e-2c5d76b697eb",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "34957f17-444d-579b-9332-46e222f7e5d3",
+    "move_id": "b25c6f7a-632c-59f1-bd87-dd06ea37cb81",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "278723d2-becf-5107-bbc1-15532900ef8b",
+    "move_id": "30e836c3-991e-53f5-b96f-0d5a544083b1",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "ac01651b-8472-5eae-b10c-9cf99dc9ff83",
+    "move_id": "df74ccab-d3ca-5b64-be83-36c127e06c22",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "832f3c13-f770-5a52-a639-7009b4e4f51e",
+    "move_id": "125d123f-9b62-51d1-bafe-5049aa68be4c",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "a472b9bc-bdd9-5879-95d5-bc72ca7fb5b8",
+    "move_id": "6f3301ac-b593-5b35-a178-7d33c0e1a5f2",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "66e322d7-5251-528f-946b-ef47858cbda1",
+    "move_id": "8b87d3c4-4ab7-57dd-9e85-1b145f07ca95",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "efc7a1af-d888-52b8-afb4-828381ad08b8",
+    "move_id": "c1372185-9c1f-5a8b-992e-6628204f4db7",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "d5dce71b-ce57-5bab-b7ba-93bb6fd7e46b",
+    "move_id": "2c09742c-c101-5259-a0ae-186020c685bf",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "ef246204-0651-5716-a655-135ac7318075",
+    "move_id": "20f46611-b9c9-590c-aee0-2ce4a2bd12e0",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "7717f6ac-8df6-554a-8736-1ee48dd73454",
+    "move_id": "238365d5-f0dc-54d4-b3a1-e637930cd151",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "92513bbf-9573-5114-9794-aed05192498d",
+    "move_id": "ae7ecaf3-855e-5a28-84d6-fa53e318b153",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "49cd67bc-b6d8-5eda-a4fe-12296662dec9",
+    "move_id": "5758ea94-4e09-5cce-84ac-30e4a388ab14",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "f586e03e-4d78-5ee7-9012-cb5593e1ccfd",
+    "move_id": "f1576cb3-16aa-53a7-aac6-c7ca962afd4c",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "c8e05a34-ba0a-52b8-8040-c36eaa9bcd76",
+    "move_id": "8820077a-1b41-5f7c-9ef1-728d27bbfd12",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "8a15096c-0d18-5347-8696-701b2401659e",
+    "move_id": "076fb3d4-724a-5c81-aaa5-438104f46362",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "ebc9cded-6302-5bba-bff0-948c8d043822",
+    "move_id": "63522002-e1dd-5cfc-8071-92cd638f31f7",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "d4289140-a4e1-55dd-bf2f-7e35df84bcc5",
+    "move_id": "4706eac6-9bcb-5a55-9b6b-cdbe10344212",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "06dc7968-398b-558b-9346-acba335e3db4",
+    "move_id": "6c0aad2a-cbf0-5d68-8436-aafb8ce20797",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "11f3394b-63e2-5ff4-b364-f41765cd031c",
+    "move_id": "d54caa0e-bc32-5eb3-ae32-eec658054d9b",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "57f45064-0fb6-5685-b806-7acca01a481d",
+    "move_id": "9bd8acb0-cb0a-5ab9-88f2-7398a58700b1",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "1ddad004-dd42-5d71-8ba8-c2e96cc5f73d",
+    "move_id": "ed411372-cb9b-5e68-bf4e-48f79b91b29c",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "13278072-f940-5723-b1d2-2b9c80ad6e6a",
+    "move_id": "d7b9ea51-221e-53b9-a5fe-39f7034e1d26",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "8314f303-af86-57d7-b597-0fdc209c047a",
+    "move_id": "d38c2585-b28b-5804-ab2b-d4689768bbd0",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "7c129f3b-50a4-5a20-9678-4b1a9def1e0f",
+    "move_id": "75c3c6de-08de-5963-ace2-c4a67b55fafa",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "70677a13-5fc5-5787-96da-cc24baf915be",
+    "move_id": "05abce16-e631-536e-a4e4-33900861793f",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "bb785140-a02b-5286-a950-a0e892ef48ba",
+    "move_id": "e8e8fdb0-6f77-5097-94cc-c79e8fde9b21",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "5a254a54-df45-5777-835d-b544f0d0d37a",
+    "move_id": "51be3e59-7906-5293-90bd-4fe16007dd8b",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "e5ca8576-d152-50ba-9f0c-e9bde6620880",
+    "move_id": "787713ee-cba1-53b9-a4eb-41890ed69421",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "9482a142-a388-5f9f-86d7-31f93091f00d",
+    "move_id": "01ce32a9-697f-50d5-8271-97198e68aaee",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "02d80665-41c7-57ca-8999-0943f79d6177",
+    "move_id": "025bf9d7-3cd5-5e50-ba33-94648ea03d8d",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "c2b8da8f-aaeb-5fcb-a0d6-db9b71be1fd9",
+    "move_id": "a5c82e46-a235-58c8-83e1-cb2636f9dae4",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "bd1abb7f-4952-520c-806e-182238246633",
+    "move_id": "5e68b3ac-f1ec-5fca-ab3e-1c78e9b997ab",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "c0a094d7-9609-563a-b8e4-dbeb14d191b7",
+    "move_id": "9958595c-1f36-57d1-b123-e0058aeae9a0",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "61ee5b37-f0fc-53c9-aa1e-b7721e49bdb7",
+    "move_id": "bf2ab113-d903-52e6-a21c-9a73e6ff28bf",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "7db5c17f-be75-551a-8c4d-42b68ff1bf1b",
+    "move_id": "bd6de3c4-8a44-50e9-bfdd-61220c836af8",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "6b438aef-fb88-52f2-bf19-3aca063e5a29",
+    "move_id": "af645e10-ecb8-5d9f-8dc6-333db728cf5c",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "75651188-6b08-5ae0-8869-6ab95269385b",
+    "move_id": "9c1fbd04-01a0-52bf-bcaa-15732d2e81d0",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "4d5f3e07-f003-5484-b8cf-b60fc19a5425",
+    "move_id": "bf7af424-33e4-5d3a-a34f-da03d393cf5b",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "8a5e9207-3074-5ed5-b692-74b5d69b5558",
+    "move_id": "5652f065-4ba5-52ab-9757-84113488ea24",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "6a07dd84-a110-51b8-9a04-77f4836079a1",
+    "move_id": "01ecade3-f3df-56c6-b1bf-10c45f648fa1",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "125299ed-9fff-5a64-baae-55d1ec54bd83",
+    "move_id": "327c1e80-c90d-554e-a8f7-3059ed532f11",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "d041b88b-9109-5ad8-ae8c-ed9ae6e61a66",
+    "move_id": "a4057cab-3dd0-5fa5-8e75-0063dadad4cf",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "2af24a56-5689-5d45-be74-36159673db92",
+    "move_id": "3a6359da-084c-50d6-b35d-208aaf37fc29",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "f87dc4f2-6def-50f6-8bfa-f626c99829c7",
+    "move_id": "929c9d41-dc44-5531-9e3a-df25da0b4d13",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "051be255-2722-5a89-bcbc-57d143c9fec1",
+    "move_id": "08f720aa-ef33-5e74-93fa-b34fcf591321",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "b52a1c15-e35a-5efd-9798-b8e3eccc5f8b",
+    "move_id": "1f27f7ad-55e9-5232-8f96-b4024308314c",
+    "oos_type": "up_smash",
+    "extra_frames": 0,
+    "label": "上スマ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "d489d23c-a85c-5b24-b05f-f8ca8877e6cd",
+    "move_id": "66bf85c1-09fd-561d-9f34-93ffcadf5001",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "7dc06d6c-60c6-5171-b615-c0cc74ba96ab",
+    "move_id": "b1a66d38-a91b-5263-87cb-6550b6e87b5c",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "d5b14bad-dbb6-5947-941c-0df51392dc9a",
+    "move_id": "a9b3b3d6-5bf7-59d9-99e3-b72f31f6b8ec",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "a9bf75d1-9f70-5566-8b50-0ed8fe7b6842",
+    "move_id": "4e6a22d1-e791-5324-aacb-6753952b16f5",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "f323dd25-aae5-5d6d-b411-4e4fb4e536ab",
+    "move_id": "6ec929e8-8a01-5cf0-ab9a-efcac96e9251",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "9720cb01-e63b-556e-bdf8-53f83ed8e8a3",
+    "move_id": "1d194833-28f4-581a-a226-991cc71f7472",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "e02ff8a1-7f0c-506d-81ae-734e1baebcfb",
+    "move_id": "ea6bcfb5-26fa-522a-b55b-9972b75f76a7",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "be143506-9c8c-58e1-bd16-c1d06bfb49d5",
+    "move_id": "087e2763-0def-5165-b67a-95e55798fc8a",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "6eb27792-c104-59b2-ac27-7f4d44133d1c",
+    "move_id": "18b7067c-3ab3-527d-bd5c-c32e4c657ed2",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  },
+  {
+    "id": "03901d89-742e-52d3-b7a9-6b120e786511",
+    "move_id": "857bb602-9526-5721-887d-bd04c5d38299",
+    "oos_type": "up_b",
+    "extra_frames": 0,
+    "label": "上B",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "4f47e076-ffdb-5217-b9f0-e64fb9a50656",
+    "move_id": "14fba3da-7e7e-576d-b781-7301349e7ef5",
+    "oos_type": "grab",
+    "extra_frames": 4,
+    "label": "つかみ",
+    "range_note": "密着限定"
+  },
+  {
+    "id": "ccb89c6a-357d-5370-9e86-6b2f8ec1c7c0",
+    "move_id": "c53d03e9-b402-530a-b1ca-c72617beb927",
+    "oos_type": "aerial",
+    "extra_frames": 3,
+    "label": "空中攻撃",
+    "range_note": "中距離可"
+  },
+  {
+    "id": "e85fe3f8-5947-5b9f-ade1-9a98e273c198",
+    "move_id": "9e48ddf6-be80-5a45-b6c2-64fc89c49151",
+    "oos_type": "shield_drop",
+    "extra_frames": 11,
+    "label": "ガード解除",
+    "range_note": null
+  }
+]
