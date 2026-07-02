@@ -1,14 +1,124 @@
 // 英日技名の突合。UFD move（英語）に日本語名を割り当てる。
+//
+// 監査対応（2026-07-03）: 弱/強/スマッシュ/空中/ダッシュ/つかみ/投げ/回避は英語側の
+// カテゴリとスロットで技種が確定するため、検証窓との順序マッチをやめ規則ベースで機械生成する。
+// 検証窓の順序マッチは必殺技・派生技など固有名が必要なものに限定する。
 // 戦略:
-//   1. canonical key 一致（jab1/ftilt/nair/nb/upb/grab/fthrow 等）= 高信頼
-//   2. 未マッチは同カテゴリ内の出現順で JP 側の未使用技を割当 = 中信頼（needs_review）
-//   3. それでも埋まらなければ canonical慣用名 / 生成名 = 低信頼（ai_generated）
-import { ufdCanonical } from "./canonical-move.js";
+//   0. dodge / スロット確定技 → 規則ベース日本語名（rule）= 高信頼・review不要
+//      （未訳の英語修飾が残る場合のみ needs_review）
+//   1. 必殺技の canonical key 一致（nb/sideb/upb/downb）= 高信頼（シート固有名を採用）
+//   2. 必殺派生技は 必殺ワザ セクション内の出現順で補完 = 中信頼（needs_review）
+//   3. それでも埋まらなければ慣用名生成 = 低信頼（ai_generated）
+import { ufdCanonical, ufdCanonicalWithRest } from "./canonical-move.js";
 import { jpMoveCanonical, jpNameForCanonical } from "./ai-fallback.js";
 import type { UfdMove, JpCharacter, JpMove } from "./types.js";
 
-// 回避（dodge）は全キャラ共通動作。検証窓シートの技名突合対象外だが、慣用日本語名は既知なので
-// UFD英語名から機械生成する（source=derived相当の慣用名。needs_reviewは付けない=確立した訳語）。
+export interface NameMatch {
+  slug: string;
+  moveSlug: string;
+  nameEn: string;
+  category: string;
+  nameJa: string | null;
+  /** high=規則生成/canonical一致 / medium=順序補完 / low=慣用名生成・不明 */
+  confidence: "high" | "medium" | "low";
+  needsReview: boolean;
+  aiGenerated: boolean;
+  method: "rule" | "canonical" | "order" | "generated" | "derived_canonical" | "unmatched";
+}
+
+// ---- 規則ベース日本語名（スロット確定技） ----
+
+// canonical key → 規則ベース日本語名。jabN は動的生成。
+const RULE_JP: Record<string, string> = {
+  jab: "弱攻撃",
+  jab_rapid: "百裂攻撃",
+  jab_rapid_finisher: "百裂フィニッシュ",
+  dash: "ダッシュ攻撃",
+  ftilt: "横強",
+  utilt: "上強",
+  dtilt: "下強",
+  fsmash: "横スマ",
+  usmash: "上スマ",
+  dsmash: "下スマ",
+  nair: "空N",
+  fair: "空前",
+  bair: "空後",
+  uair: "空上",
+  dair: "空下",
+  zair: "ワイヤー空中攻撃",
+  grab: "つかみ",
+  dashgrab: "ダッシュつかみ",
+  pivotgrab: "振り向きつかみ",
+  pummel: "つかみ攻撃",
+  fthrow: "前投げ",
+  bthrow: "後投げ",
+  uthrow: "上投げ",
+  dthrow: "下投げ",
+};
+
+function ruleBaseName(key: string): string | null {
+  const jabN = key.match(/^jab(\d+)$/);
+  if (jabN) return `弱${jabN[1]}`;
+  return RULE_JP[key] ?? null;
+}
+
+// 英語修飾語 → 日本語。既知の修飾のみ訳し、未知はそのまま英語で残して needs_review。
+const QUALIFIER_JP: Record<string, string> = {
+  luma: "チコ",
+  grounded: "地上",
+  aerial: "空中",
+  air: "空中",
+  "up angled": "上シフト",
+  "angled up": "上シフト",
+  "down angled": "下シフト",
+  "angled down": "下シフト",
+  light: "弱",
+  heavy: "強",
+  close: "近",
+  far: "遠",
+  cargo: "リフティング",
+  dragon: "ドラゴン",
+  "power dragon": "パワードラゴン",
+  ramram: "ラムラム",
+  megawatt: "メガワット",
+  laser: "レーザー",
+};
+
+/** rest（英語修飾）を訳す。戻り値: { text, translated（全トークン訳せたか） } */
+function translateQualifier(rest: string): { text: string; translated: boolean } {
+  if (!rest) return { text: "", translated: true };
+  // 純数字（多段技番号）はそのまま
+  if (/^\d+$/.test(rest)) return { text: rest, translated: true };
+  // 全体一致を優先（"Power Dragon" 等の複合語）
+  const whole = QUALIFIER_JP[rest.toLowerCase()];
+  if (whole) return { text: whole, translated: true };
+  const tokens = rest
+    .split(/\s*[,/]\s*/)
+    .map((t) => t.trim())
+    .filter(Boolean);
+  let allTranslated = true;
+  const out = tokens.map((t) => {
+    const ja = QUALIFIER_JP[t.toLowerCase()];
+    if (ja) return ja;
+    if (/^\d+$/.test(t)) return t;
+    allTranslated = false;
+    return t;
+  });
+  return { text: out.join("・"), translated: allTranslated };
+}
+
+/** 規則ベース名を組み立てる（例: ftilt + "Up Angled" → 横強（上シフト））。 */
+function buildRuleName(key: string, rest: string): { nameJa: string; reviewed: boolean } | null {
+  const base = ruleBaseName(key);
+  if (!base) return null;
+  if (!rest) return { nameJa: base, reviewed: false };
+  const q = translateQualifier(rest);
+  // 純数字は直結（空前2 等）、それ以外は（）付き
+  const nameJa = /^\d+$/.test(q.text) ? `${base}${q.text}` : `${base}（${q.text}）`;
+  return { nameJa, reviewed: !q.translated };
+}
+
+// 回避（dodge）は全キャラ共通動作。慣用訳語をUFD英語名から機械生成。
 function dodgeJpName(nameEn: string): string | null {
   const n = nameEn.toLowerCase();
   if (/spot dodge/.test(n)) return "その場回避";
@@ -24,44 +134,12 @@ function dodgeJpName(nameEn: string): string | null {
   return "回避";
 }
 
-// つかみ系（grabカテゴリ）も確立した慣用訳語。canonical key から機械生成する。
-// 検証窓シートの つかみ・投げ には つかみ攻撃(pummel) しか無いことが多く、順序補完だと
-// 素の Grab を pummel に誤対応させるため、grab系は canonical で確定させる。
-const GRAB_JP: Record<string, string> = {
-  grab: "つかみ",
-  dashgrab: "ダッシュつかみ",
-  pivotgrab: "振り向きつかみ",
-  pummel: "つかみ攻撃",
-};
-
-export interface NameMatch {
-  slug: string;
-  moveSlug: string;
-  nameEn: string;
-  category: string;
-  nameJa: string | null;
-  /** high=canonical一致 / medium=順序補完 / low=慣用名生成 */
-  confidence: "high" | "medium" | "low";
-  needsReview: boolean;
-  aiGenerated: boolean;
-  method: "canonical" | "order" | "generated" | "derived_canonical";
-}
-
-// UFDカテゴリ → JPセクション（順序補完の対象セクションを絞る）
-const CATEGORY_TO_SECTION: Record<string, string[]> = {
-  jab: ["地上攻撃"],
-  dash: ["地上攻撃"],
-  tilt: ["地上攻撃"],
-  smash: ["地上攻撃"],
-  aerial: ["空中攻撃"],
-  special: ["必殺ワザ"],
-  grab: ["つかみ・投げ"],
-  throw: ["投げ", "つかみ・投げ"],
-  dodge: [], // 回避はシート突合対象外（UFD英語名のみ）
-};
+// 規則ベース生成の対象カテゴリ（special と dodge 以外の全カテゴリ）
+const RULE_CATEGORIES = new Set(["jab", "dash", "tilt", "smash", "aerial", "grab", "throw"]);
 
 /**
  * 1キャラ分の突合。UFD moves（表示順）に日本語名を付与した NameMatch[] を返す。
+ * jp（検証窓シート）は必殺技の固有名にのみ使う。
  */
 export function matchCharacter(
   slug: string,
@@ -70,61 +148,77 @@ export function matchCharacter(
 ): NameMatch[] {
   const results: NameMatch[] = [];
 
-  // JP側を canonical index と section順キューに整理
+  // JP側: 必殺技 canonical index と 必殺ワザ セクションの順序リスト
   const jpByCanonical = new Map<string, JpMove>();
-  const jpBySection = new Map<string, JpMove[]>();
+  const jpSpecials: JpMove[] = [];
   for (const jm of jp.moves) {
     const key = jpMoveCanonical(jm);
     if (key && !jpByCanonical.has(key)) jpByCanonical.set(key, jm);
-    const list = jpBySection.get(jm.section) ?? [];
-    list.push(jm);
-    jpBySection.set(jm.section, list);
+    if (jm.section === "必殺ワザ") jpSpecials.push(jm);
   }
   const usedJp = new Set<JpMove>();
-
-  // 順序補完用のセクションカーソル
-  const sectionCursor = new Map<string, number>();
+  let specialCursor = 0;
 
   for (const um of ufdMoves) {
+    // 0a. 回避: 慣用訳語を機械生成
+    if (um.category === "dodge") {
+      results.push({
+        slug,
+        moveSlug: um.slug,
+        nameEn: um.nameEn,
+        category: um.category,
+        nameJa: dodgeJpName(um.nameEn),
+        confidence: "high",
+        needsReview: false,
+        aiGenerated: false,
+        method: "rule",
+      });
+      continue;
+    }
+
+    // 0b. スロット確定技: 規則ベース日本語名を機械生成（順序マッチしない）
+    if (RULE_CATEGORIES.has(um.category)) {
+      const cm = ufdCanonicalWithRest(um.nameEn);
+      const built = cm ? buildRuleName(cm.key, cm.rest) : null;
+      if (built) {
+        results.push({
+          slug,
+          moveSlug: um.slug,
+          nameEn: um.nameEn,
+          category: um.category,
+          nameJa: built.nameJa,
+          confidence: "high",
+          needsReview: built.reviewed,
+          aiGenerated: false,
+          method: "rule",
+        });
+      } else {
+        // canonical 不明（カズヤ固有技/Olimarつかみ比較等）→ 名前なし・要レビュー
+        // （オーバーライド data/overrides/name-overrides.csv で人力補完する）
+        results.push({
+          slug,
+          moveSlug: um.slug,
+          nameEn: um.nameEn,
+          category: um.category,
+          nameJa: null,
+          confidence: "low",
+          needsReview: true,
+          aiGenerated: false,
+          method: "unmatched",
+        });
+      }
+      continue;
+    }
+
+    // ---- special: シート固有名を使う ----
     const canon = ufdCanonical(um.nameEn);
     let nameJa: string | null = null;
     let confidence: NameMatch["confidence"] = "low";
     let method: NameMatch["method"] = "generated";
+    let needsReview = true;
+    let aiGenerated = false;
 
-    // 0. 回避（共通動作）は慣用訳語を機械生成。確立した訳語なので high 扱い。
-    if (um.category === "dodge") {
-      const dj = dodgeJpName(um.nameEn);
-      results.push({
-        slug,
-        moveSlug: um.slug,
-        nameEn: um.nameEn,
-        category: um.category,
-        nameJa: dj,
-        confidence: "high",
-        needsReview: false,
-        aiGenerated: false,
-        method: "derived_canonical",
-      });
-      continue;
-    }
-
-    // 0.5 つかみ系の確立訳語（grab/dashgrab/pivotgrab/pummel）は canonical で確定。
-    if (um.category === "grab" && canon && GRAB_JP[canon]) {
-      results.push({
-        slug,
-        moveSlug: um.slug,
-        nameEn: um.nameEn,
-        category: um.category,
-        nameJa: GRAB_JP[canon],
-        confidence: "high",
-        needsReview: false,
-        aiGenerated: false,
-        method: "derived_canonical",
-      });
-      continue;
-    }
-
-    // 1. canonical一致
+    // 1. canonical一致（NB/横B/上B/下B の基幹行）
     if (canon) {
       const jm = jpByCanonical.get(canon);
       if (jm && !usedJp.has(jm)) {
@@ -132,41 +226,39 @@ export function matchCharacter(
         usedJp.add(jm);
         confidence = "high";
         method = jp.source === "sheet" ? "canonical" : "derived_canonical";
+        needsReview = jp.source !== "sheet";
       }
     }
 
-    // 2. 順序補完（同カテゴリのJPセクションから未使用を順に）
+    // 2. 順序補完（必殺ワザ セクションの未使用行を順に）
     if (!nameJa) {
-      const sections = CATEGORY_TO_SECTION[um.category] ?? [];
-      for (const sec of sections) {
-        const list = jpBySection.get(sec) ?? [];
-        let idx = sectionCursor.get(sec) ?? 0;
-        while (idx < list.length && usedJp.has(list[idx])) idx++;
-        if (idx < list.length) {
-          nameJa = list[idx].nameJa;
-          usedJp.add(list[idx]);
-          sectionCursor.set(sec, idx + 1);
-          confidence = "medium";
-          method = "order";
-          break;
-        }
-        sectionCursor.set(sec, idx);
+      while (specialCursor < jpSpecials.length && usedJp.has(jpSpecials[specialCursor])) {
+        specialCursor++;
+      }
+      if (specialCursor < jpSpecials.length) {
+        const jm = jpSpecials[specialCursor];
+        nameJa = jm.nameJa;
+        usedJp.add(jm);
+        specialCursor++;
+        confidence = "medium";
+        method = "order";
+        needsReview = true;
       }
     }
 
-    // 3. 慣用名生成（canonical key があれば慣用名、無ければ英語名から）
+    // 3. 慣用名生成
+    if (!nameJa && canon) {
+      nameJa = jpNameForCanonical(canon);
+      if (nameJa) {
+        confidence = "low";
+        method = "generated";
+        needsReview = true;
+        aiGenerated = true;
+      }
+    }
     if (!nameJa) {
-      if (canon) {
-        nameJa = jpNameForCanonical(canon);
-        if (nameJa) {
-          confidence = "low";
-          method = "generated";
-        }
-      }
+      method = "unmatched";
     }
-
-    const aiGenerated = jp.source === "ai" || method === "generated";
-    const needsReview = confidence !== "high" || jp.source !== "sheet";
 
     results.push({
       slug,

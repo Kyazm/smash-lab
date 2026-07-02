@@ -48,12 +48,18 @@ npm run build        # 最終JSON + REPORT.md → data/imported/
 
 英日突合（`src/lib/match-names.ts`）:
 
-1. **canonical key 一致**（jab/tilt/smash/aerial/special/grab/throw の正規化キー）= 高信頼
-2. **同カテゴリ出現順で補完** = 中信頼（`needs_review`）
-3. **慣用名生成**（回避・つかみ系の確立訳語、または慣用フォールバック）
+1. **スロット確定技は規則ベース生成**（弱1〜3/百裂/横強/上強/下強/横スマ/上スマ/下スマ/
+   空N/空前/空後/空上/空下/ワイヤー空中攻撃/ダッシュ攻撃/つかみ系/前後上下投げ/回避）。
+   英語側のカテゴリとスロットで技種が確定するため検証窓との順序マッチは使わない。
+   既知の英語修飾（Luma/Cargo/シフト等）は訳語化、未知修飾は `needs_review`
+2. **必殺技のみ検証窓シートの固有名を採用**（NB/横B/上B/下B の canonical 一致 = 高信頼、
+   派生技は 必殺ワザ セクション内の順序補完 = `needs_review`）
+3. **手動オーバーライド**: `data/overrides/name-overrides.csv`（character_slug, move_slug, name_ja）
+   を build 時に最後に適用。パイプライン再実行でも消えない人力修正層
 
-`extra_frames` は docs/02 定義の固定値: aerial=3 / up_b=0 / up_smash=0 / grab=4 / shield_drop=11。
-実効発生 = `moves.startup + extra_frames`。
+`extra_frames` は docs/02 定義の固定値: aerial=3 / up_b=0 / up_smash=0 / grab=4 / shield_drop=11 を
+基本とし、UFDのOoS実効値と±2F超乖離する場合のみ **UFD値を正として (UFD実効値 − startup) に個別調整**
+（多段上B・特殊ジャンプ踏切キャラ対応。調整一覧は REPORT.md）。実効発生 = `moves.startup + extra_frames`。
 
 ## 検証窓シートの罠（実測、`.context/data-sources-addendum-kenshomado.md`）
 

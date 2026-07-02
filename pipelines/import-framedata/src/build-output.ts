@@ -1,15 +1,24 @@
 // 最終出力ビルダー: ufd.json + name-matches.json → data/imported/{characters,moves,oos_options}.json
 // フィールド名は supabase/migrations/0001_schema.sql の列と完全一致させる。
-// REPORT.md に取込サマリー・スポットチェック・既知の問題を出力する。
+// REPORT.md に取込サマリー・スポットチェック・欠損統計・既知の問題を出力する。
+//
+// 手動オーバーライド: data/overrides/name-overrides.csv（character_slug, move_slug, name_ja）を
+// 最後に適用する。再実行しても消えない人力修正層（監査対応 2026-07-03）。
 import { join } from "node:path";
+import { readFile } from "node:fs/promises";
 import { REPO_ROOT, readJsonIfExists, writeJson } from "./lib/http-cache.js";
 import { uuidv5 } from "./lib/uuid.js";
+import { parseCsv } from "./lib/parse-jp-csv.js";
 import { ROSTER, MAIN_SLUG } from "./roster.js";
 import type { UfdCharacter, UfdMove, UfdOos } from "./lib/types.js";
 import type { NameMatch } from "./lib/match-names.js";
 
 const WORK_DIR = join(REPO_ROOT, ".context", "import-framedata");
 const OUT_DIR = join(REPO_ROOT, "data", "imported");
+const OVERRIDES_CSV = join(REPO_ROOT, "data", "overrides", "name-overrides.csv");
+
+// 規則ベース導入前（順序マッチ主体）の needs_review 実績値。REPORT のビフォーアフター表示用。
+const NEEDS_REVIEW_BASELINE = 687;
 
 // docs/02 定義の extra_frames（oos_type別固定値）。実効発生 = moves.startup + extra_frames。
 const EXTRA_FRAMES: Record<UfdOos["oosType"], number> = {
@@ -69,23 +78,56 @@ interface OutOos {
   range_note: string | null;
 }
 
-/** OoSのmoveNameEn を UfdMove に解決（aerial/grab/up_b/up_smash を具体技へ紐づけ） */
+/**
+ * OoSのmoveNameEn を UfdMove に解決（aerial/grab/up_b/up_smash を具体技へ紐づけ）。
+ * 複数候補（地上/空中版の上B等）がある場合は、startup+規定extra が UFDのOoS実効値に
+ * 最も近い候補を選ぶ（監査対応: DK上B等の誤紐付け防止）。
+ */
 function resolveOosMove(oos: UfdOos, moves: UfdMove[]): UfdMove | null {
   const target = oos.moveNameEn.toLowerCase();
-  // Up B / Up Smash / Grab / 具体的な空中技名で照合
-  const byName = moves.find((m) => {
+  const candidates = moves.filter((m) => {
     const n = m.nameEn.toLowerCase();
     if (oos.oosType === "up_b") return /up b|up special/.test(n);
     if (oos.oosType === "up_smash") return /up smash/.test(n);
     if (oos.oosType === "grab") return /^grab$/.test(n);
     if (oos.oosType === "aerial") {
-      // "Neutral Air" 等の具体名一致を優先
       const key = target.replace(/\s+/g, " ");
       return n === key || n.includes(key) || key.includes(n);
     }
     return false;
   });
-  return byName ?? null;
+  if (candidates.length === 0) return null;
+
+  const extra = EXTRA_FRAMES[oos.oosType];
+  let best: UfdMove | null = null;
+  let bestDiff = Infinity;
+  for (const c of candidates) {
+    if (c.startup == null) continue;
+    const d = Math.abs(c.startup + extra - oos.effectiveFrames);
+    if (d < bestDiff) {
+      bestDiff = d;
+      best = c;
+    }
+  }
+  return best ?? candidates[0];
+}
+
+/** 手動オーバーライド読込（無ければ空）。key = "characterSlug::moveSlug" */
+async function loadOverrides(): Promise<Map<string, string>> {
+  const map = new Map<string, string>();
+  let text: string;
+  try {
+    text = await readFile(OVERRIDES_CSV, "utf8");
+  } catch {
+    return map;
+  }
+  const rows = parseCsv(text);
+  for (const r of rows.slice(1)) {
+    const [charSlug, moveSlug, nameJa] = r.map((c) => (c ?? "").trim());
+    if (!charSlug || !moveSlug || !nameJa) continue;
+    map.set(`${charSlug}::${moveSlug}`, nameJa);
+  }
+  return map;
 }
 
 async function main(): Promise<void> {
@@ -106,7 +148,12 @@ async function main(): Promise<void> {
   // 統計
   const missing = { startup: 0, active: 0, faf: 0, on_shield: 0, damage: 0, hitbox: 0, name_ja: 0 };
   const problems: string[] = [];
+  const oosAdjustments: string[] = [];
   let oosLinkFail = 0;
+
+  // 手動オーバーライド（最後に適用される人力修正層）
+  const overrides = await loadOverrides();
+  const usedOverrides = new Set<string>();
 
   for (const entry of ROSTER) {
     const u = ufdBySlug.get(entry.slug);
@@ -130,7 +177,15 @@ async function main(): Promise<void> {
       const moveId = uuidv5(`move:${entry.slug}:${um.slug}`);
       moveIdByUfd.set(um, moveId);
       const nm = jaBy.get(`${entry.slug}::${um.slug}`);
-      const nameJa = nm?.nameJa ?? null;
+      let nameJa = nm?.nameJa ?? null;
+
+      // 手動オーバーライド適用（最優先）
+      const ovKey = `${entry.slug}::${um.slug}`;
+      const ov = overrides.get(ovKey);
+      if (ov !== undefined) {
+        nameJa = ov;
+        usedOverrides.add(ovKey);
+      }
 
       if (um.startup == null) missing.startup++;
       if (um.active == null) missing.active++;
@@ -167,14 +222,18 @@ async function main(): Promise<void> {
         continue;
       }
       const moveId = moveIdByUfd.get(move)!;
-      const extra = EXTRA_FRAMES[oos.oosType];
-      // クロスチェック: startup+extra が UFD実効値と乖離していたら記録（UFDの丸め/背面差で±ありうる）
+      let extra = EXTRA_FRAMES[oos.oosType];
+      // クロスチェック: startup+extra が UFD実効値と±2F超乖離する場合はUFDのOoS値を正とし、
+      // extra_frames = (UFD OoS値 − startup) に調整する（監査対応 2026-07-03。
+      // 多段上B・特殊ジャンプ踏切キャラ等で docs 固定値が合わないケース）。
       if (move.startup != null) {
         const computed = move.startup + extra;
         if (Math.abs(computed - oos.effectiveFrames) > 2) {
-          problems.push(
-            `OoS乖離 ${entry.slug} ${oos.oosType}(${move.nameEn}): 計算${computed}f vs UFD${oos.effectiveFrames}f`,
+          const adjusted = oos.effectiveFrames - move.startup;
+          oosAdjustments.push(
+            `${entry.slug} ${oos.oosType}(${move.nameEn}): extra_frames ${extra}→${adjusted}（UFD実効${oos.effectiveFrames}fを正として調整）`,
           );
+          extra = adjusted;
         }
       }
       const oosId = uuidv5(`oos:${entry.slug}:${oos.oosType}:${move.slug}`);
@@ -191,7 +250,10 @@ async function main(): Promise<void> {
       });
     }
     // shield_drop を1件付与（ダッシュ攻撃があれば紐づけ、universal 11F）
-    const dash = u.moves.find((m) => m.category === "dash");
+    // 素の "Dash Attack" を優先（カズヤの Double Dash Attack 等の派生を代表にしない）
+    const dash =
+      u.moves.find((m) => m.category === "dash" && /^dash attack$/i.test(m.nameEn)) ??
+      u.moves.find((m) => m.category === "dash");
     if (dash) {
       outOos.push({
         id: uuidv5(`oos:${entry.slug}:shield_drop:${dash.slug}`),
@@ -219,6 +281,13 @@ async function main(): Promise<void> {
   );
   if (jp) for (const c of jp) jpSourceCounts[c.source]++;
 
+  // 未適用オーバーライド（slug のタイポ等）を検出
+  for (const key of overrides.keys()) {
+    if (!usedOverrides.has(key)) {
+      problems.push(`オーバーライド未適用（該当技なし）: ${key.replace("::", " / ")}`);
+    }
+  }
+
   // スポットチェック
   const spot = spotChecks(outChars, outMoves, outOos);
 
@@ -233,6 +302,9 @@ async function main(): Promise<void> {
     jpSourceCounts,
     missing,
     oosLinkFail,
+    oosAdjustments,
+    overrideApplied: usedOverrides.size,
+    overrideTotal: overrides.size,
     problems,
     spot,
   });
@@ -241,6 +313,7 @@ async function main(): Promise<void> {
 
   console.log(`[build-output] characters=${outChars.length} moves=${total} oos=${outOos.length}`);
   console.log(`  日本語カバレッジ=${((withJa / total) * 100).toFixed(1)}% needs_review=${needsReview} ai_generated=${aiGen}`);
+  console.log(`  オーバーライド適用=${usedOverrides.size}/${overrides.size} OoS調整=${oosAdjustments.length}件`);
   console.log(`  → data/imported/{characters,moves,oos_options}.json + REPORT.md`);
   if (problems.length) console.log(`  ⚠ 問題 ${problems.length}件（REPORT.md参照）`);
 }
@@ -306,6 +379,9 @@ function buildReport(d: {
   jpSourceCounts: { sheet: number; derived: number; ai: number };
   missing: Record<string, number>;
   oosLinkFail: number;
+  oosAdjustments: string[];
+  overrideApplied: number;
+  overrideTotal: number;
   problems: string[];
   spot: SpotResult[];
 }): string {
@@ -323,8 +399,11 @@ function buildReport(d: {
   l.push(`- 技数: **${d.moveCount}**`);
   l.push(`- OoS候補数: **${d.oosCount}**`);
   l.push(`- 日本語名カバレッジ: **${d.jaCoverage}%** (${d.withJa}/${d.moveCount})`);
-  l.push(`- needs_review: **${d.needsReview}** 件`);
+  l.push(
+    `- needs_review: **${d.needsReview}** 件（順序マッチ主体の旧方式: ${NEEDS_REVIEW_BASELINE}件 → 規則ベース生成導入で削減）`,
+  );
   l.push(`- ai_generated: **${d.aiGen}** 件`);
+  l.push(`- 手動オーバーライド適用: **${d.overrideApplied}** 件（定義 ${d.overrideTotal} 件）`);
   l.push("");
   l.push("### 日本語技名ソース内訳");
   l.push("");
@@ -344,6 +423,19 @@ function buildReport(d: {
   l.push("|---|---|---|");
   for (const s of d.spot) l.push(`| ${s.label} | ${s.ok ? "✅ OK" : "❌ NG"} | ${s.detail} |`);
   l.push("");
+  l.push("## OoS extra_frames の個別調整");
+  l.push("");
+  if (d.oosAdjustments.length === 0) {
+    l.push("- なし（全OoSが docs/02 固定値と±2F以内で一致）");
+  } else {
+    l.push(
+      `UFDのOoS実効値と docs/02 固定 extra_frames の計算が±2F超乖離した ${d.oosAdjustments.length} 件は、`,
+    );
+    l.push("**UFD値を正として extra_frames = (UFD OoS実効値 − startup) に調整**した:");
+    l.push("");
+    for (const a of d.oosAdjustments) l.push(`- ${a}`);
+  }
+  l.push("");
   l.push("## 既知の問題・要確認");
   l.push("");
   if (d.oosLinkFail > 0) l.push(`- OoS紐付け失敗（対応技が見つからず除外）: ${d.oosLinkFail} 件`);
@@ -359,8 +451,9 @@ function buildReport(d: {
   l.push("");
   l.push("- ヒットボックス画像はURLのみ保存（ダウンロードせず）。Storageミラーは後工程。");
   l.push("- needs_review / ai_generated 行は data/imported/name-mapping.csv で確認可能。");
-  l.push("- OoS extra_frames は docs/02 定義の固定値（aerial=3/up_b=0/up_smash=0/grab=4/shield_drop=11）。");
-  l.push("  実効発生 = moves.startup + extra_frames。UFD実効値との±2F超の乖離は上記に列挙。");
+  l.push("- 日本語名の人力修正は data/overrides/name-overrides.csv に追記（再実行でも消えない）。");
+  l.push("- OoS extra_frames は docs/02 定義の固定値（aerial=3/up_b=0/up_smash=0/grab=4/shield_drop=11）を");
+  l.push("  基本とし、UFD実効値と±2F超乖離する場合のみ個別調整（上記「OoS extra_frames の個別調整」参照）。");
   l.push("");
   return l.join("\n");
 }

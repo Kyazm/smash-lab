@@ -138,6 +138,21 @@ export function parseJpCsv(text: string): { charLabel: string | null; moves: JpM
     // ヘッダ行（"判定持続"等が並ぶ）を弾く: c1が既知ヘッダなら skip
     if (NOISE_CELLS.has(c1) && !hasBase) continue;
 
+    // 必殺ワザの "地上・空中"/"地上"/"空中" は新規技名ではなく直前技の適用範囲サブラベル。
+    // baseName を引き継いで variant として扱う（順序補完時に「地上・空中」単独名になるのを防ぐ）。
+    const isScopeLabel = /^(地上・空中|地上|空中)(のみ)?$/.test(c0);
+    if (isScopeLabel && lastBaseName) {
+      const scopeVariant = hasVariant ? c1 : c0;
+      moves.push({
+        nameJa: `${lastBaseName}（${scopeVariant}）`,
+        baseName: lastBaseName,
+        variant: scopeVariant,
+        section: currentSection,
+        order: order++,
+      });
+      continue;
+    }
+
     const baseName = hasBase ? c0 : lastBaseName;
     if (hasBase) lastBaseName = c0;
     const variant = hasVariant ? c1 : "";

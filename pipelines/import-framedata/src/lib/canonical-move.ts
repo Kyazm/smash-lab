@@ -1,60 +1,103 @@
 // UFD英語技名 / 検証窓シート日本語技名 を「正規化キー」へ落とす。
-// 突合は基本このキーの一致で行い、外れたものは category内の出現順で補完する。
 //
-// 正規化キーは代表的なスマブラ技: jab1-3, ftilt/utilt/dtilt, dash, fsmash/usmash/dsmash,
-// nair/fair/bair/uair/dair, nb/sideb/upb/downb, grab, pummel, fthrow/bthrow/uthrow/dthrow。
-// 一意に定まらない技（多段/派生/固有必殺の内部技）は null を返し、順序補完に委ねる。
+// 弱/強/スマッシュ/空中/つかみ/投げ/ダッシュ攻撃は英語側のカテゴリとスロットで技種が確定するため、
+// 日本語名は規則ベースで機械生成する（検証窓との順序マッチは使わない）。
+// 順序マッチは必殺技・派生技など固有名が必要なものに限定する（監査指摘 2026-07-03）。
 
-/** UFD movename → canonical key（不明は null） */
-export function ufdCanonical(nameEn: string): string | null {
-  const n = nameEn.toLowerCase().trim();
+export interface CanonicalMatch {
+  /** 正規化キー（jab1/ftilt/nair/zair/nb/upb/fthrow 等） */
+  key: string;
+  /** 技名からベース部分を除いた残り（例 "Forward Tilt (Up Angled)" → "Up Angled"）。修飾なしは "" */
+  rest: string;
+}
 
+interface Pattern {
+  re: RegExp;
+  /** キー。関数はマッチ結果からキーを導出（弱n段など）。 */
+  key?: string | ((m: RegExpMatchArray) => string);
+  /** true: このパターンにマッチしたら canonical なし確定（カズヤ固有技等）。 */
+  reject?: boolean;
+}
+
+// パターン定義。順序が重要（jab系→ダッシュ→空中→強→スマッシュ→投げ→つかみ→必殺）。
+// - jab系は ^ アンカー必須（"Crouch Jab" 等の誤ヒット防止）
+// - "Down-Forward Tilt" / "Back Tilt" 等の複合方向はカズヤ固有技であり ftilt に吸わせない
+const PATTERNS: Pattern[] = [
   // Jab
-  const jab = n.match(/^jab\s*([123])/);
-  if (jab) return `jab${jab[1]}`;
-  if (/^(neutral attack|jab)$/.test(n)) return "jab1";
-  if (/rapid jab/.test(n)) return "jab_rapid";
+  { re: /^jab\s*(\d+)/i, key: (m) => `jab${m[1]}` },
+  { re: /rapid jab finisher/i, key: "jab_rapid_finisher" },
+  { re: /rapid jab/i, key: "jab_rapid" },
+  { re: /^(?:neutral attack|jab)\b/i, key: "jab" },
 
-  // Dash
-  if (/dash attack/.test(n)) return "dash";
+  // ダッシュ攻撃（"Double Dash Attack" も dash に吸わせ、修飾で区別）
+  { re: /dash attack/i, key: "dash" },
 
-  // Tilts
-  if (/forward tilt|f[- ]?tilt/.test(n)) return "ftilt";
-  if (/up tilt|u[- ]?tilt/.test(n)) return "utilt";
-  if (/down tilt|d[- ]?tilt/.test(n)) return "dtilt";
+  // 空中攻撃（Z Air を先に）
+  { re: /\bz[- ]?air\b/i, key: "zair" },
+  { re: /neutral air(?! ?dodge)/i, key: "nair" },
+  { re: /forward air/i, key: "fair" },
+  { re: /back(?:ward)? air/i, key: "bair" },
+  { re: /up air/i, key: "uair" },
+  { re: /down air/i, key: "dair" },
 
-  // Smashes
-  if (/forward smash|f[- ]?smash/.test(n)) return "fsmash";
-  if (/up smash|u[- ]?smash/.test(n)) return "usmash";
-  if (/down smash|d[- ]?smash/.test(n)) return "dsmash";
+  // 強攻撃。カズヤの複合方向強攻撃（Down-Forward Tilt / Up-Back Tilt / Back Tilt 等）は
+  // 固有名技なので canonical 不一致とし、順序マッチ/オーバーライドに委ねる。
+  { re: /(?:down|up)[- ](?:forward|back) tilt/i, reject: true },
+  { re: /(?<![a-z])back tilt/i, reject: true },
+  { re: /forward tilt/i, key: "ftilt" },
+  { re: /up tilt/i, key: "utilt" },
+  { re: /down tilt/i, key: "dtilt" },
 
-  // Aerials
-  if (/neutral air|nair|n[- ]?air/.test(n)) return "nair";
-  if (/forward air|fair|f[- ]?air/.test(n)) return "fair";
-  if (/back air|bair|b[- ]?air/.test(n)) return "bair";
-  if (/up air|uair|u[- ]?air/.test(n)) return "uair";
-  if (/down air|dair|d[- ]?air/.test(n)) return "dair";
+  // スマッシュ
+  { re: /forward smash/i, key: "fsmash" },
+  { re: /up smash/i, key: "usmash" },
+  { re: /down smash/i, key: "dsmash" },
 
-  // Specials（内部の複数hitは分けず代表keyへ。始/連/〆などは順序補完に回す）
-  if (/^neutral b|^nb\b|neutral special/.test(n)) return "nb";
-  if (/^side b|^side special|^forward b/.test(n)) return "sideb";
-  if (/^up b|^up special/.test(n)) return "upb";
-  if (/^down b|^down special/.test(n)) return "downb";
+  // 投げ（Cargo系は修飾で吸収）
+  { re: /forward throw/i, key: "fthrow" },
+  { re: /back(?:ward)? throw/i, key: "bthrow" },
+  { re: /up throw/i, key: "uthrow" },
+  { re: /down throw/i, key: "dthrow" },
 
-  // Grabs / throws
-  if (/pivot grab/.test(n)) return "pivotgrab";
-  if (/dash grab/.test(n)) return "dashgrab";
-  if (/^grab$/.test(n)) return "grab";
-  if (/pummel/.test(n)) return "pummel";
-  if (/forward throw|f[- ]?throw/.test(n)) return "fthrow";
-  if (/back(ward)? throw|b[- ]?throw/.test(n)) return "bthrow";
-  if (/up throw|u[- ]?throw/.test(n)) return "uthrow";
-  if (/down throw|d[- ]?throw/.test(n)) return "dthrow";
+  // つかみ
+  { re: /pivot grab/i, key: "pivotgrab" },
+  { re: /dash grab/i, key: "dashgrab" },
+  { re: /^grab$/i, key: "grab" },
+  { re: /pummel/i, key: "pummel" },
 
+  // 必殺（シート canonical 突合用）
+  { re: /^neutral b\b|^neutral special\b/i, key: "nb" },
+  { re: /^side b\b|^side special\b|^forward b\b/i, key: "sideb" },
+  { re: /^up b\b|^up special\b/i, key: "upb" },
+  { re: /^down b\b|^down special\b/i, key: "downb" },
+];
+
+/**
+ * UFD movename → { canonical key, 残り修飾テキスト }。不明は null。
+ * rest はベース部分を除去し、括弧・カンマ・アスタリスク等を掃除したもの。
+ */
+export function ufdCanonicalWithRest(nameEn: string): CanonicalMatch | null {
+  for (const p of PATTERNS) {
+    const m = nameEn.match(p.re);
+    if (!m) continue;
+    if (p.reject) return null;
+    const key = typeof p.key === "function" ? p.key(m) : p.key!;
+    const rest = nameEn
+      .replace(p.re, " ")
+      .replace(/[()*,/]+/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+    return { key, rest };
+  }
   return null;
 }
 
-/** 検証窓シート日本語技名（baseName）→ canonical key（不明は null） */
+/** UFD movename → canonical key（不明は null）。従来API互換。 */
+export function ufdCanonical(nameEn: string): string | null {
+  return ufdCanonicalWithRest(nameEn)?.key ?? null;
+}
+
+/** 検証窓シート日本語技名（baseName）→ canonical key（不明は null）。必殺技の突合に使う。 */
 export function jpCanonical(baseName: string, variant: string): string | null {
   const b = baseName.trim();
   const v = variant.trim();
@@ -91,7 +134,6 @@ export function jpCanonical(baseName: string, variant: string): string | null {
 
   // 必殺（NB/横B/上B/下B）。派生内部技（地上・空中/持続/〆）はここで拾わず順序補完へ。
   if (/^NB\b|^通常(必殺|B)/.test(b)) return "nb";
-  if (/^横B\b|^横(必殺|スマ)?B?/.test(b) && /^横B/.test(b)) return "sideb";
   if (/^横B/.test(b)) return "sideb";
   if (/^上B\b/.test(b)) return "upb";
   if (/^下B\b/.test(b)) return "downb";
