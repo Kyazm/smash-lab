@@ -43,7 +43,7 @@
     "id": "1dd91ab7-db50-5859-bbe8-fd2d039aca4c",
     "move_id": "b7b609f3-8c5a-5f24-8579-3e803619003b",
     "oos_type": "up_b",
-    "extra_frames": 0,
+    "extra_frames": -12,
     "label": "上B",
     "range_note": "密着限定"
   },
@@ -2016,16 +2016,16 @@
     "range_note": "密着限定"
   },
   {
-    "id": "49083bc7-a8a1-558a-8aaf-aab54e53fad2",
-    "move_id": "ae3a9b79-2bde-5950-8629-fcc10fa75846",
+    "id": "e01342ec-84cd-5e68-9227-e28428dcac5c",
+    "move_id": "c71cbe6a-5643-52ff-a759-0bef815cbc33",
     "oos_type": "aerial",
     "extra_frames": 3,
     "label": "空中攻撃",
     "range_note": "中距離可"
   },
   {
-    "id": "8b352290-6916-5f68-8b74-988239eba311",
-    "move_id": "492a9fa3-1491-5009-be9f-5d22a4d8a9c9",
+    "id": "39d29c8b-99f8-5168-aa6c-9847ee354b85",
+    "move_id": "88e2254d-76da-5294-a72e-b94509ab5755",
     "oos_type": "aerial",
     "extra_frames": 3,
     "label": "空中攻撃",
@@ -2488,8 +2488,8 @@
     "range_note": null
   },
   {
-    "id": "6d9ce1c0-6711-5552-9b32-753b61198909",
-    "move_id": "c743995a-e81a-5064-b9f4-8a174ffc2a72",
+    "id": "67b5be1d-b062-5ecd-b83c-068ae1d28f71",
+    "move_id": "277001b3-3763-56fb-bfe1-d755dbb61d19",
     "oos_type": "up_b",
     "extra_frames": 0,
     "label": "上B",
@@ -2987,7 +2987,7 @@
     "id": "f586e03e-4d78-5ee7-9012-cb5593e1ccfd",
     "move_id": "f1576cb3-16aa-53a7-aac6-c7ca962afd4c",
     "oos_type": "up_b",
-    "extra_frames": 0,
+    "extra_frames": 3,
     "label": "上B",
     "range_note": "密着限定"
   },
@@ -3171,7 +3171,7 @@
     "id": "6b438aef-fb88-52f2-bf19-3aca063e5a29",
     "move_id": "af645e10-ecb8-5d9f-8dc6-333db728cf5c",
     "oos_type": "aerial",
-    "extra_frames": 3,
+    "extra_frames": 7,
     "label": "空中攻撃",
     "range_note": "中距離可"
   },
@@ -3291,7 +3291,7 @@
     "id": "f323dd25-aae5-5d6d-b411-4e4fb4e536ab",
     "move_id": "6ec929e8-8a01-5cf0-ab9a-efcac96e9251",
     "oos_type": "aerial",
-    "extra_frames": 3,
+    "extra_frames": 7,
     "label": "空中攻撃",
     "range_note": "中距離可"
   },
@@ -3307,7 +3307,7 @@
     "id": "e02ff8a1-7f0c-506d-81ae-734e1baebcfb",
     "move_id": "ea6bcfb5-26fa-522a-b55b-9972b75f76a7",
     "oos_type": "aerial",
-    "extra_frames": 3,
+    "extra_frames": 7,
     "label": "空中攻撃",
     "range_note": "中距離可"
   },
@@ -3320,8 +3320,8 @@
     "range_note": "密着限定"
   },
   {
-    "id": "6eb27792-c104-59b2-ac27-7f4d44133d1c",
-    "move_id": "18b7067c-3ab3-527d-bd5c-c32e4c657ed2",
+    "id": "b8b2683f-748c-52bb-86b0-9b8bf273bb61",
+    "move_id": "e7760a4a-0a8c-5d52-a57a-824f9e09aa43",
     "oos_type": "shield_drop",
     "extra_frames": 11,
     "label": "ガード解除",
