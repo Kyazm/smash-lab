@@ -1,0 +1,22 @@
+{
+  "name": "import-framedata",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "ultimateframedata.com + 検証窓シート → characters/moves/oos_options JSON 一括取込 (ADR-0003 / ADR-0006)",
+  "scripts": {
+    "scrape:ufd": "tsx src/scrape-ufd.ts",
+    "fetch:jp": "tsx src/fetch-jp-names.ts",
+    "match": "tsx src/match-names.ts",
+    "build": "tsx src/build-output.ts",
+    "all": "tsx src/run-all.ts"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "tsx": "^4.19.2"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.0",
+    "typescript": "^6.0.3"
+  }
+}
