@@ -1,12 +1,13 @@
-// キャラページ（"/c/:slug"）。タブ: フレームデータ表 / 確定反撃（守り・攻め）。
+// キャラページ（"/c/:slug"）。タブ: フレームデータ表 / 確定反撃（守り・攻め） / キャラ対メモ。
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { dataProvider } from "../data";
 import { FrameDataTable } from "../components/FrameDataTable";
 import { PunishPanel } from "../components/PunishPanel";
+import { MatchupNotesTab } from "../components/notes/MatchupNotesTab";
 import type { CharacterBundle } from "../types";
 
-type Tab = "framedata" | "punish";
+type Tab = "framedata" | "punish" | "notes";
 
 export function CharacterPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -79,14 +80,29 @@ export function CharacterPage() {
         >
           確定反撃
         </button>
+        <button
+          type="button"
+          onClick={() => setTab("notes")}
+          className={`px-3 py-2 text-sm font-medium ${
+            tab === "notes" ? "border-b-2 border-emerald-500 text-emerald-400" : "text-slate-400"
+          }`}
+        >
+          キャラ対メモ
+        </button>
       </div>
 
       <div className="mt-4">
         {tab === "framedata" ? (
           <FrameDataTable moves={bundle.moves} />
-        ) : (
+        ) : tab === "punish" ? (
           /* key でキャラ切替時に選択状態をリセット（技選択の持ち越し防止） */
           <PunishPanel key={bundle.character.id} opponent={bundle} main={main ?? null} />
+        ) : (
+          <MatchupNotesTab
+            key={bundle.character.id}
+            characterId={bundle.character.id}
+            characterNameJa={bundle.character.name_ja}
+          />
         )}
       </div>
     </div>
