@@ -1,0 +1,803 @@
+[
+  {
+    "id": "a4f42229-bb70-5fee-9fe0-e883d3cd1150",
+    "slug": "mario",
+    "name_ja": "マリオ",
+    "name_en": "Mario",
+    "fighter_number": 1,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "81580e99-4859-5dff-8a0c-6840f54fa689",
+    "slug": "donkey_kong",
+    "name_ja": "ドンキーコング",
+    "name_en": "Donkey Kong",
+    "fighter_number": 2,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "0ef92e41-6239-5fd1-a494-e389606563d5",
+    "slug": "link",
+    "name_ja": "リンク",
+    "name_en": "Link",
+    "fighter_number": 3,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "b7b880c9-284e-5b0c-bd73-8dfb308d1acd",
+    "slug": "samus",
+    "name_ja": "サムス",
+    "name_en": "Samus",
+    "fighter_number": 4,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "a5979a6d-bb14-56ed-be32-70a92eeb2641",
+    "slug": "dark_samus",
+    "name_ja": "ダークサムス",
+    "name_en": "Dark Samus",
+    "fighter_number": 4,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "ab6bb60f-782e-5813-9d7c-5e663007e73e",
+    "slug": "yoshi",
+    "name_ja": "ヨッシー",
+    "name_en": "Yoshi",
+    "fighter_number": 5,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "974e93f3-2b90-5096-96f3-9bc269efb7e6",
+    "slug": "kirby",
+    "name_ja": "カービィ",
+    "name_en": "Kirby",
+    "fighter_number": 6,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "f260267c-d67e-5451-8c49-9d8e20c071cd",
+    "slug": "fox",
+    "name_ja": "フォックス",
+    "name_en": "Fox",
+    "fighter_number": 7,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "b0c7c907-18c0-5ce8-b889-91e130dcb1b8",
+    "slug": "pikachu",
+    "name_ja": "ピカチュウ",
+    "name_en": "Pikachu",
+    "fighter_number": 8,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "17c13bd8-da08-5da6-8a01-465b79d296ad",
+    "slug": "luigi",
+    "name_ja": "ルイージ",
+    "name_en": "Luigi",
+    "fighter_number": 9,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "4e0180fc-d73d-5ee5-92c1-5795bea4022a",
+    "slug": "ness",
+    "name_ja": "ネス",
+    "name_en": "Ness",
+    "fighter_number": 10,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "a343e006-8a3d-567b-90c4-88aa58e52ca7",
+    "slug": "captain_falcon",
+    "name_ja": "キャプテン・ファルコン",
+    "name_en": "Captain Falcon",
+    "fighter_number": 11,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "aea52b1e-097a-5d0d-be16-976f6d8a43d1",
+    "slug": "jigglypuff",
+    "name_ja": "プリン",
+    "name_en": "Jigglypuff",
+    "fighter_number": 12,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "7a69e5a6-67d8-5fbd-9685-adc87ad7f086",
+    "slug": "peach",
+    "name_ja": "ピーチ",
+    "name_en": "Peach",
+    "fighter_number": 13,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "e2153ac1-13fa-5784-a4b6-ab8bd7623c91",
+    "slug": "daisy",
+    "name_ja": "デイジー",
+    "name_en": "Daisy",
+    "fighter_number": 13,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "169c2ebd-c4ba-541d-aa29-b9c6bf5d87c7",
+    "slug": "bowser",
+    "name_ja": "クッパ",
+    "name_en": "Bowser",
+    "fighter_number": 14,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "c62a014d-5d80-5590-a1c2-9e2f732d389e",
+    "slug": "ice_climbers",
+    "name_ja": "アイスクライマー",
+    "name_en": "Ice Climbers",
+    "fighter_number": 15,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "bcf0d56e-2233-5983-a035-c50f5ec1e493",
+    "slug": "sheik",
+    "name_ja": "シーク",
+    "name_en": "Sheik",
+    "fighter_number": 16,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "3079b93b-6703-511b-925e-1e3db1bf7aa2",
+    "slug": "zelda",
+    "name_ja": "ゼルダ",
+    "name_en": "Zelda",
+    "fighter_number": 17,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "825886e0-76ad-5d2c-9a76-ec95ba304e6c",
+    "slug": "dr_mario",
+    "name_ja": "ドクターマリオ",
+    "name_en": "Dr. Mario",
+    "fighter_number": 18,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "cebcfb20-34d7-56f1-b2fe-0bc95cd7e62c",
+    "slug": "pichu",
+    "name_ja": "ピチュー",
+    "name_en": "Pichu",
+    "fighter_number": 19,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "a2dc0e40-a895-5779-baf9-b24a545288e0",
+    "slug": "falco",
+    "name_ja": "ファルコ",
+    "name_en": "Falco",
+    "fighter_number": 20,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "ef899144-8a7e-54c7-9a93-3aae4739c96a",
+    "slug": "marth",
+    "name_ja": "マルス",
+    "name_en": "Marth",
+    "fighter_number": 21,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "119e9b84-088e-5994-b0be-ee472d741695",
+    "slug": "lucina",
+    "name_ja": "ルキナ",
+    "name_en": "Lucina",
+    "fighter_number": 21,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "a076dac2-79ea-5d1c-bb65-3f37f7a30293",
+    "slug": "young_link",
+    "name_ja": "こどもリンク",
+    "name_en": "Young Link",
+    "fighter_number": 22,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "c882aca0-f943-51f7-bbd7-ef89ec9209d4",
+    "slug": "ganondorf",
+    "name_ja": "ガノンドロフ",
+    "name_en": "Ganondorf",
+    "fighter_number": 23,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "bac882e1-5b87-53e8-93b9-5b69a075bb76",
+    "slug": "mewtwo",
+    "name_ja": "ミュウツー",
+    "name_en": "Mewtwo",
+    "fighter_number": 24,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "fc69f42a-4bdf-584a-9bd7-7aa7d8a044f1",
+    "slug": "roy",
+    "name_ja": "ロイ",
+    "name_en": "Roy",
+    "fighter_number": 25,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "cfee5b6f-0e78-5421-b277-5c3c24179ca9",
+    "slug": "chrom",
+    "name_ja": "クロム",
+    "name_en": "Chrom",
+    "fighter_number": 25,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "94384e48-9838-5cf9-b5c7-25f81077dd8c",
+    "slug": "mr_game_and_watch",
+    "name_ja": "Mr.ゲーム&ウォッチ",
+    "name_en": "Mr. Game & Watch",
+    "fighter_number": 26,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "e16e8e96-6fb1-5429-91ad-e3e76842f073",
+    "slug": "meta_knight",
+    "name_ja": "メタナイト",
+    "name_en": "Meta Knight",
+    "fighter_number": 27,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "fb25e790-b4ba-5495-a8d2-4ddfb32750ae",
+    "slug": "pit",
+    "name_ja": "ピット",
+    "name_en": "Pit",
+    "fighter_number": 28,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "50853f88-03e2-5e99-8a30-b85a1c50b7a7",
+    "slug": "dark_pit",
+    "name_ja": "ブラックピット",
+    "name_en": "Dark Pit",
+    "fighter_number": 28,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "940675d4-25c1-5b74-8e9a-91a3402003a1",
+    "slug": "zero_suit_samus",
+    "name_ja": "ゼロスーツサムス",
+    "name_en": "Zero Suit Samus",
+    "fighter_number": 29,
+    "icon_url": null,
+    "is_main": true
+  },
+  {
+    "id": "bc911e27-445b-5e90-90be-16ac1835c506",
+    "slug": "wario",
+    "name_ja": "ワリオ",
+    "name_en": "Wario",
+    "fighter_number": 30,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "b8015b3d-5d92-5bf6-8806-8f8212199b32",
+    "slug": "snake",
+    "name_ja": "スネーク",
+    "name_en": "Snake",
+    "fighter_number": 31,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "57a0efa4-7172-5332-991c-ddadcdd1bcb0",
+    "slug": "ike",
+    "name_ja": "アイク",
+    "name_en": "Ike",
+    "fighter_number": 32,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "f3cb7bb4-6ad6-59df-928a-810a89b11a67",
+    "slug": "pt_squirtle",
+    "name_ja": "ゼニガメ",
+    "name_en": "Squirtle",
+    "fighter_number": 33,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "ffc891d2-bb39-560b-8bbc-855ad54954c0",
+    "slug": "pt_ivysaur",
+    "name_ja": "フシギソウ",
+    "name_en": "Ivysaur",
+    "fighter_number": 34,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "a07b8f99-e7b5-584a-92be-ae67573bb878",
+    "slug": "pt_charizard",
+    "name_ja": "リザードン",
+    "name_en": "Charizard",
+    "fighter_number": 35,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "3f0e1cc1-3ede-5400-9db1-c5bbf68adba7",
+    "slug": "diddy_kong",
+    "name_ja": "ディディーコング",
+    "name_en": "Diddy Kong",
+    "fighter_number": 36,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "53816712-0c99-5bd9-9a63-43e4dee6bfbc",
+    "slug": "lucas",
+    "name_ja": "リュカ",
+    "name_en": "Lucas",
+    "fighter_number": 37,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "ed7d565f-bbdb-57df-a9b2-028ce1d152e5",
+    "slug": "sonic",
+    "name_ja": "ソニック",
+    "name_en": "Sonic",
+    "fighter_number": 38,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "c35175a0-9b29-53ac-b043-60287acce2b0",
+    "slug": "king_dedede",
+    "name_ja": "デデデ",
+    "name_en": "King Dedede",
+    "fighter_number": 39,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "85a8d2bc-5c8c-5401-9ef2-79be34fb872e",
+    "slug": "olimar",
+    "name_ja": "ピクミン&オリマー",
+    "name_en": "Olimar",
+    "fighter_number": 40,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "eea100e1-0003-524f-91b3-db804eae6553",
+    "slug": "lucario",
+    "name_ja": "ルカリオ",
+    "name_en": "Lucario",
+    "fighter_number": 41,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "2f094304-8a22-56ec-aec3-93817aef98f4",
+    "slug": "rob",
+    "name_ja": "ロボット",
+    "name_en": "R.O.B.",
+    "fighter_number": 42,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "55d0f593-0068-5d66-961a-45613390c07a",
+    "slug": "toon_link",
+    "name_ja": "トゥーンリンク",
+    "name_en": "Toon Link",
+    "fighter_number": 43,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "6ffdd9a7-cdb2-573d-beea-873869ac54a1",
+    "slug": "wolf",
+    "name_ja": "ウルフ",
+    "name_en": "Wolf",
+    "fighter_number": 44,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "3d2f5d52-d129-54d0-b158-3f70d552e712",
+    "slug": "villager",
+    "name_ja": "むらびと",
+    "name_en": "Villager",
+    "fighter_number": 45,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "14ca45f6-0e67-5b19-ba9c-9fadd5c12274",
+    "slug": "mega_man",
+    "name_ja": "ロックマン",
+    "name_en": "Mega Man",
+    "fighter_number": 46,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "4c37efbb-4fb7-55c8-b3db-966747b82e84",
+    "slug": "wii_fit_trainer",
+    "name_ja": "Wii Fit トレーナー",
+    "name_en": "Wii Fit Trainer",
+    "fighter_number": 47,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "b7f949f7-f43f-57c8-8be4-36e4dd78ef82",
+    "slug": "rosalina_and_luma",
+    "name_ja": "ロゼッタ&チコ",
+    "name_en": "Rosalina & Luma",
+    "fighter_number": 48,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "5e285e26-d8e4-51b5-a59a-0290969a76af",
+    "slug": "little_mac",
+    "name_ja": "リトル・マック",
+    "name_en": "Little Mac",
+    "fighter_number": 49,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "3cbd2d88-3d5c-541c-8053-a3c2bee35a65",
+    "slug": "greninja",
+    "name_ja": "ゲッコウガ",
+    "name_en": "Greninja",
+    "fighter_number": 50,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "24d9a0b9-4c8a-5337-8fe2-cdf799c6c4ed",
+    "slug": "mii_brawler",
+    "name_ja": "Mii 格闘タイプ",
+    "name_en": "Mii Brawler",
+    "fighter_number": 51,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "e6966d24-eade-5308-bb1e-e898979c84b3",
+    "slug": "mii_swordfighter",
+    "name_ja": "Mii 剣術タイプ",
+    "name_en": "Mii Swordfighter",
+    "fighter_number": 52,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "ef581b62-ba72-5a8d-8303-84a5a33b7852",
+    "slug": "mii_gunner",
+    "name_ja": "Mii 射撃タイプ",
+    "name_en": "Mii Gunner",
+    "fighter_number": 53,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "99fcc89e-7bcf-5b55-b5c2-340385de9870",
+    "slug": "palutena",
+    "name_ja": "パルテナ",
+    "name_en": "Palutena",
+    "fighter_number": 54,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "fcc3508b-82b8-5f06-8847-f1b17c1c2af3",
+    "slug": "pac_man",
+    "name_ja": "パックマン",
+    "name_en": "Pac-Man",
+    "fighter_number": 55,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "35876538-78c9-5d45-9c58-c151c2e37c1e",
+    "slug": "robin",
+    "name_ja": "ルフレ",
+    "name_en": "Robin",
+    "fighter_number": 56,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "92c837c1-2378-502c-8a36-400e9ac306da",
+    "slug": "shulk",
+    "name_ja": "シュルク",
+    "name_en": "Shulk",
+    "fighter_number": 57,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "e518044f-9e6c-50d3-b87d-48c1754c9b03",
+    "slug": "bowser_jr",
+    "name_ja": "クッパJr.",
+    "name_en": "Bowser Jr.",
+    "fighter_number": 58,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "c8b7a177-1eb0-5219-a936-43810f878ce9",
+    "slug": "duck_hunt",
+    "name_ja": "ダックハント",
+    "name_en": "Duck Hunt",
+    "fighter_number": 59,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "8e7e54b6-d79f-5c74-8c3f-9a8ca78ce016",
+    "slug": "ryu",
+    "name_ja": "リュウ",
+    "name_en": "Ryu",
+    "fighter_number": 60,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "77437bef-a01f-5188-b02b-c2696fdd1272",
+    "slug": "ken",
+    "name_ja": "ケン",
+    "name_en": "Ken",
+    "fighter_number": 60,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "6fd15f69-57c8-5fc1-ab7d-2005924fbd2e",
+    "slug": "cloud",
+    "name_ja": "クラウド",
+    "name_en": "Cloud",
+    "fighter_number": 61,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "fbe208ac-36ca-59ca-90ff-15ce121edadf",
+    "slug": "corrin",
+    "name_ja": "カムイ",
+    "name_en": "Corrin",
+    "fighter_number": 62,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "362f5f6e-3821-58d8-80cc-ff365f9826f0",
+    "slug": "bayonetta",
+    "name_ja": "ベヨネッタ",
+    "name_en": "Bayonetta",
+    "fighter_number": 63,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "4706583e-814f-5d61-9bfc-53a53792a223",
+    "slug": "inkling",
+    "name_ja": "インクリング",
+    "name_en": "Inkling",
+    "fighter_number": 64,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "ce2ca034-c48b-5356-a1b1-5b819834984b",
+    "slug": "ridley",
+    "name_ja": "リドリー",
+    "name_en": "Ridley",
+    "fighter_number": 65,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "296341ac-c836-5827-8cea-89d6d4ce93fb",
+    "slug": "simon",
+    "name_ja": "シモン",
+    "name_en": "Simon",
+    "fighter_number": 66,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "34bd1b12-c58e-547c-8747-70f883db3255",
+    "slug": "richter",
+    "name_ja": "リヒター",
+    "name_en": "Richter",
+    "fighter_number": 66,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "ec0d4714-00a2-5b78-9372-fe6d696f2006",
+    "slug": "king_k_rool",
+    "name_ja": "キングクルール",
+    "name_en": "King K. Rool",
+    "fighter_number": 67,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "4a58c1a4-78a1-579a-9ccc-63a49ef5534b",
+    "slug": "isabelle",
+    "name_ja": "しずえ",
+    "name_en": "Isabelle",
+    "fighter_number": 68,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "acb9d5d3-440d-53b7-976c-303a08762b86",
+    "slug": "incineroar",
+    "name_ja": "ガオガエン",
+    "name_en": "Incineroar",
+    "fighter_number": 69,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "69ebf04b-11fc-53ef-9f80-4d4b2d6d45b1",
+    "slug": "piranha_plant",
+    "name_ja": "パックンフラワー",
+    "name_en": "Piranha Plant",
+    "fighter_number": 70,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "8f9b7a34-a01d-504c-b53d-5fa2c320b754",
+    "slug": "joker",
+    "name_ja": "ジョーカー",
+    "name_en": "Joker",
+    "fighter_number": 71,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "744dffec-c65f-544e-9a3b-40446b2e5480",
+    "slug": "hero",
+    "name_ja": "勇者",
+    "name_en": "Hero",
+    "fighter_number": 72,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "93ed2701-29b5-59ff-85fb-243da2056cc4",
+    "slug": "banjo_and_kazooie",
+    "name_ja": "バンジョー&カズーイ",
+    "name_en": "Banjo & Kazooie",
+    "fighter_number": 73,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "11e27e38-32bd-5e89-a8ae-61c3bf9cf143",
+    "slug": "terry",
+    "name_ja": "テリー",
+    "name_en": "Terry",
+    "fighter_number": 74,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "6751b1fd-6e2b-5acf-94fd-92f989a1a8c9",
+    "slug": "byleth",
+    "name_ja": "ベレト/ベレス",
+    "name_en": "Byleth",
+    "fighter_number": 75,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "6fe8ed3d-8694-5fad-b53b-4dc736d1f91b",
+    "slug": "minmin",
+    "name_ja": "ミェンミェン",
+    "name_en": "Min Min",
+    "fighter_number": 76,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "593cc0a2-acb4-59f3-8715-de9520adeab0",
+    "slug": "steve",
+    "name_ja": "スティーブ",
+    "name_en": "Steve",
+    "fighter_number": 77,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "b2384980-1ea1-52c4-ac78-989da4960ae9",
+    "slug": "sephiroth",
+    "name_ja": "セフィロス",
+    "name_en": "Sephiroth",
+    "fighter_number": 78,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "28f5945b-2ee1-5367-ae24-903a54bc97ab",
+    "slug": "pyra",
+    "name_ja": "ホムラ",
+    "name_en": "Pyra",
+    "fighter_number": 79,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "2173c576-fe2b-5e35-9340-559d14981534",
+    "slug": "mythra",
+    "name_ja": "ヒカリ",
+    "name_en": "Mythra",
+    "fighter_number": 79,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "8a34ce96-69a0-5f17-80da-5d27ade01fdb",
+    "slug": "kazuya",
+    "name_ja": "カズヤ",
+    "name_en": "Kazuya",
+    "fighter_number": 80,
+    "icon_url": null,
+    "is_main": false
+  },
+  {
+    "id": "d9abe195-ea8c-5fda-b9c4-ceb6f438707b",
+    "slug": "sora",
+    "name_ja": "ソラ",
+    "name_en": "Sora",
+    "fighter_number": 82,
+    "icon_url": null,
+    "is_main": false
+  }
+]

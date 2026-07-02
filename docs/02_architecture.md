@@ -50,6 +50,8 @@ notes           id, kind(own_play|own_move|matchup|player),
 note_media      id, note_id, type(image|youtube|local_video),
                 storage_path|url, caption
 sessions        id, date, goal, retro_md   -- 練習セッション(目的設定→振り返り)
+                -- goalはプロセス目標を促す(結果目標の言い換えナッジ)。振り返り必須質問・ティルト休憩提案・
+                -- 分散練習の可視化などの組込仕様は docs/05_practice-science.md の表に従う
 matches         id, session_id(nullable), played_at, opponent_character_id, result(win|lose),
                 stocks_diff, video_url(YouTube限定公開), memo,
                 meta_source(auto|manual)  -- opponent/resultはGemini推定を初期値(auto)とし、UIで訂正するとmanualに。癖統計は訂正後の値を使う
@@ -60,8 +62,9 @@ ai_reviews      id, match_id, model, status(pending|done|error),
                 focus_evaluations jsonb,  -- [{focus_point_id, verdict, evidence}]
                 created_at
                 -- findingsは「候補」。承認/棄却をUIで操作し、癖統計はrejected除外で集計(MLLM精度は人間未満: docs/04 #9)
-focus_points    id, body, active, created_at
+focus_points    id, body, category(technical|mental), active, created_at
                 -- 「意識すること」リスト。アクティブは1〜3個に制限(1スキル集中→実戦転移: docs/04 #10)
+                -- mentalカテゴリは技術と同格に扱う(感情制御は第3の専門技能: docs/05 #8)
                 -- 達成度はfocus_evaluationsを時系列集計して推移グラフ表示
 habit_tags      slug, label        -- 固定タクソノミ(崖上がり|飛び|ガード|置き技|復帰阻止|着地|投げ択|OP管理…)
 intel_items     id, character_id(NULL=汎用), type(article|video), source_url,

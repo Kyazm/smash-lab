@@ -11,6 +11,7 @@
 - [アーキテクチャ設計](docs/02_architecture.md)
 - [実装計画](docs/03_implementation-plan.md)
 - [リサーチ結果（既存ツール/学習科学/AI精度）](docs/04_research-findings.md)
+- [練習科学（エビデンス付き練習原則と組込仕様）](docs/05_practice-science.md)
 - [ADR](docs/adr/)
 
 ## 構成
