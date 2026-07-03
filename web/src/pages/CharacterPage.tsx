@@ -137,10 +137,14 @@ export function CharacterPage() {
       <Link to="/" className="text-xs text-ink-muted hover:text-ink-primary">
         ← キャラ一覧
       </Link>
-      <h1 className="mt-1 flex flex-wrap items-center gap-2 text-xl font-bold text-ink-primary">
-        <span>
-          {bundle.character.name_ja}
-          <span className="ml-2 text-sm font-normal text-ink-secondary">{bundle.character.name_en}</span>
+      <h1 className="mt-1 flex flex-wrap items-baseline gap-x-2 gap-y-1 text-ink-primary">
+        <span className="flex items-baseline gap-2">
+          <span className="font-display text-3xl leading-none tracking-wide">
+            {bundle.character.name_ja}
+          </span>
+          <span className="font-frame text-xs uppercase tracking-widest text-ink-muted">
+            {bundle.character.name_en}
+          </span>
         </span>
         {isMain ? (
           <span className="align-middle rounded bg-action/20 px-2 py-0.5 text-xs font-normal text-action-strong">

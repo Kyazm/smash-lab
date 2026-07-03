@@ -19,8 +19,8 @@ export default defineConfig({
         name: "Kyazm Smash Lab",
         short_name: "Smash Lab",
         description: "スマブラSP上達用の個人ツール（フレームデータ・確定反撃・キャラ対メモ）",
-        theme_color: "#0b0e14",
-        background_color: "#0b0e14",
+        theme_color: "#0a0a0a",
+        background_color: "#0a0a0a",
         display: "standalone",
         start_url: ".",
         icons: [
@@ -30,6 +30,9 @@ export default defineConfig({
         ],
       },
       workbox: {
+        // self-hostフォント(woff2)をprecacheに含めオフラインでも書体が効くようにする（design-satoh.md）。
+        // 既定のglobPatternsに woff2 を追加（js/css/html/画像はデフォルトで対象）。
+        globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2}"],
         // オフラインで見えるのはフレームデータ・確反のみ（バンドルJSON）。メモ/提案はSupabase必須でオンライン限定。
         navigateFallback: "index.html",
         navigateFallbackDenylist: [/^\/api\//, /supabase\.co/],

@@ -63,7 +63,7 @@ export function CharacterListPage() {
   return (
     <div className="mx-auto max-w-2xl p-4">
       <div className="flex items-center justify-between gap-2">
-        <h1 className="text-xl font-bold text-ink-primary">キャラ一覧</h1>
+        <h1 className="font-display text-2xl tracking-wide text-ink-primary">キャラ一覧</h1>
         <nav className="flex flex-wrap gap-2 text-sm">
           <Link
             to="/me"
@@ -83,7 +83,7 @@ export function CharacterListPage() {
           >
             承認待ち
             {pendingCount !== null && pendingCount > 0 ? (
-              <span className="rounded-full bg-warning/80 px-1.5 py-0.5 text-xs font-semibold text-white">
+              <span className="rounded-full bg-warning px-1.5 py-0.5 text-xs font-bold text-surface-0">
                 {pendingCount}
               </span>
             ) : null}

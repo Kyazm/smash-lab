@@ -99,7 +99,7 @@ export function PunishHitList({ hits, perfectShieldHits = [], title }: Props) {
                     {d.hit.candidate.label ?? "（無名の行動）"}
                   </span>
                   {d.perfectShieldOnly ? (
-                    <span className="inline-flex items-center rounded bg-action/15 px-1.5 py-0.5 text-xs font-semibold text-action-strong">
+                    <span className="inline-flex items-center rounded bg-accent-yellow px-1.5 py-0.5 text-xs font-bold text-surface-0">
                       ジャスガ
                     </span>
                   ) : null}

@@ -96,7 +96,7 @@ export function SearchPage() {
       <Link to="/" className="text-xs text-ink-muted hover:text-ink-primary">
         ← キャラ一覧
       </Link>
-      <h1 className="mt-1 text-xl font-bold text-ink-primary">横断検索</h1>
+      <h1 className="mt-1 font-display text-2xl tracking-wide text-ink-primary">横断検索</h1>
       <p className="mt-1 text-xs text-ink-muted">キャラ名・技名・メモ（本文/タグ）を検索</p>
 
       <input
