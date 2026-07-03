@@ -14,7 +14,7 @@ export function LibraryIndexPage() {
           ライブラリ<span className="text-action"> / </span>記事
         </h1>
         <p className="mt-2 text-sm text-ink-secondary">
-          スマブラSPの上達に関する練習科学・調査のリサーチノート。ログイン不要で読めます。
+          スマブラSPの上達に関する練習科学・調査のリサーチノート。
         </p>
       </header>
 
