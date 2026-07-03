@@ -1,0 +1,25 @@
+[
+  { "id": "1000", "type": 4, "name": "64キャラ対策", "parent_id": null, "position": 0 },
+  { "id": "1001", "type": 0, "name": "7_フォックス対策⭐", "parent_id": "1000", "position": 0 },
+  { "id": "1002", "type": 0, "name": "29ゼロスーツサムスミラー", "parent_id": "1000", "position": 1 },
+  { "id": "1003", "type": 0, "name": "50_ゲッコウガ対策", "parent_id": "1000", "position": 2 },
+
+  { "id": "2000", "type": 4, "name": "DXキャラ対策", "parent_id": null, "position": 1 },
+  { "id": "2001", "type": 0, "name": "4_サムス対策", "parent_id": "2000", "position": 0 },
+  { "id": "2002", "type": 0, "name": "謎キャラ対策⭐", "parent_id": "2000", "position": 1 },
+
+  { "id": "3000", "type": 4, "name": "ゼロサム技", "parent_id": null, "position": 2 },
+  { "id": "3001", "type": 0, "name": "横b", "parent_id": "3000", "position": 0 },
+  { "id": "3002", "type": 0, "name": "da", "parent_id": "3000", "position": 1 },
+  { "id": "3003", "type": 0, "name": "空後", "parent_id": "3000", "position": 2 },
+  { "id": "3004", "type": 0, "name": "コンボ雑談", "parent_id": "3000", "position": 3 },
+
+  { "id": "4000", "type": 4, "name": "ゼロサムについて", "parent_id": null, "position": 3 },
+  { "id": "4001", "type": 0, "name": "立ち回り", "parent_id": "4000", "position": 0 },
+
+  { "id": "5000", "type": 4, "name": "スマブラ基本", "parent_id": null, "position": 4 },
+  { "id": "5001", "type": 0, "name": "ガード関連", "parent_id": "5000", "position": 0 },
+
+  { "id": "9000", "type": 4, "name": "雑談", "parent_id": null, "position": 5 },
+  { "id": "9001", "type": 0, "name": "general", "parent_id": "9000", "position": 0 }
+]

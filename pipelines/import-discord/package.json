@@ -1,0 +1,22 @@
+{
+  "name": "import-discord",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Discord サーバーのキャラ対/技考察チャンネルを notes/note_media へ移行するパイプライン（一度きり、docs/02 Discord移行）",
+  "scripts": {
+    "export": "tsx src/export.ts",
+    "transform": "tsx src/transform.ts",
+    "load": "tsx src/load.ts",
+    "all": "tsx src/run-all.ts",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "tsx": "^4.19.2"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.0",
+    "typescript": "^6.0.3",
+    "vitest": "^3.0.5"
+  }
+}
