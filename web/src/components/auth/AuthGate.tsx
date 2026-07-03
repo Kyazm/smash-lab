@@ -7,6 +7,7 @@
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import type { Session } from "@supabase/supabase-js";
+import { BrandMark } from "../BrandMark";
 import { resolveNotesProviderKind } from "../../lib/providerMode";
 import { getSupabaseClient } from "../../data/supabaseClient";
 import { GuestProvider } from "../../lib/guestContext";
@@ -112,9 +113,7 @@ function LoginForm() {
         onSubmit={onSubmit}
         className="w-full max-w-sm rounded-xl border border-border-subtle bg-surface-1 p-6"
       >
-        <h1 className="mb-1 font-display text-3xl leading-none tracking-wide text-ink-primary">
-          KYAZM<span className="text-action"> SMASH</span> LAB
-        </h1>
+        <BrandMark size="md" className="mb-1 block" />
         <p className="mb-5 font-frame text-[10px] uppercase tracking-[0.3em] text-ink-muted">
           frame data / punish / matchup
         </p>
