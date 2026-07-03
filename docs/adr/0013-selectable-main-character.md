@@ -19,3 +19,7 @@ Status: Accepted (2026-07-03)
 - 複数キャラを本格運用でき、使用キャラ変更・二刀流に対応
 - own_* メモがキャラ単位に分離される（正しい挙動）
 - **デプロイ順序**: 0004バックフィルは旧コード（own_playを character_id IS NULL でクエリ）と非互換。安全順序は ①新コードを `character_id IS NULL OR character_id = mainId` の両対応でデプロイ → ②0004適用 → ③後続でNULL両対応を撤去（共有DB稼働中プロダクトを壊さない）
+
+## 実装注記（2026-07-03、実装時に判明）
+- `characters.is_main` の表示実体は `data/imported/characters.json`（ビルド時固定の静的JSON、ImportedProviderが読む）で、Supabaseの `characters` テーブルとは別系統。`set_main_character` RPCでDB側を更新してもフロント表示に即反映されないため、`DataProvider.setMainCharacterOverride()` + `MainCharacterContext`（起動時にDB実値と同期、切替時にRPC+ローカル上書きを一元管理）で吸収した
+- `set_main_character` の単一UPDATE文はSupabaseの「WHERE句なしUPDATE拒否」設定に当たるため `where true` を付与（挙動は不変）
