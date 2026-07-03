@@ -71,7 +71,7 @@ function LoginForm() {
         onSubmit={onSubmit}
         className="w-full max-w-sm rounded-xl border border-border-subtle bg-surface-1 p-6"
       >
-        <h1 className="mb-4 text-lg font-bold text-ink-primary">smash-lab</h1>
+        <h1 className="mb-4 text-lg font-bold text-ink-primary">Kyazm Smash Lab</h1>
         <label className="mb-1 block text-xs text-ink-secondary" htmlFor="email">
           メールアドレス
         </label>
