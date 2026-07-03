@@ -6,6 +6,7 @@ import {
   attachmentToStoragePath,
   matchMarkdownImageAttachmentLine,
   matchBareAttachmentLine,
+  matchLinkCardLine,
   extractLineMedia,
   INLINE_URL_RE,
 } from "./embeds";
@@ -145,6 +146,38 @@ describe("matchBareAttachmentLine", () => {
   });
   it("文中に混じる場合はnull", () => {
     expect(matchBareAttachmentLine("見て attachment://123/foo.png")).toBeNull();
+  });
+});
+
+describe("matchLinkCardLine", () => {
+  it("単独行の一般リンク（note.com）はカード情報を返す", () => {
+    expect(matchLinkCardLine("https://note.com/foo/n/abc123")).toEqual({
+      url: "https://note.com/foo/n/abc123",
+      domain: "note.com",
+    });
+  });
+  it("ドメインの先頭 www. は除去する", () => {
+    expect(matchLinkCardLine("https://www.example.com/article")).toEqual({
+      url: "https://www.example.com/article",
+      domain: "example.com",
+    });
+  });
+  it("前後空白があってもカード化する", () => {
+    expect(matchLinkCardLine("  https://note.com/x  ")).toEqual({
+      url: "https://note.com/x",
+      domain: "note.com",
+    });
+  });
+  it("YouTube/画像/ツイートはカード化しない（従来の埋め込みが担当）", () => {
+    expect(matchLinkCardLine("https://youtu.be/CgLfqHQkbyU")).toBeNull();
+    expect(matchLinkCardLine("https://example.com/a.png")).toBeNull();
+    expect(matchLinkCardLine("https://x.com/somebody/status/123456789")).toBeNull();
+  });
+  it("文中にURLが混じる行はカード化しない（単独行のみ対象）", () => {
+    expect(matchLinkCardLine("参考: https://note.com/foo です")).toBeNull();
+  });
+  it("URLを含まない行はnull", () => {
+    expect(matchLinkCardLine("ただのテキスト")).toBeNull();
   });
 });
 
