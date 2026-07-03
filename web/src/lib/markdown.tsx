@@ -229,6 +229,22 @@ function LineMediaBlock({ segments, keyPrefix }: { segments: LineSegment[]; keyP
   );
 }
 
+/** GFMパイプ表の1行を検出（先頭に `|` を含む行）。区切り行判定は isTableSeparator を使う。 */
+function isTableRow(line: string): boolean {
+  return /^\s*\|.*\|\s*$/.test(line);
+}
+
+/** 表のヘッダ/本文を分ける区切り行（| --- | :--: | 等）か。 */
+function isTableSeparator(line: string): boolean {
+  return /^\s*\|(?:\s*:?-{1,}:?\s*\|)+\s*$/.test(line);
+}
+
+/** `| a | b |` を ["a","b"] に分割（前後の空セルは除去）。 */
+function splitTableCells(line: string): string[] {
+  const trimmed = line.trim().replace(/^\|/, "").replace(/\|$/, "");
+  return trimmed.split("|").map((c) => c.trim());
+}
+
 /** Markdown 文字列を React 要素へ。ブロック単位で解釈する。 */
 export function renderMarkdown(md: string): ReactNode {
   const lines = (md ?? "").replace(/\r\n/g, "\n").split("\n");
@@ -281,8 +297,57 @@ export function renderMarkdown(md: string): ReactNode {
     paragraph = [];
   };
 
-  for (const raw of lines) {
+  for (let li = 0; li < lines.length; li++) {
+    const raw = lines[li];
     const line = raw;
+    // GFMパイプ表: ヘッダ行 + 次行が区切り行のときのみ表として解釈する。
+    // 該当行を consume してループindexを進める（他ブロック判定より前に処理）。
+    if (isTableRow(line) && li + 1 < lines.length && isTableSeparator(lines[li + 1])) {
+      flushParagraph();
+      flushList();
+      const header = splitTableCells(line);
+      const bodyRows: string[][] = [];
+      let j = li + 2;
+      while (j < lines.length && isTableRow(lines[j]) && !isTableSeparator(lines[j])) {
+        bodyRows.push(splitTableCells(lines[j]));
+        j++;
+      }
+      blocks.push(
+        <div key={`table-${key}`} className="my-3 overflow-x-auto">
+          <table className="w-full border-collapse text-left text-sm">
+            <thead>
+              <tr>
+                {header.map((cell, ci) => (
+                  <th
+                    key={`th-${key}-${ci}`}
+                    className="border border-border bg-surface-2 px-2 py-1.5 font-semibold text-ink-primary"
+                  >
+                    {renderInline(cell, `th-${key}-${ci}`)}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {bodyRows.map((row, ri) => (
+                <tr key={`tr-${key}-${ri}`}>
+                  {header.map((_, ci) => (
+                    <td
+                      key={`td-${key}-${ri}-${ci}`}
+                      className="border border-border px-2 py-1.5 align-top"
+                    >
+                      {renderInline(row[ci] ?? "", `td-${key}-${ri}-${ci}`)}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>,
+      );
+      key++;
+      li = j - 1;
+      continue;
+    }
     // 水平線
     if (/^---+\s*$/.test(line)) {
       flushParagraph();
