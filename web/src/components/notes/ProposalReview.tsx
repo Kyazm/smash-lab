@@ -2,7 +2,7 @@
 // モバイルはbefore/after切替、デスクトップは並列表示。stale提案は再生成ボタン導線を表示する
 // （実際の再生成パイプライン実行はSupabase/Agent B側の責務。ここではUIとしての導線のみ用意し、
 //   クリック時は「再生成をリクエストする」旨を案内する）。
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { renderMarkdown } from "../../lib/markdown";
 import { useProposals } from "../../hooks/useProposals";
 import type { NoteWithMedia } from "../../data/notes/types";
@@ -11,15 +11,29 @@ interface Props {
   note: NoteWithMedia;
   /** 承認/却下後にノート一覧を再取得するためのコールバック */
   onNoteChanged: () => void;
+  /**
+   * 却下、または承認によりこのノートの pending/stale 提案が0件になったタイミングで呼ばれる。
+   * /proposals 一覧（docs/07 F-A）が行を除去するのに使う。省略可（既存呼び出し元は無変更でよい）。
+   */
+  onResolved?: () => void;
 }
 
 type MobileView = "before" | "after";
 
-export function ProposalReview({ note, onNoteChanged }: Props) {
+export function ProposalReview({ note, onNoteChanged, onResolved }: Props) {
   const { proposals, error, apply, reject } = useProposals(note.id);
   const [mobileView, setMobileView] = useState<MobileView>("after");
   const [busy, setBusy] = useState(false);
   const [staleNotice, setStaleNotice] = useState(false);
+
+  const pending = (proposals ?? []).filter((p) => p.status === "pending");
+  const stale = (proposals ?? []).filter((p) => p.status === "stale");
+  const resolved = proposals !== null && pending.length === 0 && stale.length === 0;
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (resolved) onResolved?.();
+  }, [resolved]);
 
   if (proposals === null) {
     return <p className="text-xs text-ink-muted">提案を確認中…</p>;
@@ -28,10 +42,7 @@ export function ProposalReview({ note, onNoteChanged }: Props) {
     return <p className="text-xs text-danger">提案の読み込みに失敗しました: {error}</p>;
   }
 
-  const pending = proposals.filter((p) => p.status === "pending");
-  const stale = proposals.filter((p) => p.status === "stale");
-
-  if (pending.length === 0 && stale.length === 0) return null;
+  if (resolved) return null;
 
   const proposal = pending[0] ?? stale[0];
   const isStale = proposal.status === "stale";
@@ -96,12 +107,14 @@ export function ProposalReview({ note, onNoteChanged }: Props) {
         <div className="mt-2 rounded border border-warning/40 bg-warning/10 p-2 text-xs text-warning">
           元メモがこの提案の生成後に編集されたため、提案が古くなっています（stale）。内容を確認し、
           必要であれば再生成をリクエストしてください。
+          {/* docs/07 F-A: 再生成の実処理は未実装のため当面disabled。Gemini復活後（Phase 4）に対応。 */}
           <button
             type="button"
-            onClick={() => window.alert("再生成リクエストを送信しました（パイプライン側の処理はAgent B担当）。")}
-            className="mt-2 block min-h-9 rounded bg-warning/20 px-3 py-1 text-xs font-medium text-warning hover:bg-warning/30"
+            disabled
+            title="Gemini復活後に対応"
+            className="mt-2 block min-h-9 cursor-not-allowed rounded bg-warning/10 px-3 py-1 text-xs font-medium text-warning/50"
           >
-            再生成をリクエスト
+            再生成をリクエスト（Gemini復活後に対応）
           </button>
         </div>
       ) : null}

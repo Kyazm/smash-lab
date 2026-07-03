@@ -8,11 +8,12 @@ import { PunishPanel } from "../components/PunishPanel";
 import { MatchupNotesTab } from "../components/notes/MatchupNotesTab";
 import { OwnPlayTab } from "../components/notes/OwnPlayTab";
 import { OwnMoveTab } from "../components/notes/OwnMoveTab";
+import { OwnMatchTab } from "../components/notes/OwnMatchTab";
 import { TabBar } from "../components/shared/TabBar";
 import type { CharacterBundle } from "../types";
 
 type CommonTab = "frames" | "punish" | "notes";
-type MainOnlyTab = "own" | "moves";
+type MainOnlyTab = "own" | "moves" | "matches";
 type Tab = CommonTab | MainOnlyTab;
 
 const COMMON_TABS: { key: CommonTab; label: string }[] = [
@@ -20,14 +21,16 @@ const COMMON_TABS: { key: CommonTab; label: string }[] = [
   { key: "punish", label: "確定反撃" },
   { key: "notes", label: "キャラ対メモ" },
 ];
+// docs/07 F-B: 順序は フレーム表/確定反撃/キャラ対メモ/立ち回り/技メモ/試合
 const MAIN_ONLY_TABS: { key: MainOnlyTab; label: string }[] = [
   { key: "own", label: "立ち回り" },
   { key: "moves", label: "技メモ" },
+  { key: "matches", label: "試合" },
 ];
 
 function isValidTab(v: string | null, isMain: boolean): v is Tab {
   if (v === "frames" || v === "punish" || v === "notes") return true;
-  if (isMain && (v === "own" || v === "moves")) return true;
+  if (isMain && (v === "own" || v === "moves" || v === "matches")) return true;
   return false;
 }
 
@@ -121,8 +124,10 @@ export function CharacterPage() {
           />
         ) : tab === "own" ? (
           <OwnPlayTab />
-        ) : (
+        ) : tab === "moves" ? (
           <OwnMoveTab moves={bundle.moves} />
+        ) : (
+          <OwnMatchTab />
         )}
       </div>
     </div>

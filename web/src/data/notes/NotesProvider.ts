@@ -9,6 +9,7 @@ import type {
   NoteQuery,
   NoteProposal,
   ApplyProposalResult,
+  PendingProposalItem,
 } from "./types";
 
 export interface NotesProvider {
@@ -57,4 +58,10 @@ export interface NotesProvider {
   applyProposal(proposalId: string): Promise<ApplyProposalResult>;
   /** 提案を却下する（pending以外は例外）。 */
   rejectProposal(proposalId: string): Promise<void>;
+
+  /**
+   * 承認待ち一覧（docs/07 F-A）。status in (pending, stale) の提案を、対象ノート・対象キャラの
+   * 表示情報とJOINして返す（created_at 降順）。own系ノート（character_id=null）は characterName/Slug が null。
+   */
+  listPendingProposals(): Promise<PendingProposalItem[]>;
 }

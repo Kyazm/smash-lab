@@ -12,9 +12,11 @@ import type {
   NoteQuery,
   NoteProposal,
   ApplyProposalResult,
+  PendingProposalItem,
 } from "./types";
 import { filterAndSort, searchAndSort } from "../../lib/noteQuery";
 import { SEED_NOTES, SEED_MEDIA, SEED_PROPOSALS } from "./mockSeed";
+import { dataProvider } from "../index";
 
 // シードデータ形状の変更（AI整頓の提案seed追加）に伴い、旧バージョンのlocalStorageと衝突しないようにバージョンを上げる。
 const STORAGE_KEY = "smash-lab.notes.v2";
@@ -226,5 +228,31 @@ export class MockNotesProvider implements NotesProvider {
     }
     proposal.status = "rejected";
     this.store.write(store);
+  }
+
+  /**
+   * note_proposals → notes → characters のJOINを手元データで模す（docs/07 F-A）。
+   * dataProvider（フレームデータ側）からキャラ名解決する。own系ノートはcharacterName/Slugがnull。
+   */
+  async listPendingProposals(): Promise<PendingProposalItem[]> {
+    const { notes, proposals } = this.store.read();
+    const pending = proposals.filter((p) => p.status === "pending" || p.status === "stale");
+    if (pending.length === 0) return [];
+
+    const characters = await dataProvider.listCharacters();
+    const charById = new Map(characters.map((c) => [c.id, c]));
+
+    const sorted = [...pending].sort((a, b) => (a.created_at < b.created_at ? 1 : -1));
+    return sorted.map((proposal) => {
+      const note = notes.find((n) => n.id === proposal.note_id);
+      const character = note?.character_id ? charById.get(note.character_id) : undefined;
+      return {
+        proposal,
+        noteTitle: note?.title ?? null,
+        kind: note?.kind ?? "matchup",
+        characterName: character?.name_ja ?? null,
+        characterSlug: character?.slug ?? null,
+      };
+    });
   }
 }

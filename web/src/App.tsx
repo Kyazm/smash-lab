@@ -5,6 +5,7 @@ import { CharacterListPage } from "./pages/CharacterListPage";
 import { CharacterPage } from "./pages/CharacterPage";
 import { MainCharacterPage } from "./pages/MainCharacterPage";
 import { SearchPage } from "./pages/SearchPage";
+import { ProposalsPage } from "./pages/ProposalsPage";
 
 export function App() {
   return (
@@ -14,6 +15,7 @@ export function App() {
           <Route path="/" element={<CharacterListPage />} />
           <Route path="/me" element={<MainCharacterPage />} />
           <Route path="/search" element={<SearchPage />} />
+          <Route path="/proposals" element={<ProposalsPage />} />
           <Route path="/c/:slug" element={<CharacterPage />} />
         </Routes>
       </BrowserRouter>

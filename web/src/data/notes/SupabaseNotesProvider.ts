@@ -13,6 +13,7 @@ import type {
   NoteQuery,
   NoteProposal,
   ApplyProposalResult,
+  PendingProposalItem,
 } from "./types";
 import { getSupabaseClient, NOTE_MEDIA_BUCKET } from "../supabaseClient";
 
@@ -204,5 +205,37 @@ export class SupabaseNotesProvider implements NotesProvider {
       p_proposal_id: proposalId,
     });
     if (error) throw error;
+  }
+
+  async listPendingProposals(): Promise<PendingProposalItem[]> {
+    // note_proposals → notes → characters をネストselectで1クエリJOIN（docs/07 F-A）。
+    const { data, error } = await this.sb
+      .from("note_proposals")
+      .select(
+        `${PROPOSAL_COLUMNS},notes(title,kind,character_id,characters(name_ja,slug))`,
+      )
+      .in("status", ["pending", "stale"])
+      .order("created_at", { ascending: false });
+    if (error) throw error;
+
+    type Row = NoteProposal & {
+      notes: {
+        title: string | null;
+        kind: NoteWithMedia["kind"];
+        character_id: string | null;
+        characters: { name_ja: string; slug: string } | null;
+      } | null;
+    };
+
+    return ((data ?? []) as unknown as Row[]).map((row) => {
+      const { notes, ...proposal } = row;
+      return {
+        proposal,
+        noteTitle: notes?.title ?? null,
+        kind: notes?.kind ?? "matchup",
+        characterName: notes?.characters?.name_ja ?? null,
+        characterSlug: notes?.characters?.slug ?? null,
+      };
+    });
   }
 }

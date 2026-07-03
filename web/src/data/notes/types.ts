@@ -1,7 +1,7 @@
 // メモ機能のDB行型（supabase/migrations/0001_schema.sql の notes / note_media に対応）。
 // フレームデータ側の型（../../types.ts）とは独立。snake_case 列で定義する。
 
-export type NoteKind = "own_play" | "own_move" | "matchup" | "player";
+export type NoteKind = "own_play" | "own_move" | "matchup" | "player" | "own_match";
 
 // キャラ対テンプレートのセクション分類（任意）。docs/02 データモデル notes.section。
 export type NoteSection =
@@ -96,3 +96,15 @@ export interface NoteProposal {
 
 /** apply_note_proposal RPC の返り値。stale の場合は元メモが編集されたため再生成が必要。 */
 export type ApplyProposalResult = "accepted" | "stale";
+
+// ── 承認待ち一覧（docs/07 F-A）: note_proposals を notes/characters にJOINした表示用行 ──
+
+/** /proposals 一覧の1行。pending/stale の提案を、対象メモ・対象キャラの表示情報と一緒に返す。 */
+export interface PendingProposalItem {
+  proposal: NoteProposal;
+  noteTitle: string | null;
+  kind: NoteKind;
+  /** matchup/player等 character_id を持つノートのみ非null。own系(own_play/own_move/own_match)はnull */
+  characterName: string | null;
+  characterSlug: string | null;
+}

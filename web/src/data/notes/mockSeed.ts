@@ -1,10 +1,13 @@
 // MockNotesProvider の初回シードデータ。ブラウザ検証で主要導線が見えるよう最小限を用意。
-// character_id は data/fixtures/characters.json のID（zss/fox/mario）に合わせる。
+// character_id は data/imported/characters.json の実UUID（zss/fox/mario）に合わせる。
+// data/imported/ が存在する開発環境では DataProvider 側が ImportedProvider を優先するため
+// （data/index.ts hasImportedData()）、fixtures側の決め打ちIDではなくこちらに揃える必要がある
+// （listPendingProposals がキャラ名解決に dataProvider.listCharacters() を使うため、IDが一致しないと結合できない）。
 import type { Note, NoteMedia, NoteProposal } from "./types";
 
-const ZSS = "11111111-1111-4111-8111-111111111111";
-const MARIO = "22222222-2222-4222-8222-222222222222";
-const FOX = "33333333-3333-4333-8333-333333333333";
+const ZSS = "940675d4-25c1-5b74-8e9a-91a3402003a1";
+const MARIO = "a4f42229-bb70-5fee-9fe0-e883d3cd1150";
+const FOX = "f260267c-d67e-5451-8c49-9d8e20c071cd";
 
 const now = "2026-07-01T00:00:00.000Z";
 
@@ -125,6 +128,45 @@ export const SEED_NOTES: Note[] = [
     tags: ["飛び道具"],
     updated_at: "2026-07-01T07:00:00.000Z",
   }),
+
+  // ── リッチ埋め込み検証用（ADR-0012）: URL/attachmentプレースホルダを本文に含むメモ ──
+  n({
+    id: "seed-mu-fox-embeds",
+    kind: "matchup",
+    character_id: FOX,
+    section: "neutral",
+    title: "対策スクショ・参考ツイート・添付",
+    body_md:
+      "画像直リンクとattachment、ツイート、YouTube、その他リンクの表示確認用メモ。\n\n" +
+      "https://example.com/screenshots/fox-neutral.png\n\n" +
+      "![崖狩りの図](attachment://1111111111111111111/edgeguard-diagram.png)\n\n" +
+      "attachment://2222222222222222222/frame-data.png\n\n" +
+      "https://x.com/somebody/status/1234567890123456789\n\n" +
+      "https://www.youtube.com/watch?v=dQw4w9WgXcQ&t=45s\n\n" +
+      "文中にも https://ultimateframedata.com/fox というリンクが混じる場合の確認。\n\n" +
+      "https://ultimateframedata.com/fox",
+    tags: ["参考"],
+    updated_at: "2026-07-02T09:00:00.000Z",
+  }),
+
+  // ── 「試合」タブ（is_mainのみ, kind='own_match'）。migration 0003で own_play から分離。 ──
+  n({
+    id: "seed-own-match-1",
+    kind: "own_match",
+    title: "自分の試合",
+    body_md:
+      "対Foxの練習試合。崖外で復帰阻止を取れた場面の振り返り。\n\nhttps://www.youtube.com/watch?v=dQw4w9WgXcQ&t=120s",
+    tags: ["基本"],
+    updated_at: "2026-07-02T13:00:00.000Z",
+  }),
+  n({
+    id: "seed-own-match-2",
+    kind: "own_match",
+    title: "対Mario 接戦の反省",
+    body_md: "終盤の崖展開でパニックガードしてしまった。落ち着いて回避択を混ぜる。",
+    tags: [],
+    updated_at: "2026-07-01T13:00:00.000Z",
+  }),
 ];
 
 export const SEED_MEDIA: NoteMedia[] = [
@@ -164,6 +206,19 @@ export const SEED_PROPOSALS: NoteProposal[] = [
     base_updated_at: "2026-06-20T00:00:00.000Z", // seed-mu-fox-edgeguard.updated_at(2026-07-01T10:30) と不一致 = stale
     status: "stale",
     created_at: "2026-06-21T00:00:00.000Z",
+  },
+  // pending: 別キャラ(Mario)の提案。/proposals のキャラ別グルーピング検証用。
+  {
+    id: "seed-proposal-mario-projectile-1",
+    note_id: "seed-mu-mario-projectile",
+    proposed_body_md:
+      "**TL;DR**\n- 低空移動で潜るのが安定。ガード対応はポンプで運ばれるリスクあり\n\n" +
+      "## 飛び道具対策\n- 地上で捌くより低空移動で潜る (2026-06)\n- ガードするとポンプで崖端に運ばれる (2026-06)",
+    change_summary: "散文をTL;DR+セクション構成に再構成（事実の追加・削除なし）",
+    engine: "restructure-notes/v1",
+    base_updated_at: "2026-07-01T07:00:00.000Z", // seed-mu-mario-projectile.updated_at と一致 = pending
+    status: "pending",
+    created_at: "2026-07-02T07:30:00.000Z",
   },
 ];
 
