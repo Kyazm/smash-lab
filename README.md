@@ -1,20 +1,41 @@
-# smash-lab
+# Kyazm Smash Lab
 
-スマブラSP上達のための個人用ナレッジ&分析システム。使用キャラ: ゼロスーツサムス。
+スマブラSP上達のための個人用ナレッジ&分析システム。自キャラはアプリ内で選択でき（初期値: ゼロスーツサムス）、切り替えても各キャラのメモは保持される。
 
-- **閲覧系**（ホスト型Web）: キャラ対メモ / 全キャラフレームデータ / 確定反撃判定 / 検索 — スマホからも見る
-- **AI処理系**（Macローカル）: 試合録画の自動レビュー（Gemini） / ZSS特化の情報収集
+公開URL: https://kyazm.github.io/smash-lab/
 
-## ドキュメント
+## できること
 
-- [要件定義](docs/01_requirements.md)
-- [アーキテクチャ設計](docs/02_architecture.md)
-- [実装計画](docs/03_implementation-plan.md)
-- [リサーチ結果（既存ツール/学習科学/AI精度）](docs/04_research-findings.md)
-- [練習科学（エビデンス付き練習原則と組込仕様）](docs/05_practice-science.md)
-- [ADR](docs/adr/)
+- **全キャラのフレームデータ** — 発生 / 全体F / ガード硬直差 / ダメージ / ヒットボックス画像
+- **確定反撃判定（双方向）** — 相手の技→自分の確反リスト、自分の技→ガードに安全か。ガーキャン（空中技は技ごと）/ ガード解除反撃 / ジャスガ（ガード解除11F省略）を含む
+- **キャラ対メモ** — 相手キャラ / 特定プレイヤー単位。Markdown+画像/動画/ツイート埋め込み。AI整頓（提案・承認制）
+- **自キャラメモ** — 立ち回り / 技別 / 試合、タブ整理
+- **横断検索** — キャラ名 / 技名 / メモ本文
+- **ライブラリ（公開記事）** — 練習科学・調査ノートを認証不要で閲覧
+- **AI試合レビュー**（予定 / Gemini）、**外部情報収集**（予定）
+
+閲覧系はPWA対応（ホーム画面追加でオフラインでもフレームデータ/確反を参照可）。認証は単一オーナー。ゲストはログイン時点のスナップショットをローカルで自由に触れるサンドボックス（実データは不変）。
 
 ## 構成
 
-React + Vite + Supabase + GitHub Pages（閲覧系） / TypeScriptパイプライン + Gemini API + launchd（AI処理系）。
-詳細は [docs/02_architecture.md](docs/02_architecture.md)。
+- **閲覧系**: React + Vite + TypeScript + Tailwind + Supabase、GitHub Pages（develop push で自動デプロイ）
+- **AI処理系**: TypeScriptパイプライン + Gemini API（Macローカル、Supabase経由で疎結合）
+- フレームデータは Ver.13.0.1 で静的。日本語技名は検証窓スプレッドシート由来
+- キャラアイコンは外部参照（自サーバーに再配布しない）
+
+## ドキュメント
+
+- [要件定義](docs/01_requirements.md) / [アーキテクチャ](docs/02_architecture.md) / [実装計画](docs/03_implementation-plan.md)
+- [リサーチ結果（既存ツール/学習科学/AI精度）](docs/04_research-findings.md) / [練習科学](docs/05_practice-science.md)
+- [UI/UX設計](docs/06_ui-redesign.md) ほか docs/07・08（機能設計）
+- [ADR](docs/adr/)（設計判断の履歴。自キャラ選択=ADR-0013、ゲスト=ADR-0014 など）
+
+## 開発
+
+```
+cd web && npm install && npm run dev     # 開発サーバー
+npm run typecheck && npm test            # 型チェック + テスト
+npm run build -- --base=/smash-lab/      # 本番ビルド
+```
+
+CI: `ci.yml`（PR・非developブランチで型/テスト/ビルド）、`deploy-pages.yml`（develop push でデプロイ、docs-only はスキップ）。接続情報・キーは `.env`（git管理外）。
