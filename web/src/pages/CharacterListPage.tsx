@@ -16,9 +16,17 @@ export function CharacterListPage() {
 
   useEffect(() => {
     let cancelled = false;
-    dataProvider.listCharacters().then((list) => {
-      if (!cancelled) setCharacters(list);
-    });
+    dataProvider
+      .listCharacters()
+      .then((list) => {
+        if (!cancelled) setCharacters(list);
+      })
+      .catch((e) => {
+        if (!cancelled) {
+          console.error("[CharacterListPage] listCharacters 失敗", e);
+          setCharacters([]);
+        }
+      });
     return () => {
       cancelled = true;
     };
@@ -26,9 +34,18 @@ export function CharacterListPage() {
 
   useEffect(() => {
     let cancelled = false;
-    notesProvider.listPendingProposals().then((list) => {
-      if (!cancelled) setPendingCount(list.length);
-    });
+    notesProvider
+      .listPendingProposals()
+      .then((list) => {
+        if (!cancelled) setPendingCount(list.length);
+      })
+      .catch((e) => {
+        // バッジは補助情報。取得失敗時は非表示(null)にとどめ、致命的エラーにはしない。
+        if (!cancelled) {
+          console.error("[CharacterListPage] listPendingProposals 失敗", e);
+          setPendingCount(null);
+        }
+      });
     return () => {
       cancelled = true;
     };

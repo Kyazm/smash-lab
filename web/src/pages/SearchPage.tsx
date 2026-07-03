@@ -42,9 +42,17 @@ export function SearchPage() {
       setNoteHits([]);
       return;
     }
-    notesProvider.searchNotes(k).then((hits) => {
-      if (!cancelled) setNoteHits(hits);
-    });
+    notesProvider
+      .searchNotes(k)
+      .then((hits) => {
+        if (!cancelled) setNoteHits(hits);
+      })
+      .catch((e) => {
+        if (!cancelled) {
+          console.error("[SearchPage] searchNotes 失敗", e);
+          setNoteHits([]);
+        }
+      });
     return () => {
       cancelled = true;
     };

@@ -50,9 +50,17 @@ export function CharacterPage() {
     if (!slug) return;
     let cancelled = false;
     setBundle(undefined);
-    dataProvider.getCharacterBySlug(slug).then((b) => {
-      if (!cancelled) setBundle(b);
-    });
+    dataProvider
+      .getCharacterBySlug(slug)
+      .then((b) => {
+        if (!cancelled) setBundle(b);
+      })
+      .catch((e) => {
+        if (!cancelled) {
+          console.error("[CharacterPage] getCharacterBySlug 失敗", e);
+          setBundle(null);
+        }
+      });
     return () => {
       cancelled = true;
     };
@@ -61,9 +69,17 @@ export function CharacterPage() {
   // mainCharacterId が変わったら（自キャラ切替、初期同期）確反タブ用の main バンドルを再取得する。
   useEffect(() => {
     let cancelled = false;
-    dataProvider.getMainCharacter().then((m) => {
-      if (!cancelled) setMain(m);
-    });
+    dataProvider
+      .getMainCharacter()
+      .then((m) => {
+        if (!cancelled) setMain(m);
+      })
+      .catch((e) => {
+        if (!cancelled) {
+          console.error("[CharacterPage] getMainCharacter 失敗", e);
+          setMain(null);
+        }
+      });
     return () => {
       cancelled = true;
     };

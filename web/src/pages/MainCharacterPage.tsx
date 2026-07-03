@@ -13,9 +13,17 @@ export function MainCharacterPage() {
 
   useEffect(() => {
     let cancelled = false;
-    dataProvider.getMainCharacter().then((m) => {
-      if (!cancelled) setMain(m);
-    });
+    dataProvider
+      .getMainCharacter()
+      .then((m) => {
+        if (!cancelled) setMain(m);
+      })
+      .catch((e) => {
+        if (!cancelled) {
+          console.error("[MainCharacterPage] getMainCharacter 失敗", e);
+          setMain(null);
+        }
+      });
     return () => {
       cancelled = true;
     };

@@ -3,6 +3,11 @@ name: deploy-pages
 on:
   push:
     branches: [develop]
+    # docs や設計ファイルのみの変更ではWebに影響しないためデプロイをスキップ（無駄なリビルド回避）。
+    paths-ignore:
+      - "docs/**"
+      - "**.md"
+      - ".context/**"
   workflow_dispatch:
 
 permissions:
@@ -25,6 +30,9 @@ jobs:
           cache: npm
           cache-dependency-path: web/package-lock.json
       - run: npm ci
+        working-directory: web
+      - name: Typecheck
+        run: npm run typecheck
         working-directory: web
       - run: npm test -- --run
         working-directory: web

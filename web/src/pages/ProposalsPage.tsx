@@ -43,9 +43,17 @@ function ProposalRow({ item, onChanged }: ProposalRowProps) {
   useEffect(() => {
     if (!open || note !== undefined) return;
     let cancelled = false;
-    notesProvider.getNote(item.proposal.note_id).then((n) => {
-      if (!cancelled) setNote(n);
-    });
+    notesProvider
+      .getNote(item.proposal.note_id)
+      .then((n) => {
+        if (!cancelled) setNote(n);
+      })
+      .catch((e) => {
+        if (!cancelled) {
+          console.error("[ProposalsPage] getNote 失敗", e);
+          setNote(null);
+        }
+      });
     return () => {
       cancelled = true;
     };
