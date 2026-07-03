@@ -108,7 +108,7 @@ export function MatchupNotesTab({ characterId, characterNameJa, characterSlug }:
         <button
           type="button"
           onClick={() => setComposing({ mode: "create", kind: "player" })}
-          className="min-h-11 rounded bg-info px-3 py-1.5 text-sm font-medium text-white"
+          className="min-h-11 rounded border border-info/50 bg-surface-2 px-3 py-1.5 text-sm font-medium text-info hover:border-info"
         >
           + プレイヤー別メモ
         </button>

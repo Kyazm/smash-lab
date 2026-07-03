@@ -66,7 +66,7 @@ export function NoteCard({
               </span>
             ) : null}
             {note.player_name ? (
-              <span className="rounded bg-info/70 px-2 py-0.5 text-xs text-white">
+              <span className="rounded bg-info/15 px-2 py-0.5 text-xs font-medium text-info">
                 vs {note.player_name}
               </span>
             ) : null}
