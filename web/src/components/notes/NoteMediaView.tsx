@@ -9,7 +9,7 @@ interface Props {
 
 export function NoteMediaView({ media }: Props) {
   const caption = media.caption ? (
-    <p className="mt-1 text-xs text-slate-400">{media.caption}</p>
+    <p className="mt-1 text-xs text-ink-secondary">{media.caption}</p>
   ) : null;
 
   if (media.type === "youtube") {
@@ -21,7 +21,7 @@ export function NoteMediaView({ media }: Props) {
             href={media.url ?? "#"}
             target="_blank"
             rel="noreferrer"
-            className="text-sm text-emerald-400 underline"
+            className="text-sm text-action-strong underline"
           >
             {media.url ?? "（無効なYouTube URL）"}
           </a>
@@ -52,7 +52,7 @@ export function NoteMediaView({ media }: Props) {
         <img
           src={src}
           alt={media.caption ?? ""}
-          className="max-h-80 max-w-full rounded border border-slate-700 object-contain"
+          className="max-h-80 max-w-full rounded border border-border object-contain"
         />
         {caption}
       </div>
@@ -66,7 +66,7 @@ export function NoteMediaView({ media }: Props) {
         href={media.url ?? "#"}
         target="_blank"
         rel="noreferrer"
-        className="text-sm text-emerald-400 underline"
+        className="text-sm text-action-strong underline"
       >
         🎞 ローカル動画を開く
       </a>

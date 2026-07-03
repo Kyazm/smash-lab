@@ -1,6 +1,9 @@
-// ノート1件のカード表示。スター/ピン切替・編集・削除の導線と、本文Markdown・タグ・メディアを表示。
+// ノート1件のカード表示。デフォルト折りたたみ（タイトル+冒頭2行+メタ）、タップで展開（docs/06 A-3）。
+// 長文ノート展開時は見出しへのTOCチップを表示。スター/ピン切替・編集・削除の導線と、タグ・メディアを表示。
+import { useId, useState } from "react";
 import { renderMarkdown } from "../../lib/markdown";
 import { sectionLabel } from "../../lib/noteSections";
+import { extractHeadings, extractPreviewLines, isLongNote } from "../../lib/notePreview";
 import { NoteMediaView } from "./NoteMediaView";
 import type { NoteWithMedia } from "../../data/notes/types";
 
@@ -10,8 +13,10 @@ interface Props {
   onDelete?: (id: string) => void;
   onToggleStar?: (note: NoteWithMedia) => void;
   onTogglePin?: (note: NoteWithMedia) => void;
-  /** true で本文を折りたたみ・メディアは件数のみ表示（一覧のスキャン用） */
+  /** true で常にプレビュー表示（展開不可）。横断検索など一覧のスキャン専用に使う */
   compact?: boolean;
+  /** true でデフォルト展開（TL;DRピン留めなど、常に全文を見せたいカードに使う） */
+  defaultExpanded?: boolean;
 }
 
 const PIN_KINDS = new Set(["matchup", "player"]);
@@ -23,27 +28,50 @@ export function NoteCard({
   onToggleStar,
   onTogglePin,
   compact = false,
+  defaultExpanded = false,
 }: Props) {
+  const [expanded, setExpanded] = useState(defaultExpanded);
+  const bodyId = useId();
   const canPin = PIN_KINDS.has(note.kind);
+  const body = note.body_md ?? "";
+  const previewLines = extractPreviewLines(body);
+  const headings = expanded ? extractHeadings(body) : [];
+  const showToc = expanded && isLongNote(body) && headings.length > 1;
+
+  const scrollToHeading = (index: number) => {
+    document.getElementById(`${bodyId}-h${index}`)?.scrollIntoView({ block: "start" });
+  };
 
   return (
-    <div className="rounded border border-slate-700 bg-slate-900/50 p-3">
+    <div className="rounded border border-border bg-surface-1/50 p-3">
       <div className="flex items-start justify-between gap-2">
-        <div className="min-w-0">
+        <button
+          type="button"
+          onClick={() => !compact && setExpanded((v) => !v)}
+          disabled={compact}
+          aria-expanded={compact ? undefined : expanded}
+          aria-controls={compact ? undefined : bodyId}
+          className="min-w-0 flex-1 text-left disabled:cursor-default"
+        >
           <div className="flex flex-wrap items-center gap-2">
-            <span className="font-medium text-slate-100">{note.title || "（無題）"}</span>
+            {!compact ? (
+              <span className="text-ink-muted" aria-hidden="true">
+                {expanded ? "▾" : "▸"}
+              </span>
+            ) : null}
+            <span className="font-medium text-ink-primary">{note.title || "（無題）"}</span>
             {note.section ? (
-              <span className="rounded bg-slate-800 px-2 py-0.5 text-xs text-slate-300">
+              <span className="rounded bg-surface-2 px-2 py-0.5 text-xs text-ink-secondary">
                 {sectionLabel(note.section)}
               </span>
             ) : null}
             {note.player_name ? (
-              <span className="rounded bg-indigo-700/70 px-2 py-0.5 text-xs text-white">
+              <span className="rounded bg-info/70 px-2 py-0.5 text-xs text-white">
                 vs {note.player_name}
               </span>
             ) : null}
           </div>
-        </div>
+        </button>
 
         <div className="flex shrink-0 items-center gap-1">
           {onToggleStar ? (
@@ -51,7 +79,7 @@ export function NoteCard({
               type="button"
               onClick={() => onToggleStar(note)}
               title={note.starred ? "スターを外す" : "スターを付ける"}
-              className={`text-lg leading-none ${note.starred ? "text-amber-400" : "text-slate-600"}`}
+              className={`min-h-11 min-w-11 text-lg leading-none ${note.starred ? "text-warning" : "text-ink-muted"}`}
             >
               {note.starred ? "★" : "☆"}
             </button>
@@ -61,7 +89,7 @@ export function NoteCard({
               type="button"
               onClick={() => onTogglePin(note)}
               title={note.pinned ? "ピンを外す" : "冒頭に固定（TL;DR）"}
-              className={`text-sm leading-none ${note.pinned ? "text-emerald-400" : "text-slate-600"}`}
+              className={`min-h-11 min-w-11 text-sm leading-none ${note.pinned ? "text-action-strong" : "text-ink-muted"}`}
             >
               📌
             </button>
@@ -69,60 +97,108 @@ export function NoteCard({
         </div>
       </div>
 
-      {note.body_md ? (
-        <div className={compact ? "mt-2 max-h-32 overflow-hidden" : "mt-2"}>
-          {renderMarkdown(note.body_md)}
-        </div>
+      {/* 折りたたみ時: タイトル+冒頭2行+メタのみ。compactは常にこの表示（横断検索のスキャン用） */}
+      {!expanded && previewLines.length > 0 ? (
+        <p className="mt-1.5 line-clamp-2 text-sm text-ink-secondary">{previewLines.join(" ")}</p>
       ) : null}
 
-      {note.tags.length > 0 ? (
-        <div className="mt-2 flex flex-wrap gap-1">
-          {note.tags.map((t) => (
-            <span key={t} className="rounded bg-slate-800 px-2 py-0.5 text-xs text-slate-300">
-              #{t}
-            </span>
-          ))}
-        </div>
-      ) : null}
-
-      {note.media.length > 0 ? (
-        compact ? (
-          <p className="mt-2 text-xs text-slate-500">🎞 メディア {note.media.length}件</p>
-        ) : (
-          <ul className="mt-3 space-y-3">
-            {note.media.map((m) => (
-              <li key={m.id}>
-                <NoteMediaView media={m} />
-              </li>
-            ))}
-          </ul>
-        )
-      ) : null}
-
-      {onEdit || onDelete ? (
-        <div className="mt-3 flex gap-3 border-t border-slate-800 pt-2">
-          {onEdit ? (
-            <button
-              type="button"
-              onClick={() => onEdit(note.id)}
-              className="text-xs text-slate-400 hover:text-slate-200"
-            >
-              編集
-            </button>
+      {expanded ? (
+        <div id={bodyId}>
+          {showToc ? (
+            <div className="mt-2 flex flex-wrap gap-1 border-b border-border-subtle pb-2">
+              {headings.map((h) => (
+                <button
+                  key={h.index}
+                  type="button"
+                  onClick={() => scrollToHeading(h.index)}
+                  className="min-h-8 rounded-full border border-border-subtle px-2.5 py-1 text-xs text-ink-secondary hover:border-action hover:text-action-strong"
+                >
+                  {h.text}
+                </button>
+              ))}
+            </div>
           ) : null}
-          {onDelete ? (
-            <button
-              type="button"
-              onClick={() => {
-                if (window.confirm("このメモを削除しますか？")) onDelete(note.id);
-              }}
-              className="text-xs text-red-400 hover:text-red-300"
-            >
-              削除
-            </button>
+
+          {body ? (
+            <div className="mt-2 [&_h3]:scroll-mt-4 [&_h4]:scroll-mt-4 [&_h5]:scroll-mt-4">
+              <HeadingAnchoredMarkdown body={body} idPrefix={bodyId} />
+            </div>
+          ) : null}
+
+          {note.tags.length > 0 ? (
+            <div className="mt-2 flex flex-wrap gap-1">
+              {note.tags.map((t) => (
+                <span key={t} className="rounded bg-surface-2 px-2 py-0.5 text-xs text-ink-secondary">
+                  #{t}
+                </span>
+              ))}
+            </div>
+          ) : null}
+
+          {note.media.length > 0 ? (
+            <ul className="mt-3 space-y-3">
+              {note.media.map((m) => (
+                <li key={m.id}>
+                  <NoteMediaView media={m} />
+                </li>
+              ))}
+            </ul>
+          ) : null}
+
+          {onEdit || onDelete ? (
+            <div className="mt-3 flex gap-3 border-t border-border-subtle pt-2">
+              {onEdit ? (
+                <button
+                  type="button"
+                  onClick={() => onEdit(note.id)}
+                  className="min-h-11 text-xs text-ink-secondary hover:text-ink-primary"
+                >
+                  編集
+                </button>
+              ) : null}
+              {onDelete ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (window.confirm("このメモを削除しますか？")) onDelete(note.id);
+                  }}
+                  className="min-h-11 text-xs text-danger hover:opacity-80"
+                >
+                  削除
+                </button>
+              ) : null}
+            </div>
           ) : null}
         </div>
-      ) : null}
+      ) : (
+        <>
+          {note.tags.length > 0 ? (
+            <div className="mt-2 flex flex-wrap gap-1">
+              {note.tags.slice(0, 4).map((t) => (
+                <span key={t} className="rounded bg-surface-2 px-2 py-0.5 text-xs text-ink-secondary">
+                  #{t}
+                </span>
+              ))}
+            </div>
+          ) : null}
+          {note.media.length > 0 ? (
+            <p className="mt-2 text-xs text-ink-muted">🎞 メディア {note.media.length}件</p>
+          ) : null}
+        </>
+      )}
     </div>
   );
+}
+
+/** renderMarkdown の出力に見出しID(idPrefix-hN)を後付けする軽量ラッパー。 */
+function HeadingAnchoredMarkdown({ body, idPrefix }: { body: string; idPrefix: string }) {
+  // renderMarkdown はReact要素を直接返すためDOM後処理でid付与する（見出し数は少なく許容範囲）。
+  const ref = (el: HTMLDivElement | null) => {
+    if (!el) return;
+    const headings = el.querySelectorAll("h3, h4, h5");
+    headings.forEach((h, i) => {
+      h.id = `${idPrefix}-h${i}`;
+    });
+  };
+  return <div ref={ref}>{renderMarkdown(body)}</div>;
 }

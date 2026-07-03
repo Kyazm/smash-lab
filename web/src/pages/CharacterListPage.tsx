@@ -30,17 +30,17 @@ export function CharacterListPage() {
   return (
     <div className="mx-auto max-w-2xl p-4">
       <div className="flex items-center justify-between gap-2">
-        <h1 className="text-xl font-bold text-slate-100">キャラ一覧</h1>
+        <h1 className="text-xl font-bold text-ink-primary">キャラ一覧</h1>
         <nav className="flex gap-2 text-sm">
           <Link
             to="/me"
-            className="rounded bg-emerald-700 px-3 py-1.5 font-medium text-white hover:bg-emerald-600"
+            className="flex min-h-11 items-center rounded bg-action px-3 py-1.5 font-medium text-white hover:bg-action-strong"
           >
             自キャラ
           </Link>
           <Link
             to="/search"
-            className="rounded bg-slate-800 px-3 py-1.5 font-medium text-slate-200 hover:bg-slate-700"
+            className="flex min-h-11 items-center rounded bg-surface-2 px-3 py-1.5 font-medium text-ink-secondary hover:text-ink-primary"
           >
             横断検索
           </Link>
@@ -52,38 +52,40 @@ export function CharacterListPage() {
         placeholder="キャラ名で検索（日本語/英語）"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        className="mt-3 w-full rounded border border-slate-700 bg-slate-900 p-2 text-sm text-slate-100"
+        className="mt-3 w-full min-h-11 rounded border border-border bg-surface-1 p-2 text-sm text-ink-primary"
       />
 
       {characters === null ? (
-        <p className="mt-4 text-sm text-slate-400">読み込み中…</p>
+        <p className="mt-4 text-sm text-ink-muted">読み込み中…</p>
       ) : (
-        <ul className="mt-4 divide-y divide-slate-800">
+        <ul className="mt-4 divide-y divide-border-subtle">
           {filtered.map((c) => (
             <li key={c.id}>
               <Link
                 to={`/c/${c.slug}`}
-                className="flex items-center justify-between gap-2 py-3 text-slate-100 hover:bg-slate-800/50"
+                className="flex min-h-11 items-center justify-between gap-2 py-3 text-ink-primary hover:bg-surface-2/50"
               >
                 <span className="flex items-center gap-2">
                   {c.icon_url ? (
                     <img src={c.icon_url} alt="" className="h-8 w-8 rounded object-contain" />
-                  ) : null}
+                  ) : (
+                    <span className="flex h-8 w-8 items-center justify-center rounded bg-surface-2 text-xs text-ink-muted">
+                      {c.name_ja.slice(0, 1)}
+                    </span>
+                  )}
                   <span>
                     <span className="font-medium">{c.name_ja}</span>
-                    <span className="ml-2 text-xs text-slate-400">{c.name_en}</span>
+                    <span className="ml-2 text-xs text-ink-muted">{c.name_en}</span>
                   </span>
                 </span>
                 {c.is_main ? (
-                  <span className="rounded bg-emerald-700 px-2 py-0.5 text-xs text-white">
-                    使用キャラ
-                  </span>
+                  <span className="rounded bg-action px-2 py-0.5 text-xs text-white">使用キャラ</span>
                 ) : null}
               </Link>
             </li>
           ))}
           {filtered.length === 0 ? (
-            <li className="py-3 text-sm text-slate-400">該当するキャラが見つかりません。</li>
+            <li className="py-3 text-sm text-ink-muted">該当するキャラが見つかりません。</li>
           ) : null}
         </ul>
       )}

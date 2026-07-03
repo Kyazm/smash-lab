@@ -35,22 +35,22 @@ export function OwnNotesList({ kind, moveId, emptyLabel }: Props) {
     setComposing(null);
   };
 
-  if (notes === null) return <p className="text-sm text-slate-400">読み込み中…</p>;
+  if (notes === null) return <p className="text-sm text-ink-muted">読み込み中…</p>;
 
   return (
     <div>
-      {error ? <p className="mb-2 text-sm text-red-400">読み込みエラー: {error}</p> : null}
+      {error ? <p className="mb-2 text-sm text-danger">読み込みエラー: {error}</p> : null}
 
       <button
         type="button"
         onClick={() => setComposing({ mode: "create" })}
-        className="rounded bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white"
+        className="min-h-11 rounded bg-action px-3 py-1.5 text-sm font-medium text-white disabled:opacity-50"
         disabled={kind === "own_move" && !moveId}
       >
         + メモを追加
       </button>
       {kind === "own_move" && !moveId ? (
-        <p className="mt-2 text-xs text-slate-500">技を選択するとメモを追加できます。</p>
+        <p className="mt-2 text-xs text-ink-muted">技を選択するとメモを追加できます。</p>
       ) : null}
 
       {composing ? (
@@ -75,7 +75,7 @@ export function OwnNotesList({ kind, moveId, emptyLabel }: Props) {
 
       <div className="mt-4 space-y-2">
         {notes.length === 0 ? (
-          <p className="text-sm text-slate-400">{emptyLabel}</p>
+          <p className="text-sm text-ink-muted">{emptyLabel}</p>
         ) : (
           notes.map((n) => (
             <NoteCard

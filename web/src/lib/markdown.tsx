@@ -19,7 +19,7 @@ function renderInline(text: string, keyPrefix: string): ReactNode[] {
       nodes.push(<strong key={`${keyPrefix}-b${i}`}>{tok.slice(2, -2)}</strong>);
     } else {
       nodes.push(
-        <code key={`${keyPrefix}-c${i}`} className="rounded bg-slate-800 px-1 py-0.5 text-xs">
+        <code key={`${keyPrefix}-c${i}`} className="rounded bg-surface-2 px-1 py-0.5 text-xs font-frame">
           {tok.slice(1, -1)}
         </code>,
       );
@@ -78,7 +78,7 @@ export function renderMarkdown(md: string): ReactNode {
     if (/^---+\s*$/.test(line)) {
       flushParagraph();
       flushList();
-      blocks.push(<hr key={`hr-${key}`} className="my-3 border-slate-700" />);
+      blocks.push(<hr key={`hr-${key}`} className="my-3 border-border" />);
       key++;
       continue;
     }
@@ -142,5 +142,5 @@ export function renderMarkdown(md: string): ReactNode {
   flushParagraph();
   flushList();
 
-  return <div className="space-y-2 text-sm text-slate-200">{blocks}</div>;
+  return <div className="space-y-2 text-sm text-ink-secondary">{blocks}</div>;
 }

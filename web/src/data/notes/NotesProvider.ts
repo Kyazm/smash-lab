@@ -7,6 +7,8 @@ import type {
   NoteMedia,
   NoteMediaCreateInput,
   NoteQuery,
+  NoteProposal,
+  ApplyProposalResult,
 } from "./types";
 
 export interface NotesProvider {
@@ -42,4 +44,17 @@ export interface NotesProvider {
    * 検索結果はキャラ/技レーンとは別（呼び出し側でレーン分け）。
    */
   searchNotes(keyword: string): Promise<NoteWithMedia[]>;
+
+  // ── AI整頓（ADR-0010）: 提案・承認制。listNotes等と同じProviderに同居させる（notesと密結合のため、ADR-0008追補） ──
+
+  /** 指定ノートの提案一覧（created_at 降順）。noteId 省略時は全ノート分。 */
+  listProposals(noteId?: string): Promise<NoteProposal[]>;
+  /**
+   * 提案を承認する。楽観ロック: 生成時の base_updated_at と現在の notes.updated_at が一致する場合のみ
+   * body_md を置き換え、不一致なら 'stale' を返して中断する（承認前の手動編集を上書きしない）。
+   * 承認前に note_revisions へ旧本文を保全する。
+   */
+  applyProposal(proposalId: string): Promise<ApplyProposalResult>;
+  /** 提案を却下する（pending以外は例外）。 */
+  rejectProposal(proposalId: string): Promise<void>;
 }
