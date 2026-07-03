@@ -11,20 +11,23 @@ import { MatchupNotesTab } from "../components/notes/MatchupNotesTab";
 import { OwnPlayTab } from "../components/notes/OwnPlayTab";
 import { OwnMoveTab } from "../components/notes/OwnMoveTab";
 import { OwnMatchTab } from "../components/notes/OwnMatchTab";
+import { CharacterStatsTab } from "../components/match/CharacterStatsTab";
 import { TabBar } from "../components/shared/TabBar";
 import { BrandMark } from "../components/BrandMark";
 import { CharacterIcon } from "../components/shared/CharacterIcon";
 import { useMainCharacter } from "../lib/mainCharacterContext";
 import type { CharacterBundle } from "../types";
 
-type CommonTab = "frames" | "punish" | "notes";
+type CommonTab = "frames" | "punish" | "notes" | "record";
 type MainOnlyTab = "own" | "moves" | "matches";
 type Tab = CommonTab | MainOnlyTab;
 
+// 戦績（record）は全キャラ共通（相手キャラ単位の勝敗のため is_main 不問、ADR-0015）。
 const COMMON_TABS: { key: CommonTab; label: string }[] = [
   { key: "frames", label: "フレーム表" },
   { key: "punish", label: "確定反撃" },
   { key: "notes", label: "キャラ対メモ" },
+  { key: "record", label: "戦績" },
 ];
 // docs/07 F-B: 順序は フレーム表/確定反撃/キャラ対メモ/立ち回り/技メモ/試合
 const MAIN_ONLY_TABS: { key: MainOnlyTab; label: string }[] = [
@@ -34,7 +37,7 @@ const MAIN_ONLY_TABS: { key: MainOnlyTab; label: string }[] = [
 ];
 
 function isValidTab(v: string | null, isMain: boolean): v is Tab {
-  if (v === "frames" || v === "punish" || v === "notes") return true;
+  if (v === "frames" || v === "punish" || v === "notes" || v === "record") return true;
   if (isMain && (v === "own" || v === "moves" || v === "matches")) return true;
   return false;
 }
@@ -188,6 +191,8 @@ export function CharacterPage() {
             characterNameJa={bundle.character.name_ja}
             characterSlug={bundle.character.slug}
           />
+        ) : tab === "record" ? (
+          <CharacterStatsTab key={bundle.character.id} characterId={bundle.character.id} />
         ) : tab === "own" ? (
           <OwnPlayTab mainCharacterId={bundle.character.id} />
         ) : tab === "moves" ? (

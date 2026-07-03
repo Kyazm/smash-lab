@@ -4,19 +4,61 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { dataProvider } from "../data";
 import { notesProvider } from "../data/notes";
+import { matchProvider } from "../data/match";
+import { computeStreaks, computeSummary } from "../lib/matchStats";
 import { useMainCharacter } from "../lib/mainCharacterContext";
+import { useMatchMode } from "../lib/matchModeContext";
 import { useIsGuest } from "../lib/guestContext";
 import { BrandMark } from "../components/BrandMark";
 import { CharacterIcon } from "../components/shared/CharacterIcon";
+import { ModeSelector } from "../components/match/ModeSelector";
+import { WinLoseControl } from "../components/match/WinLoseControl";
 import type { Character } from "../types";
+
+interface CharRecord {
+  wins: number;
+  losses: number;
+  current: number;
+}
 
 export function CharacterListPage() {
   const { mainCharacterId } = useMainCharacter();
+  const { mode } = useMatchMode();
   const isGuest = useIsGuest();
   const [characters, setCharacters] = useState<Character[] | null>(null);
   const [query, setQuery] = useState("");
   // 承認待ち(pending+stale)件数バッジ（docs/07 F-A）。
   const [pendingCount, setPendingCount] = useState<number | null>(null);
+  // 現モードの対戦相手キャラ別戦績（ADR-0015）。勝敗記録・undo後に再取得する。
+  const [recordsByChar, setRecordsByChar] = useState<Map<string, CharRecord>>(new Map());
+  const [recordRefresh, setRecordRefresh] = useState(0);
+
+  useEffect(() => {
+    let cancelled = false;
+    matchProvider
+      .listResults({ mode })
+      .then((results) => {
+        if (cancelled) return;
+        const byChar = new Map<string, typeof results>();
+        for (const r of results) {
+          const list = byChar.get(r.characterId);
+          if (list) list.push(r);
+          else byChar.set(r.characterId, [r]);
+        }
+        const next = new Map<string, CharRecord>();
+        for (const [cid, list] of byChar) {
+          const s = computeSummary(list);
+          next.set(cid, { wins: s.wins, losses: s.losses, current: computeStreaks(list).current });
+        }
+        setRecordsByChar(next);
+      })
+      .catch((e) => {
+        if (!cancelled) console.error("[CharacterListPage] listResults 失敗", e);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [mode, recordRefresh]);
 
   useEffect(() => {
     let cancelled = false;
@@ -96,6 +138,13 @@ export function CharacterListPage() {
               ) : null}
             </Link>
           ) : null}
+          {/* 戦績ダッシュボードはゲストにも表示（自分のローカル戦績を試せる。個人情報漏洩はない）。 */}
+          <Link
+            to="/stats"
+            className="flex min-h-11 items-center rounded bg-surface-2 px-3 py-1.5 font-medium text-ink-secondary hover:text-ink-primary"
+          >
+            戦績
+          </Link>
           <Link
             to="/library"
             className="flex min-h-11 items-center rounded bg-surface-2 px-3 py-1.5 font-medium text-ink-secondary hover:text-ink-primary"
@@ -113,33 +162,49 @@ export function CharacterListPage() {
         className="mt-3 w-full min-h-11 rounded border border-border bg-surface-1 p-2 text-sm text-ink-primary"
       />
 
+      {/* 勝敗記録のモード切替。各行の勝/負ボタンはこのモードに記録される（ADR-0015）。 */}
+      <div className="mt-3 flex items-center gap-2">
+        <span className="font-frame text-[10px] uppercase tracking-[0.18em] text-ink-muted">記録先</span>
+        <ModeSelector />
+      </div>
+
       {characters === null ? (
         <p className="mt-4 text-sm text-ink-muted">読み込み中…</p>
       ) : (
         <ul className="mt-4 divide-y divide-border-subtle">
-          {filtered.map((c) => (
-            <li key={c.id}>
-              <Link
-                to={`/c/${c.slug}`}
-                className="flex min-h-11 items-center justify-between gap-2 py-3 text-ink-primary hover:bg-surface-2/50"
-              >
-                <span className="flex items-center gap-2">
+          {filtered.map((c) => {
+            const rec = recordsByChar.get(c.id) ?? { wins: 0, losses: 0, current: 0 };
+            return (
+              // hover背景・タップ領域は行(li)全体に。Link(左)とWinLoseControl(右)のネスト不正を回避（ADR-0015）。
+              <li key={c.id} className="flex items-center gap-2 rounded pr-1 hover:bg-surface-2/50">
+                <Link
+                  to={`/c/${c.slug}`}
+                  className="flex min-h-11 min-w-0 flex-1 items-center gap-2 py-3 text-ink-primary"
+                >
                   <CharacterIcon character={c} size="sm" />
-                  <span>
+                  <span className="min-w-0 truncate">
                     <span className="font-medium">{c.name_ja}</span>
                     <span className="ml-2 font-frame text-xs uppercase tracking-[0.18em] text-ink-muted">
                       {c.name_en}
                     </span>
                   </span>
-                </span>
-                {c.is_main ? (
-                  <span className="inline-flex items-center gap-1 rounded-full border border-accent-red px-2.5 py-0.5 text-xs font-bold text-accent-red">
-                    ★ 自キャラ
-                  </span>
-                ) : null}
-              </Link>
-            </li>
-          ))}
+                  {c.is_main ? (
+                    <span className="ml-1 shrink-0 rounded-full border border-accent-red px-1.5 py-0.5 text-[10px] font-bold text-accent-red">
+                      ★
+                    </span>
+                  ) : null}
+                </Link>
+                <WinLoseControl
+                  characterId={c.id}
+                  mode={mode}
+                  wins={rec.wins}
+                  losses={rec.losses}
+                  current={rec.current}
+                  onChanged={() => setRecordRefresh((x) => x + 1)}
+                />
+              </li>
+            );
+          })}
           {filtered.length === 0 ? (
             <li className="py-3 text-sm text-ink-muted">該当するキャラが見つかりません。</li>
           ) : null}

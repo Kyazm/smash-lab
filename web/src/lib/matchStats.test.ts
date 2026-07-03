@@ -1,0 +1,102 @@
+import { describe, expect, it } from "vitest";
+import type { MatchMode, MatchOutcome, MatchResult } from "../data/match/types";
+import {
+  computeStreaks,
+  computeSummary,
+  groupByMode,
+  rankByCharacter,
+  winRateSeries,
+} from "./matchStats";
+
+// createdAt を連番で採番し昇順を保証するビルダー。
+let seq = 0;
+function r(result: MatchOutcome, characterId = "c1", mode: MatchMode = "vip"): MatchResult {
+  seq += 1;
+  return {
+    id: `id-${seq}`,
+    characterId,
+    mode,
+    result,
+    createdAt: new Date(Date.UTC(2026, 0, 1, 0, 0, seq)).toISOString(),
+  };
+}
+const w = (c?: string, m?: MatchMode) => r("win", c, m);
+const l = (c?: string, m?: MatchMode) => r("lose", c, m);
+
+describe("computeSummary", () => {
+  it("空配列は total=0, winRate=0（ゼロ除算しない）", () => {
+    expect(computeSummary([])).toEqual({ wins: 0, losses: 0, total: 0, winRate: 0 });
+  });
+  it("全勝は winRate=1", () => {
+    expect(computeSummary([w(), w(), w()])).toEqual({ wins: 3, losses: 0, total: 3, winRate: 1 });
+  });
+  it("全敗は winRate=0", () => {
+    expect(computeSummary([l(), l()])).toEqual({ wins: 0, losses: 2, total: 2, winRate: 0 });
+  });
+  it("混在は wins/total", () => {
+    const s = computeSummary([w(), l(), w(), w()]);
+    expect(s).toEqual({ wins: 3, losses: 1, total: 4, winRate: 0.75 });
+  });
+});
+
+describe("computeStreaks", () => {
+  it("空配列は全て0", () => {
+    expect(computeStreaks([])).toEqual({ current: 0, maxWin: 0, maxLose: 0 });
+  });
+  it("単一勝ちは current=+1", () => {
+    expect(computeStreaks([w()])).toEqual({ current: 1, maxWin: 1, maxLose: 0 });
+  });
+  it("単一負けは current=-1", () => {
+    expect(computeStreaks([l()])).toEqual({ current: -1, maxWin: 0, maxLose: 1 });
+  });
+  it("連勝中に最新が敗北すると current=-1 にリセット", () => {
+    // W W W L → current は末尾の連敗=1 → -1、maxWin=3
+    expect(computeStreaks([w(), w(), w(), l()])).toEqual({ current: -1, maxWin: 3, maxLose: 1 });
+  });
+  it("maxWin / maxLose を配列全体から拾う", () => {
+    // W W L L L W W  → maxWin=2, maxLose=3, current=+2
+    expect(computeStreaks([w(), w(), l(), l(), l(), w(), w()])).toEqual({
+      current: 2,
+      maxWin: 2,
+      maxLose: 3,
+    });
+  });
+});
+
+describe("winRateSeries", () => {
+  it("空配列は []", () => {
+    expect(winRateSeries([])).toEqual([]);
+  });
+  it("n は1始まりで累積勝率を返す", () => {
+    // W L W → 1/1, 1/2, 2/3
+    expect(winRateSeries([w(), l(), w()])).toEqual([
+      { n: 1, winRate: 1 },
+      { n: 2, winRate: 0.5 },
+      { n: 3, winRate: 2 / 3 },
+    ]);
+  });
+});
+
+describe("groupByMode", () => {
+  it("3モード全キーを持ち、該当なしは空配列", () => {
+    const g = groupByMode([w("c1", "vip"), l("c1", "offline"), w("c1", "vip")]);
+    expect(Object.keys(g).sort()).toEqual(["offline", "smamate", "vip"]);
+    expect(g.vip).toHaveLength(2);
+    expect(g.offline).toHaveLength(1);
+    expect(g.smamate).toEqual([]);
+  });
+});
+
+describe("rankByCharacter", () => {
+  it("勝率降順、同率は試合数降順", () => {
+    // c1: 2勝0敗(1.0, 2試合) / c2: 1勝0敗(1.0, 1試合) / c3: 1勝1敗(0.5)
+    const ranked = rankByCharacter([
+      w("c1"), w("c1"),
+      w("c2"),
+      w("c3"), l("c3"),
+    ]);
+    expect(ranked.map((e) => e.characterId)).toEqual(["c1", "c2", "c3"]);
+    expect(ranked[0]).toEqual({ characterId: "c1", wins: 2, losses: 0, total: 2, winRate: 1 });
+    expect(ranked[2].winRate).toBe(0.5);
+  });
+});

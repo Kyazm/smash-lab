@@ -12,6 +12,8 @@ import { getSupabaseClient } from "../../data/supabaseClient";
 import { GuestProvider } from "../../lib/guestContext";
 import { setActiveNotesProvider, defaultNotesProvider } from "../../data/notes";
 import { GuestNotesProvider } from "../../data/notes/GuestNotesProvider";
+import { setActiveMatchProvider, defaultMatchProvider, GUEST_MATCH_KEY } from "../../data/match";
+import { LocalMatchProvider } from "../../data/match/LocalMatchProvider";
 import { GUEST_EMAIL, GUEST_PASSWORD, GUEST_UID } from "../../data/guestConfig";
 
 const kind = resolveNotesProviderKind(
@@ -42,6 +44,7 @@ function SupabaseAuthGate({ children }: { children: ReactNode }) {
       if (s?.user.id !== GUEST_UID) {
         guestSeeded.current = false;
         setActiveNotesProvider(defaultNotesProvider);
+        setActiveMatchProvider(defaultMatchProvider);
       }
       setSession(s);
     });
@@ -58,6 +61,12 @@ function SupabaseAuthGate({ children }: { children: ReactNode }) {
     const guestProvider = new GuestNotesProvider();
     setActiveNotesProvider(guestProvider);
     void guestProvider.seedFromSupabaseIfEmpty();
+  }, [isGuest]);
+
+  // 戦績プロバイダの切替（ADR-0015）。match はシード不要なので notes の guestSeeded とは別 useEffect。
+  // ゲスト時はローカルサンドボックス（GUEST_MATCH_KEY）、非ゲスト時は既定（Supabase/mock）へ戻す。
+  useEffect(() => {
+    setActiveMatchProvider(isGuest ? new LocalMatchProvider(GUEST_MATCH_KEY) : defaultMatchProvider);
   }, [isGuest]);
 
   if (loading) {
@@ -196,6 +205,8 @@ function GuestBanner() {
       const provider = new GuestNotesProvider();
       await provider.reset();
       setActiveNotesProvider(provider);
+      // 戦績のローカルサンドボックスも消去（notes リセットと対称、ADR-0015）。
+      new LocalMatchProvider(GUEST_MATCH_KEY).clear();
       window.location.reload();
     } finally {
       setResetting(false);

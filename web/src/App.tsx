@@ -5,6 +5,7 @@
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import { AuthGate } from "./components/auth/AuthGate";
 import { MainCharacterProvider } from "./lib/mainCharacterContext";
+import { MatchModeProvider } from "./lib/matchModeContext";
 import { CharacterListPage } from "./pages/CharacterListPage";
 import { CharacterPage } from "./pages/CharacterPage";
 import { MainCharacterPage } from "./pages/MainCharacterPage";
@@ -12,13 +13,16 @@ import { SearchPage } from "./pages/SearchPage";
 import { ProposalsPage } from "./pages/ProposalsPage";
 import { LibraryIndexPage } from "./pages/LibraryIndexPage";
 import { ArticlePage } from "./pages/ArticlePage";
+import { StatsPage } from "./pages/StatsPage";
 
 // 認証必須ルート群のレイアウト。AuthGate 配下で MainCharacterProvider を有効化し、Outlet に子ルートを描画する。
 function AuthLayout() {
   return (
     <AuthGate>
       <MainCharacterProvider>
-        <Outlet />
+        <MatchModeProvider>
+          <Outlet />
+        </MatchModeProvider>
       </MainCharacterProvider>
     </AuthGate>
   );
@@ -35,6 +39,7 @@ export function App() {
           <Route path="/search" element={<SearchPage />} />
           <Route path="/proposals" element={<ProposalsPage />} />
           <Route path="/c/:slug" element={<CharacterPage />} />
+          <Route path="/stats" element={<StatsPage />} />
           <Route path="/library" element={<LibraryIndexPage />} />
           <Route path="/library/:slug" element={<ArticlePage />} />
         </Route>
