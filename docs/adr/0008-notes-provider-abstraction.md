@@ -21,3 +21,7 @@ Phase 2 でメモ機能（notes / note_media / 横断検索）を実装する。
 - モックで全 UI をブラウザ検証可能。実 DB 検証は migration 適用後に環境変数を切り替えるだけ。
 - Supabase 依存（`@supabase/supabase-js`）を web に追加する。
 - Supabase 実接続時の残作業（Storage バケット作成・Auth ログイン UI 等）は Phase 2 完了報告に一覧化する。
+
+## 追補（2026-07-03、UI刷新にて）
+
+AI整頓（ADR-0010）の提案系メソッド `listProposals / applyProposal / rejectProposal` は `NotesProvider` インターフェースに追加する（別Provider新設はしない。提案はnotesと密結合のため）。`MockNotesProvider` は提案seedを同梱し、UI実装がSupabase無しでブラウザ検証できることを維持する。
