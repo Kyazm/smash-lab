@@ -1,44 +1,64 @@
-// デザイントークン（docs/06_ui-redesign.md）。CSS変数(src/index.css :root)をTailwindユーティリティに
+// デザイントークン（.context/design-satoh.md）。CSS変数(src/index.css :root)をTailwindユーティリティに
 // マッピングする。ハードコード色（bg-slate-900等）は新規追加禁止、必ずこのトークン経由で使う。
+// 各トークンは rgb(var(--x) / <alpha-value>) 形式。CSS変数側は空白区切りRGBチャンネル値で定義し、
+// これにより不透明度修飾子（bg-action/15, border-info/50 等）が正しく効く。
 /** @type {import('tailwindcss').Config} */
+const token = (name) => `rgb(var(${name}) / <alpha-value>)`;
+
 export default {
   content: ["./index.html", "./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
         surface: {
-          0: "var(--surface-0)",
-          1: "var(--surface-1)",
-          2: "var(--surface-2)",
+          0: token("--surface-0"),
+          1: token("--surface-1"),
+          2: token("--surface-2"),
         },
         border: {
-          subtle: "var(--border-subtle)",
-          DEFAULT: "var(--border-default)",
+          subtle: token("--border-subtle"),
+          DEFAULT: token("--border-default"),
         },
         ink: {
-          primary: "var(--text-primary)",
-          secondary: "var(--text-secondary)",
-          muted: "var(--text-muted)",
+          primary: token("--text-primary"),
+          secondary: token("--text-secondary"),
+          muted: token("--text-muted"),
         },
         action: {
-          DEFAULT: "var(--color-action)",
-          strong: "var(--color-action-strong)",
+          DEFAULT: token("--color-action"),
+          strong: token("--color-action-strong"),
         },
-        startup: "var(--color-startup)",
-        active: "var(--color-active)",
-        recovery: "var(--color-recovery)",
+        accent: {
+          yellow: token("--accent-yellow"),
+        },
+        startup: token("--color-startup"),
+        active: token("--color-active"),
+        recovery: token("--color-recovery"),
         adv: {
-          safe: "var(--adv-safe)",
-          minor: "var(--adv-minor)",
-          caution: "var(--adv-caution)",
-          punish: "var(--adv-punish)",
+          safe: token("--adv-safe"),
+          minor: token("--adv-minor"),
+          caution: token("--adv-caution"),
+          punish: token("--adv-punish"),
         },
-        danger: "var(--color-danger)",
-        warning: "var(--color-warning)",
-        info: "var(--color-info)",
+        danger: token("--color-danger"),
+        warning: token("--color-warning"),
+        info: token("--color-info"),
       },
       fontFamily: {
-        frame: ["ui-monospace", "SF Mono", "Menlo", "Consolas", "monospace"],
+        // 見出し（Anton極太コンデンス。和文はシステム太ゴシックにフォールバック）
+        display: ["Anton", '"Hiragino Kaku Gothic StdN"', '"Yu Gothic"', '"Noto Sans JP"', "sans-serif"],
+        // 本文（body既定と一致させる）
+        sans: [
+          '"Inter Variable"',
+          "Inter",
+          '"Hiragino Kaku Gothic ProN"',
+          '"Yu Gothic"',
+          '"Noto Sans JP"',
+          "system-ui",
+          "sans-serif",
+        ],
+        // フレーム数値（tabular-nums）。未ロード時はシステムmonoにフォールバック
+        frame: ['"JetBrains Mono"', "ui-monospace", "SF Mono", "Menlo", "Consolas", "monospace"],
       },
     },
   },

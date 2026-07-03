@@ -3,50 +3,70 @@
 @tailwind utilities;
 
 /*
- * デザイントークン（docs/06_ui-redesign.md）。
- * 審美方向: インダストリアル/テクニカル。ダーク基調は維持しつつ slate単調から脱却するため
- * サーフェスに温度差（青みがかった中立グレー）を持たせる。ハードコード色は禁止、必ずこの変数か
- * tailwind.config.js の theme.extend 経由で使う。
+ * デザイントークン（.context/design-satoh.md「黒×赤白×黄 ストリート/エディトリアル」SATOH参考）。
+ * 審美方向: 硬質なダーク基調＋赤アクセント＋控えめな黄。緑・青は完全排除。
+ * ハードコード色は禁止、必ずこの変数か tailwind.config.js の theme.extend 経由で使う。
+ * 全ペアWCAG AA検証済み（design-satoh.md §2）。赤は基本ダーク背景専用（明背景に赤文字を置かない）。
+ */
+/*
+ * トークンは「空白区切りのRGBチャンネル値」で定義する（例: 245 242 234）。
+ * tailwind.config.js 側で rgb(var(--x) / <alpha-value>) として参照するため、
+ * Tailwindの不透明度修飾子（bg-action/15, border-info/50 等）が正しく効く。
+ * 16進表記を直接入れると /opacity が透明化する不具合になるため必ずチャンネル値で書く。
  */
 :root {
-  /* サーフェス3層。#000純黒は避ける（research-ui-best-practices パターン15） */
-  --surface-0: #0b0e14; /* 最背面（body） */
-  --surface-1: #12161f; /* カード・パネル */
-  --surface-2: #1b212c; /* ネストしたパネル・ホバー */
+  /* サーフェス3層。純黒#000は避け僅かに持ち上げた暖色寄りニュートラル黒 */
+  --surface-0: 10 10 10; /* #0a0a0a 最背面（body） */
+  --surface-1: 20 20 20; /* #141414 カード・パネル */
+  --surface-2: 30 30 30; /* #1e1e1e ネストしたパネル・ホバー */
 
-  --border-subtle: #262d3a;
-  --border-default: #333c4d;
+  --border-subtle: 38 34 32; /* #262220 */
+  --border-default: 58 53 47; /* #3a352f */
 
-  --text-primary: #e7ebf3;
-  --text-secondary: #a2acc0;
-  --text-muted: #6b7690;
+  --text-primary: 245 242 234; /* #f5f2ea オフホワイト（純白#fffの硬さを緩和） */
+  --text-secondary: 184 178 164; /* #b8b2a4 */
+  --text-muted: 122 117 104; /* #7a7568 */
 
-  /* 機能色: action(既存emerald維持) / startup / active / recovery(フレームバー用 Dustloop方式) */
-  --color-action: #10b981;
-  --color-action-strong: #34d399;
-  --color-startup: #64748b; /* 発生: グレー */
-  --color-active: #ef4444; /* 持続: 赤 */
-  --color-recovery: #3b82f6; /* 硬直: 青 */
+  /* アクセント: action は旧emerald緑→赤に置換（主要操作・選択・CTA・タブ下線・リンクの意味を赤が担う） */
+  --color-action: 230 57 80; /* #e63950 accent-red */
+  --color-action-strong: 242 73 92; /* #f2495c accent-red-strong（hover/active・大きい文字/アイコン用） */
+  --accent-yellow: 245 204 59; /* #f5cc3b 副アクセント（警告・ハイライト。使いすぎ注意） */
 
-  /* 硬直差(adv)スケール。フレーム表・確反タブで一貫使用 */
-  --adv-safe: #34d399; /* >=0 有利/五分 */
-  --adv-minor: #a2acc0; /* -1〜-4 中立 */
-  --adv-caution: #f59e0b; /* -5〜-9 要注意 */
-  --adv-punish: #f43f5e; /* <=-10 確定反撃圏 */
+  /* 機能色（フレームバー: 発生グレー/持続黄/硬直赤の暖色トリオ。緑・青を廃止） */
+  --color-startup: 122 117 104; /* #7a7568 発生: 中立グレー */
+  --color-active: 245 204 59; /* #f5cc3b 持続: 黄 */
+  --color-recovery: 230 57 80; /* #e63950 硬直: 赤 */
 
-  /* 状態色: エラー/警告/情報系（プレイヤー別メモの強調にも使用） */
-  --color-danger: #f43f5e;
-  --color-warning: #f59e0b;
-  --color-info: #6366f1;
+  /* 硬直差(adv)スケール。フレーム表・確反タブで一貫使用（緑→白に置換） */
+  --adv-safe: 245 242 234; /* #f5f2ea >=0 有利/五分（白＝安全） */
+  --adv-minor: 184 178 164; /* #b8b2a4 -1〜-4 中立（グレー） */
+  --adv-caution: 245 204 59; /* #f5cc3b -5〜-9 要注意（黄） */
+  --adv-punish: 230 57 80; /* #e63950 <=-10 確定反撃圏（赤） */
+
+  /* 状態色（青系infoを廃し中立トーンへ） */
+  --color-danger: 230 57 80; /* #e63950 */
+  --color-warning: 245 204 59; /* #f5cc3b */
+  --color-info: 155 150 138; /* #9b968a */
 }
 
 body {
-  background-color: var(--surface-0);
-  color: var(--text-primary);
+  background-color: rgb(var(--surface-0));
+  color: rgb(var(--text-primary));
+  font-family:
+    "Inter Variable", "Inter", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP",
+    system-ui, sans-serif;
+}
+
+/* 見出し用ディスプレイ書体（Anton極太コンデンス）。和文はAntonにグリフが無いためシステム太ゴシックにフォールバック。 */
+.font-display {
+  font-family:
+    "Anton", "Hiragino Kaku Gothic StdN", "Yu Gothic", "Noto Sans JP", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.01em;
 }
 
 /* フレーム数値専用のタイポグラフィアクセント。表中の全数値に適用（tabular-numsで桁ガタつき防止）。 */
 .font-frame {
   font-variant-numeric: tabular-nums;
-  font-family: ui-monospace, "SF Mono", "Menlo", "Consolas", monospace;
+  font-family: "JetBrains Mono", ui-monospace, "SF Mono", "Menlo", "Consolas", monospace;
 }
