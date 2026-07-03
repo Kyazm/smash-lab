@@ -29,7 +29,23 @@ export function CharacterListPage() {
 
   return (
     <div className="mx-auto max-w-2xl p-4">
-      <h1 className="text-xl font-bold text-slate-100">キャラ一覧</h1>
+      <div className="flex items-center justify-between gap-2">
+        <h1 className="text-xl font-bold text-slate-100">キャラ一覧</h1>
+        <nav className="flex gap-2 text-sm">
+          <Link
+            to="/me"
+            className="rounded bg-emerald-700 px-3 py-1.5 font-medium text-white hover:bg-emerald-600"
+          >
+            自キャラ
+          </Link>
+          <Link
+            to="/search"
+            className="rounded bg-slate-800 px-3 py-1.5 font-medium text-slate-200 hover:bg-slate-700"
+          >
+            横断検索
+          </Link>
+        </nav>
+      </div>
 
       <input
         type="search"

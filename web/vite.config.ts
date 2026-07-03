@@ -6,6 +6,8 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   server: {
+    // previewツールがPORT環境変数でポートを割り当てる（5173固定だと他セッションと衝突）
+    port: process.env.PORT ? Number(process.env.PORT) : 5173,
     fs: {
       // data/fixtures/ の JSON を web/ の外から import するため、リポジトリルートを許可
       allow: [".."],
