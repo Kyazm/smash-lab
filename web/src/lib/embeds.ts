@@ -65,7 +65,10 @@ export function matchBareUrlLine(line: string): string | null {
 }
 
 // 文中に現れるURLを検出するための汎用正規表現（インラインリンク化用）。global。
-export const INLINE_URL_RE = /https?:\/\/[^\s)\]]+/g;
+// 全角の区切り記号（／、。「」等）もURLの一部に飲み込まれないよう除外する。
+// 実データで `.../watch?v=xxx／https://twitter.com/...` のように全角スラッシュで
+// 2つのURLが空白なしに連結されるケースがあるため（FU-1で発覚）。
+export const INLINE_URL_RE = /https?:\/\/[^\s)\]、。「」『』／]+/g;
 
 // Discord添付プレースホルダ: attachment://<id>/<name>
 const ATTACHMENT_RE = /^attachment:\/\/([^/]+)\/(.+)$/;
@@ -114,4 +117,95 @@ export function matchBareAttachmentLine(line: string): AttachmentPlaceholder | n
   const m = line.trim().match(BARE_ATTACHMENT_LINE_RE);
   if (!m) return null;
   return parseAttachmentPlaceholder(m[1]);
+}
+
+// --- 行内メディア抽出（FU-1） ---
+// AI整頓提案が日付・注記をURL/attachmentと同じ行に付けるケースに対応するため、
+// 単独行に限らず行内（行頭・行末・テキスト中）の既知メディアもブロック埋め込み対象として抽出する。
+// 非対応（未知）URLは従来どおりインラインリンク化に委ねるため、ここでは拾わない。
+
+export type LineSegment =
+  | { type: "text"; text: string }
+  | { type: "media-url"; kind: "youtube" | "image" | "tweet"; url: string }
+  | { type: "media-attachment"; alt: string; id: string; name: string };
+
+// `![alt](attachment://id/name)` 形式（行内のどこにあってもよい）。
+const INLINE_MD_IMAGE_ATTACHMENT_RE = /!\[([^\]]*)\]\(attachment:\/\/([^/)]+)\/([^)]+)\)/g;
+// 素の `attachment://id/name`（Markdown画像記法を伴わない）。
+const INLINE_BARE_ATTACHMENT_RE = /attachment:\/\/([^/\s]+)\/(\S+)/g;
+// 行内URL走査は INLINE_URL_RE と同一パターンを使う（global フラグの状態共有を避けるため呼び出し側で lastIndex をリセットする）。
+
+interface RawMatch {
+  start: number;
+  end: number;
+  segment: LineSegment;
+}
+
+/**
+ * 1行からメディア（既知URL種別 or attachmentプレースホルダ）を抽出し、
+ * テキストとメディアが交互に並ぶセグメント列を返す。
+ * - メディアでないテキスト部分は type: "text" として保持する（前後の注記・日付等を失わない）
+ * - 未知URL（link判定）はテキストの一部としてそのまま残す（呼び出し側のインラインリンク化に委ねる）
+ * - メディアが1つも無ければ null を返す（呼び出し側で「通常の段落行」として扱わせるため）
+ */
+export function extractLineMedia(line: string): LineSegment[] | null {
+  const matches: RawMatch[] = [];
+
+  // 1) `![alt](attachment://id/name)` を先に拾う（後段の素attachment走査と重複しないよう除外域を管理）
+  INLINE_MD_IMAGE_ATTACHMENT_RE.lastIndex = 0;
+  let m: RegExpExecArray | null;
+  while ((m = INLINE_MD_IMAGE_ATTACHMENT_RE.exec(line)) !== null) {
+    matches.push({
+      start: m.index,
+      end: m.index + m[0].length,
+      segment: { type: "media-attachment", alt: m[1], id: m[2], name: m[3] },
+    });
+  }
+
+  const isInsideExistingMatch = (idx: number) =>
+    matches.some((r) => idx >= r.start && idx < r.end);
+
+  // 2) 素の attachment://id/name（Markdown画像記法に含まれていないもの）
+  INLINE_BARE_ATTACHMENT_RE.lastIndex = 0;
+  while ((m = INLINE_BARE_ATTACHMENT_RE.exec(line)) !== null) {
+    if (isInsideExistingMatch(m.index)) continue;
+    matches.push({
+      start: m.index,
+      end: m.index + m[0].length,
+      segment: { type: "media-attachment", alt: "", id: m[1], name: m[2] },
+    });
+  }
+
+  // 3) URL（youtube/image/tweetのみメディア化。それ以外はテキストとして残す＝未抽出）
+  INLINE_URL_RE.lastIndex = 0;
+  while ((m = INLINE_URL_RE.exec(line)) !== null) {
+    if (isInsideExistingMatch(m.index)) continue;
+    const classified = classifyUrl(m[0]);
+    if (classified.kind === "link") continue; // 未知URLはテキスト側に残す（従来どおりインラインリンク化）
+    matches.push({
+      start: m.index,
+      end: m.index + m[0].length,
+      segment: { type: "media-url", kind: classified.kind, url: classified.url },
+    });
+  }
+
+  if (matches.length === 0) return null;
+
+  matches.sort((a, b) => a.start - b.start);
+
+  const segments: LineSegment[] = [];
+  let cursor = 0;
+  for (const r of matches) {
+    if (r.start > cursor) {
+      const text = line.slice(cursor, r.start);
+      if (text.trim() !== "") segments.push({ type: "text", text });
+    }
+    segments.push(r.segment);
+    cursor = r.end;
+  }
+  if (cursor < line.length) {
+    const text = line.slice(cursor);
+    if (text.trim() !== "") segments.push({ type: "text", text });
+  }
+  return segments;
 }
