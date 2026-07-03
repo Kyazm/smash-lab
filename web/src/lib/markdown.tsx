@@ -8,6 +8,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
   classifyUrl,
   extractLineMedia,
+  matchLinkCardLine,
   attachmentToStoragePath,
   INLINE_URL_RE,
   type LineSegment,
@@ -160,6 +161,25 @@ function LinkBlock({ url }: { url: string }) {
   );
 }
 
+/** 一般リンク（単独行）の簡易カード。ドメインchip + URL。OGP取得はしない（FU-4）。 */
+function LinkCardBlock({ url, domain }: { url: string; domain: string }) {
+  return (
+    <a
+      href={url}
+      target="_blank"
+      rel="noreferrer"
+      className="my-2 flex flex-col gap-1 rounded-lg border border-border bg-surface-1 px-3 py-2 no-underline transition-colors hover:border-action"
+    >
+      <span className="w-fit rounded bg-surface-2 px-1.5 py-0.5 text-xs text-ink-muted">
+        {domain}
+      </span>
+      <span className="break-all text-sm text-action-strong underline decoration-action/40">
+        {url}
+      </span>
+    </a>
+  );
+}
+
 /** 単独行URLを種別に応じたブロック要素へ。 */
 function UrlEmbedBlock({ url }: { url: string }) {
   const classified = classifyUrl(url);
@@ -220,9 +240,20 @@ export function renderMarkdown(md: string): ReactNode {
   const flushList = () => {
     if (listItems.length === 0) return;
     const ordered = listItems[0].ordered;
-    const items = listItems.map((li, idx) => (
-      <li key={`li-${key}-${idx}`}>{renderInline(li.text, `li-${key}-${idx}`)}</li>
-    ));
+    // FU-4: リスト項目テキストに行内メディア（YouTube/画像/ツイート/attachment）があれば、
+    // マーカーを維持したまま「テキスト（リンク化済み）＋直下に埋め込みブロック」で描画する。
+    // メディアが無ければ従来どおりインライン描画のみ。
+    const items = listItems.map((li, idx) => {
+      const media = extractLineMedia(li.text);
+      if (media) {
+        return (
+          <li key={`li-${key}-${idx}`}>
+            <LineMediaBlock segments={media} keyPrefix={`li-${key}-${idx}`} />
+          </li>
+        );
+      }
+      return <li key={`li-${key}-${idx}`}>{renderInline(li.text, `li-${key}-${idx}`)}</li>;
+    });
     blocks.push(
       ordered ? (
         <ol key={`ol-${key}`} className="ml-5 list-decimal space-y-1">
@@ -273,6 +304,16 @@ export function renderMarkdown(md: string): ReactNode {
         flushParagraph();
         flushList();
         blocks.push(<LineMediaBlock key={`embed-${key}`} segments={media} keyPrefix={`embed-${key}`} />);
+        key++;
+        continue;
+      }
+      // FU-4: 単独行の一般リンク（YouTube/画像/ツイート以外）は簡易リンクカードで表示する。
+      // 箇条書き内やインラインのリンクは対象外（崩れ回避のため従来どおり素のリンク化）。
+      const card = matchLinkCardLine(line);
+      if (card) {
+        flushParagraph();
+        flushList();
+        blocks.push(<LinkCardBlock key={`card-${key}`} url={card.url} domain={card.domain} />);
         key++;
         continue;
       }

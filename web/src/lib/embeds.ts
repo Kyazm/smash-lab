@@ -64,6 +64,27 @@ export function matchBareUrlLine(line: string): string | null {
   return m ? m[1] : null;
 }
 
+/**
+ * 単独行の「一般リンク（YouTube/画像/ツイート以外）」を検出し、カード表示用の情報を返す（FU-4）。
+ * - 対象は matchBareUrlLine が成立し、かつ classifyUrl が 'link' 判定のURLのみ。
+ * - YouTube/画像/ツイートは従来の埋め込みで扱うため null を返す。
+ * - ネットワーク取得（OGP等）はしない。ドメインラベルはURLから機械的に導出する。
+ */
+export interface LinkCard {
+  url: string;
+  /** 表示用ドメイン（例: note.com）。先頭 www. は除去。パース不能時はURL全体。 */
+  domain: string;
+}
+
+export function matchLinkCardLine(line: string): LinkCard | null {
+  const url = matchBareUrlLine(line);
+  if (!url) return null;
+  if (classifyUrl(url).kind !== "link") return null;
+  const parsed = parseUrl(url);
+  const domain = parsed ? parsed.hostname.replace(/^www\./, "") : url;
+  return { url, domain };
+}
+
 // 文中に現れるURLを検出するための汎用正規表現（インラインリンク化用）。global。
 // 全角の区切り記号（／、。「」等）もURLの一部に飲み込まれないよう除外する。
 // 実データで `.../watch?v=xxx／https://twitter.com/...` のように全角スラッシュで
