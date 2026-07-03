@@ -1,6 +1,5 @@
-// ブランドロゴ小コンポーネント（FU-8 A-1）。「KYAZM SMASH LAB」を全画面で統一表示する。
+// ブランドロゴ小コンポーネント（FU-8 A-1）。「PERSONAL SMASH LAB」を全画面で統一表示する。
 // font-display(Anton) / uppercase / tracking / SMASH のみ accent-red。sm/md の2サイズ。
-// モック(.context/design-mockup.html) の KYAZM <red>SMASH</red> LAB ブランドに準拠。
 
 type BrandMarkSize = "sm" | "md";
 
@@ -22,7 +21,7 @@ export function BrandMark({
     <span
       className={`inline-block font-display uppercase leading-none tracking-wide text-ink-primary ${SIZE_CLASS[size]} ${className}`}
     >
-      KYAZM<span className="text-accent-red"> SMASH</span> LAB
+      PERSONAL<span className="text-accent-red"> SMASH</span> LAB
     </span>
   );
 }

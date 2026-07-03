@@ -5,12 +5,14 @@ import { Link } from "react-router-dom";
 import { dataProvider } from "../data";
 import { notesProvider } from "../data/notes";
 import { useMainCharacter } from "../lib/mainCharacterContext";
+import { useIsGuest } from "../lib/guestContext";
 import { BrandMark } from "../components/BrandMark";
 import { CharacterIcon } from "../components/shared/CharacterIcon";
 import type { Character } from "../types";
 
 export function CharacterListPage() {
   const { mainCharacterId } = useMainCharacter();
+  const isGuest = useIsGuest();
   const [characters, setCharacters] = useState<Character[] | null>(null);
   const [query, setQuery] = useState("");
   // 承認待ち(pending+stale)件数バッジ（docs/07 F-A）。
@@ -80,17 +82,20 @@ export function CharacterListPage() {
           >
             横断検索
           </Link>
-          <Link
-            to="/proposals"
-            className="flex min-h-11 items-center gap-1.5 rounded bg-surface-2 px-3 py-1.5 font-medium text-ink-secondary hover:text-ink-primary"
-          >
-            承認待ち
-            {pendingCount !== null && pendingCount > 0 ? (
-              <span className="rounded-full bg-warning px-1.5 py-0.5 text-xs font-bold text-surface-0">
-                {pendingCount}
-              </span>
-            ) : null}
-          </Link>
+          {/* 承認待ち提案はオーナー個人のレビューキュー（migration 0006でRLSもオーナー限定）。ゲストには出さない。 */}
+          {!isGuest ? (
+            <Link
+              to="/proposals"
+              className="flex min-h-11 items-center gap-1.5 rounded bg-surface-2 px-3 py-1.5 font-medium text-ink-secondary hover:text-ink-primary"
+            >
+              承認待ち
+              {pendingCount !== null && pendingCount > 0 ? (
+                <span className="rounded-full bg-warning px-1.5 py-0.5 text-xs font-bold text-surface-0">
+                  {pendingCount}
+                </span>
+              ) : null}
+            </Link>
+          ) : null}
           <Link
             to="/library"
             className="flex min-h-11 items-center rounded bg-surface-2 px-3 py-1.5 font-medium text-ink-secondary hover:text-ink-primary"
