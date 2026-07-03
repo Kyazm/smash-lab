@@ -5,6 +5,7 @@
 // ゲスト判定は session.user.id === GUEST_UID。GuestProviderで配下に伝播し、
 // NotesProviderをGuestNotesProviderに切替える。
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
+import { Link } from "react-router-dom";
 import type { Session } from "@supabase/supabase-js";
 import { resolveNotesProviderKind } from "../../lib/providerMode";
 import { getSupabaseClient } from "../../data/supabaseClient";
@@ -167,6 +168,15 @@ function LoginForm() {
         <p className="mt-2 text-xs text-ink-muted">
           ゲストの変更はこの端末内のみに保存され、実データには反映されません。
         </p>
+
+        <div className="mt-4 border-t border-border-subtle pt-3 text-center">
+          <Link
+            to="/library"
+            className="text-xs text-ink-secondary underline decoration-action/40 hover:text-ink-primary hover:decoration-action-strong"
+          >
+            ログインせずに記事を読む（ライブラリ）
+          </Link>
+        </div>
       </form>
     </div>
   );

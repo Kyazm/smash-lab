@@ -88,6 +88,12 @@ export function CharacterListPage() {
               </span>
             ) : null}
           </Link>
+          <Link
+            to="/library"
+            className="flex min-h-11 items-center rounded bg-surface-2 px-3 py-1.5 font-medium text-ink-secondary hover:text-ink-primary"
+          >
+            ライブラリ
+          </Link>
         </nav>
       </div>
 
