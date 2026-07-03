@@ -21,7 +21,7 @@ import { dataProvider } from "../index";
 // シードデータ形状の変更（AI整頓の提案seed追加）に伴い、旧バージョンのlocalStorageと衝突しないようにバージョンを上げる。
 const STORAGE_KEY = "smash-lab.notes.v2";
 
-interface Store {
+export interface Store {
   notes: Note[];
   media: NoteMedia[];
   proposals: NoteProposal[];
@@ -39,9 +39,26 @@ function genId(): string {
   return `id-${Date.now()}-${Math.random().toString(36).slice(2)}`;
 }
 
-/** 永続層の薄いラッパ。localStorage が無い環境（SSR/テスト）ではメモリに退避。 */
-class LocalStore {
+function defaultSeed(): Store {
+  return {
+    notes: SEED_NOTES.map((n) => ({ ...n, tags: [...n.tags] })),
+    media: SEED_MEDIA.map((m) => ({ ...m })),
+    proposals: SEED_PROPOSALS.map((p) => ({ ...p })),
+  };
+}
+
+/**
+ * 永続層の薄いラッパ。localStorage が無い環境（SSR/テスト）ではメモリに退避。
+ * storageKey とシード関数を注入可能にし、ゲスト用（GuestNotesProvider）に別キー・別シードで
+ * 使い回せるようにする（ADR-0014）。
+ */
+export class LocalStore {
   private memory: Store | null = null;
+
+  constructor(
+    private readonly storageKey: string = STORAGE_KEY,
+    private readonly seed: () => Store = defaultSeed,
+  ) {}
 
   private hasLocalStorage(): boolean {
     try {
@@ -53,7 +70,7 @@ class LocalStore {
 
   read(): Store {
     if (this.hasLocalStorage()) {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      const raw = localStorage.getItem(this.storageKey);
       if (raw) {
         try {
           return JSON.parse(raw) as Store;
@@ -71,23 +88,35 @@ class LocalStore {
 
   write(store: Store): void {
     if (this.hasLocalStorage()) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+      localStorage.setItem(this.storageKey, JSON.stringify(store));
     } else {
       this.memory = store;
     }
   }
 
-  private seed(): Store {
-    return {
-      notes: SEED_NOTES.map((n) => ({ ...n, tags: [...n.tags] })),
-      media: SEED_MEDIA.map((m) => ({ ...m })),
-      proposals: SEED_PROPOSALS.map((p) => ({ ...p })),
-    };
+  /** localStorage/メモリを完全に消去する（ゲストのリセットボタン用）。 */
+  clear(): void {
+    if (this.hasLocalStorage()) {
+      localStorage.removeItem(this.storageKey);
+    }
+    this.memory = null;
+  }
+
+  /** 既にデータが書き込まれているか（localStorage/メモリいずれか）。初回シード要否の判定に使う。 */
+  exists(): boolean {
+    if (this.hasLocalStorage()) {
+      return localStorage.getItem(this.storageKey) != null;
+    }
+    return this.memory != null;
   }
 }
 
 export class MockNotesProvider implements NotesProvider {
-  private store = new LocalStore();
+  private store: LocalStore;
+
+  constructor(store: LocalStore = new LocalStore()) {
+    this.store = store;
+  }
 
   private attachMedia(note: Note, allMedia: NoteMedia[]): NoteWithMedia {
     return { ...note, media: allMedia.filter((m) => m.note_id === note.id) };
