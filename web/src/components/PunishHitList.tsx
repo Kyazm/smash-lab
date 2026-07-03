@@ -1,4 +1,4 @@
-// 確定反撃の結果一覧（守り/攻め共通の行表示）。shield_drop はデフォルト非表示。
+// 確定反撃の結果一覧（守り/攻め共通の行表示）。shield_drop はデフォルト表示（トグルで隠せる、G-1）。
 // docs/06 A-3: 猶予Fの水平バー可視化 + 「猶予3F以上のみ」トグル（実戦で安定する反撃だけに絞る、FAT準拠）。
 import { useState } from "react";
 import { FrameValue } from "./shared/FrameValue";
@@ -14,7 +14,7 @@ interface Props {
 const STABLE_SLACK_THRESHOLD = 3;
 
 export function PunishHitList({ hits, title }: Props) {
-  const [showShieldDrop, setShowShieldDrop] = useState(false);
+  const [showShieldDrop, setShowShieldDrop] = useState(true);
   const [stableOnly, setStableOnly] = useState(false);
 
   const hasShieldDrop = hits.some((h) => h.candidate.oosType === "shield_drop");
