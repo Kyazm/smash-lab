@@ -73,6 +73,12 @@ export type NoteMediaCreateInput = Omit<NoteMedia, "id">;
 export interface NoteQuery {
   kind?: NoteKind;
   character_id?: string | null;
+  /**
+   * character_id が候補配列のいずれかに一致（IN句相当）。null を含めると character_id IS NULL も含む。
+   * ADR-0013 デプロイ移行用: `character_id IS NULL OR character_id = mainId` の両対応クエリに使う
+   * （0004バックフィル未適用の既存notesも拾うため）。character_id と併用不可（character_id_in優先）。
+   */
+  character_id_in?: (string | null)[];
   move_id?: string | null;
   starred?: boolean;
   pinned?: boolean;

@@ -1,5 +1,7 @@
 // 統一キャラページ（"/c/:slug"）。ADR-0009: 全キャラ共通 frames|punish|notes、is_mainのみ own|moves を追加。
 // タブ状態は `?tab=` に、確反タブの守り/攻めは `&mode=defend|attack` に持つ（共有・戻る対応、docs/06）。
+// ADR-0013 (G-2): is_main の実効値は useMainCharacter() （Context、Supabase実値+ランタイム上書き）で判定する。
+// bundle.character.is_main（静的JSON由来）はフォールバックに留める。
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { dataProvider } from "../data";
@@ -10,6 +12,7 @@ import { OwnPlayTab } from "../components/notes/OwnPlayTab";
 import { OwnMoveTab } from "../components/notes/OwnMoveTab";
 import { OwnMatchTab } from "../components/notes/OwnMatchTab";
 import { TabBar } from "../components/shared/TabBar";
+import { useMainCharacter } from "../lib/mainCharacterContext";
 import type { CharacterBundle } from "../types";
 
 type CommonTab = "frames" | "punish" | "notes";
@@ -39,6 +42,9 @@ export function CharacterPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [bundle, setBundle] = useState<CharacterBundle | null | undefined>(undefined);
   const [main, setMain] = useState<CharacterBundle | null | undefined>(undefined);
+  const { mainCharacterId, setMainCharacter } = useMainCharacter();
+  const [settingMain, setSettingMain] = useState(false);
+  const [settingMainError, setSettingMainError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!slug) return;
@@ -47,15 +53,23 @@ export function CharacterPage() {
     dataProvider.getCharacterBySlug(slug).then((b) => {
       if (!cancelled) setBundle(b);
     });
+    return () => {
+      cancelled = true;
+    };
+  }, [slug]);
+
+  // mainCharacterId が変わったら（自キャラ切替、初期同期）確反タブ用の main バンドルを再取得する。
+  useEffect(() => {
+    let cancelled = false;
     dataProvider.getMainCharacter().then((m) => {
       if (!cancelled) setMain(m);
     });
     return () => {
       cancelled = true;
     };
-  }, [slug]);
+  }, [mainCharacterId]);
 
-  const isMain = bundle?.character.is_main ?? false;
+  const isMain = bundle != null && mainCharacterId != null && bundle.character.id === mainCharacterId;
   const tabParam = searchParams.get("tab");
   const tab: Tab = isValidTab(tabParam, isMain) ? tabParam : "frames";
 
@@ -90,20 +104,46 @@ export function CharacterPage() {
     );
   }
 
+  const onSetMain = async () => {
+    setSettingMain(true);
+    setSettingMainError(null);
+    try {
+      await setMainCharacter(bundle.character.id);
+    } catch (e) {
+      setSettingMainError(e instanceof Error ? e.message : String(e));
+    } finally {
+      setSettingMain(false);
+    }
+  };
+
   return (
     <div className="mx-auto max-w-3xl p-4">
       <Link to="/" className="text-xs text-ink-muted hover:text-ink-primary">
         ← キャラ一覧
       </Link>
-      <h1 className="mt-1 text-xl font-bold text-ink-primary">
-        {bundle.character.name_ja}
-        <span className="ml-2 text-sm font-normal text-ink-secondary">{bundle.character.name_en}</span>
+      <h1 className="mt-1 flex flex-wrap items-center gap-2 text-xl font-bold text-ink-primary">
+        <span>
+          {bundle.character.name_ja}
+          <span className="ml-2 text-sm font-normal text-ink-secondary">{bundle.character.name_en}</span>
+        </span>
         {isMain ? (
-          <span className="ml-2 align-middle rounded bg-action/20 px-2 py-0.5 text-xs font-normal text-action-strong">
+          <span className="align-middle rounded bg-action/20 px-2 py-0.5 text-xs font-normal text-action-strong">
             使用キャラ
           </span>
-        ) : null}
+        ) : (
+          <button
+            type="button"
+            onClick={onSetMain}
+            disabled={settingMain}
+            className="min-h-9 rounded-full border border-border-subtle px-3 py-1 text-xs font-medium text-ink-secondary hover:border-action hover:text-action-strong disabled:opacity-50"
+          >
+            {settingMain ? "設定中…" : "⭐ 自キャラに設定"}
+          </button>
+        )}
       </h1>
+      {settingMainError ? (
+        <p className="mt-1 text-xs text-danger">自キャラの設定に失敗しました: {settingMainError}</p>
+      ) : null}
 
       <div className="mt-4">
         <TabBar tabs={tabs} active={tab} onChange={setTab} />
@@ -123,11 +163,11 @@ export function CharacterPage() {
             characterSlug={bundle.character.slug}
           />
         ) : tab === "own" ? (
-          <OwnPlayTab />
+          <OwnPlayTab mainCharacterId={bundle.character.id} />
         ) : tab === "moves" ? (
-          <OwnMoveTab moves={bundle.moves} />
+          <OwnMoveTab moves={bundle.moves} mainCharacterId={bundle.character.id} />
         ) : (
-          <OwnMatchTab />
+          <OwnMatchTab mainCharacterId={bundle.character.id} />
         )}
       </div>
     </div>

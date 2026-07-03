@@ -1,11 +1,14 @@
 // キャラ一覧（"/"）。日本語名/英語名の部分一致検索。モバイルファースト。
+// ADR-0013 (G-2): is_main バッジは自キャラ切替で更新されるよう mainCharacterId を依存に含めて再取得する。
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { dataProvider } from "../data";
 import { notesProvider } from "../data/notes";
+import { useMainCharacter } from "../lib/mainCharacterContext";
 import type { Character } from "../types";
 
 export function CharacterListPage() {
+  const { mainCharacterId } = useMainCharacter();
   const [characters, setCharacters] = useState<Character[] | null>(null);
   const [query, setQuery] = useState("");
   // 承認待ち(pending+stale)件数バッジ（docs/07 F-A）。
@@ -16,6 +19,13 @@ export function CharacterListPage() {
     dataProvider.listCharacters().then((list) => {
       if (!cancelled) setCharacters(list);
     });
+    return () => {
+      cancelled = true;
+    };
+  }, [mainCharacterId]);
+
+  useEffect(() => {
+    let cancelled = false;
     notesProvider.listPendingProposals().then((list) => {
       if (!cancelled) setPendingCount(list.length);
     });

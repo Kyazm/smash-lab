@@ -57,6 +57,24 @@ describe("matchesQuery", () => {
     expect(matchesQuery(pinned, { pinned: true })).toBe(true);
     expect(matchesQuery(note({ id: "b" }), { pinned: true })).toBe(false);
   });
+
+  // ADR-0013 (G-2): デプロイ移行用の character_id_in（NULL + mainId 両対応クエリ）。
+  describe("character_id_in（ADR-0013デプロイ移行の両対応クエリ）", () => {
+    it("null と mainId のどちらも拾う", () => {
+      const unbackfilled = note({ id: "a", character_id: null });
+      const main = note({ id: "b", character_id: "main-1" });
+      const other = note({ id: "c", character_id: "other-2" });
+      const query = { character_id_in: [null, "main-1"] };
+      expect(matchesQuery(unbackfilled, query)).toBe(true);
+      expect(matchesQuery(main, query)).toBe(true);
+      expect(matchesQuery(other, query)).toBe(false);
+    });
+
+    it("character_id_in が指定されると character_id 単体条件より優先される", () => {
+      const n = note({ id: "a", character_id: null });
+      expect(matchesQuery(n, { character_id: "main-1", character_id_in: [null] })).toBe(true);
+    });
+  });
 });
 
 describe("matchesKeyword", () => {

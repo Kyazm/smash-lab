@@ -61,19 +61,19 @@ function ProposalRow({ item, onChanged }: ProposalRowProps) {
         className="flex w-full min-h-11 items-center justify-between gap-2 text-left"
         aria-expanded={open}
       >
-        <span className="flex min-w-0 flex-wrap items-center gap-2">
+        <span className="flex min-w-0 items-center gap-2">
           <span className="text-ink-muted" aria-hidden="true">
             {open ? "▾" : "▸"}
           </span>
-          <span className="font-medium text-ink-primary">{item.noteTitle || "（無題）"}</span>
+          <span className="truncate font-medium text-ink-primary">{item.noteTitle || "（無題）"}</span>
           {isStale ? (
-            <span className="rounded bg-warning/20 px-2 py-0.5 text-xs font-medium text-warning">
+            <span className="shrink-0 rounded bg-warning/20 px-2 py-0.5 text-xs font-medium text-warning">
               要再生成（stale）
             </span>
           ) : null}
         </span>
         {item.proposal.change_summary ? (
-          <span className="hidden shrink-0 text-xs text-ink-muted sm:block">
+          <span className="hidden min-w-0 shrink truncate text-xs text-ink-muted sm:block sm:max-w-[55%]">
             {item.proposal.change_summary}
           </span>
         ) : null}

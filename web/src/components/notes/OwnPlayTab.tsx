@@ -1,12 +1,18 @@
 // 立ち回りメモタブ（is_mainのみ）。ADR-0009: 縦一列で長すぎた不満①への対応。
 // docs/06 A-3: タグチップ「ゼロサム / 基本」（Discordの元カテゴリを .context/backfill-own-play-tags.py で
 // notes.tags[0] に復元済み）でフィルタ + NoteCardのデフォルト折りたたみで一覧を圧縮する。
+// ADR-0013 (G-2): 自キャラでスコープする。character_id IS NULL（0004バックフィル前の既存メモ）と
+// character_id = mainCharacterId の両対応クエリ（デプロイ順序の安全のため、docs/08）。
 import { useMemo, useState } from "react";
 import { useNotes } from "../../hooks/useNotes";
 import { NoteCard } from "./NoteCard";
 import { NoteEditor } from "./NoteEditor";
 import { NoteMediaEditor } from "./NoteMediaEditor";
 import type { NoteCreateInput, NoteWithMedia } from "../../data/notes/types";
+
+interface Props {
+  mainCharacterId: string;
+}
 
 type Composing = { mode: "create" } | { mode: "edit"; note: NoteWithMedia } | null;
 
@@ -16,8 +22,11 @@ const KNOWN_TAGS = ["ゼロサム", "基本"];
 const OTHER = "__other__" as const;
 type TagFilter = string | typeof OTHER | null;
 
-export function OwnPlayTab() {
-  const query = useMemo(() => ({ kind: "own_play" as const, character_id: null }), []);
+export function OwnPlayTab({ mainCharacterId }: Props) {
+  const query = useMemo(
+    () => ({ kind: "own_play" as const, character_id_in: [null, mainCharacterId] }),
+    [mainCharacterId],
+  );
   const { notes, error, create, update, remove, toggleStar, reload } = useNotes(query);
   const [composing, setComposing] = useState<Composing>(null);
   const [tagFilter, setTagFilter] = useState<TagFilter>(null);
@@ -103,7 +112,7 @@ export function OwnPlayTab() {
         <div className="mt-3">
           <NoteEditor
             fixedKind="own_play"
-            fixedCharacterId={null}
+            fixedCharacterId={mainCharacterId}
             initial={composing.mode === "edit" ? composing.note : undefined}
             onSubmit={composing.mode === "create" ? submitCreate : submitEdit}
             onCancel={() => setComposing(null)}

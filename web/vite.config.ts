@@ -16,8 +16,8 @@ export default defineConfig({
     VitePWA({
       registerType: "autoUpdate",
       manifest: {
-        name: "smash-lab",
-        short_name: "smash-lab",
+        name: "Kyazm Smash Lab",
+        short_name: "Smash Lab",
         description: "スマブラSP上達用の個人ツール（フレームデータ・確定反撃・キャラ対メモ）",
         theme_color: "#0b0e14",
         background_color: "#0b0e14",

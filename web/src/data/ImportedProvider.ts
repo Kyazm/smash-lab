@@ -35,6 +35,11 @@ export class ImportedProvider implements DataProvider {
     this.oosOptions = (pick("oos_options") ?? []) as OosOption[];
   }
 
+  /** ADR-0013: is_main のランタイム上書き。単一キャラのみtrueになるよう配列を作り直す。 */
+  setMainCharacterOverride(characterId: string): void {
+    this.characters = this.characters.map((c) => ({ ...c, is_main: c.id === characterId }));
+  }
+
   private buildBundle(character: Character): CharacterBundle {
     const charMoves = this.moves.filter((m) => m.character_id === character.id);
     const moveIds = new Set(charMoves.map((m) => m.id));
