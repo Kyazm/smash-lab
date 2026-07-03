@@ -1,6 +1,8 @@
 // 認証ゲート。supabaseモード時のみ、未認証ならログイン画面を表示（docs/02: RLS+Authが唯一の防御線）。
 // mockモードでは素通し。サインアップ導線は作らない（サインアップ無効運用）。
-// ADR-0014: 「ゲストとして試す」で匿名ログイン（サンドボックス）。GuestProviderでis_anonymousを配下に伝播し、
+// ADR-0014: 「ゲストとして試す」で専用ゲストアカウントにログイン（サンドボックス）。
+// disable_signup=true が signInAnonymously() もブロックするため、匿名認証はやめ専用アカウント方式に変更。
+// ゲスト判定は session.user.id === GUEST_UID。GuestProviderで配下に伝播し、
 // NotesProviderをGuestNotesProviderに切替える。
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import type { Session } from "@supabase/supabase-js";
@@ -9,6 +11,7 @@ import { getSupabaseClient } from "../../data/supabaseClient";
 import { GuestProvider } from "../../lib/guestContext";
 import { setActiveNotesProvider, defaultNotesProvider } from "../../data/notes";
 import { GuestNotesProvider } from "../../data/notes/GuestNotesProvider";
+import { GUEST_EMAIL, GUEST_PASSWORD, GUEST_UID } from "../../data/guestConfig";
 
 const kind = resolveNotesProviderKind(
   import.meta.env.VITE_NOTES_PROVIDER,
@@ -34,8 +37,8 @@ function SupabaseAuthGate({ children }: { children: ReactNode }) {
       setLoading(false);
     });
     const { data: sub } = supabase.auth.onAuthStateChange((_event, s) => {
-      // 匿名セッションからログアウト/別セッションに変わったら、次回ゲスト化時に再シードできるようにフラグを戻す。
-      if (s?.user.is_anonymous !== true) {
+      // ゲストセッションからログアウト/別セッションに変わったら、次回ゲスト化時に再シードできるようにフラグを戻す。
+      if (s?.user.id !== GUEST_UID) {
         guestSeeded.current = false;
         setActiveNotesProvider(defaultNotesProvider);
       }
@@ -44,7 +47,7 @@ function SupabaseAuthGate({ children }: { children: ReactNode }) {
     return () => sub.subscription.unsubscribe();
   }, []);
 
-  const isGuest = session?.user.is_anonymous === true;
+  const isGuest = session?.user.id === GUEST_UID;
 
   // ゲストセッション確立時に一度だけ NotesProvider を GuestNotesProvider へ切替 + 初回シード。
   // 本人ログイン時は既定の notesProvider（Mock/Supabase切替済み）のまま。
@@ -94,7 +97,10 @@ function LoginForm() {
   async function onGuestSignIn() {
     setGuestSubmitting(true);
     setError(null);
-    const { error: err } = await getSupabaseClient().auth.signInAnonymously();
+    const { error: err } = await getSupabaseClient().auth.signInWithPassword({
+      email: GUEST_EMAIL,
+      password: GUEST_PASSWORD,
+    });
     if (err) setError("ゲストログインに失敗しました。時間をおいて再度お試しください。");
     setGuestSubmitting(false);
   }

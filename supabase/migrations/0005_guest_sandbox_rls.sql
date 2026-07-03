@@ -1,4 +1,4 @@
--- 0005: ゲスト（匿名）サンドボックスのRLS防御線（ADR-0014 / docs/08 G-3）。
+-- 0005: ゲスト（専用アカウント）サンドボックスのRLS防御線（ADR-0014 / docs/08 G-3）。
 -- 0001の全 for-all ポリシーを「SELECT=authenticated全員 / INSERT/UPDATE/DELETE=is_writer()限定」に置換。
 -- reference系（characters/moves/oos_options/habit_tags）はselect開放のみ（元々authenticated全権だったが
 -- 書込はservice_roleのみが行う運用のため、is_writer()限定にしても実害はない）。
@@ -8,14 +8,15 @@
 begin;
 
 -- ============================================================
--- is_writer(): 書込者判定を一元化。匿名JWTのis_anonymousクレームで判定。
--- ->>'is_anonymous' = 'false' ではなく coalesce(...,false)=false にする理由:
---   本人JWTにはis_anonymousクレームが無くNULLになりうる。'='比較だとNULL=falseはNULLで
---   本人まで書込拒否になってしまう（docs/08 レビュー[Critical1]）。
+-- is_writer(): 書込者判定を一元化。オーナー本人のuidのみ書込可。
+-- 当初は匿名sign-in(is_anonymousクレーム)方式だったが、Supabaseの disable_signup=true が
+-- signInAnonymously() もブロックするため、専用ゲストアカウント方式に変更（docs/08 G-3、DBは対応済み）。
+-- ゲストは別uidの通常アカウントなので、この判定で実データへの書込が拒否される。
+-- OWNER_UID は本人のauth.users.id（.context/guest-creds.txt / 本番Auth参照）。
 -- ============================================================
 create or replace function public.is_writer() returns boolean
 language sql stable as $$
-  select coalesce((auth.jwt() ->> 'is_anonymous')::boolean, false) = false
+  select auth.uid() = '2035ebe5-27c0-4c31-b34d-cc957a0529f8'::uuid
 $$;
 
 -- ============================================================

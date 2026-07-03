@@ -1,14 +1,13 @@
 // 自キャラ（is_main）選択のContext化（ADR-0013 / docs/08 G-2）。
 // フレームデータ（characters/moves/oos_options）は data/imported/ の静的JSONが実体でビルド時固定のため、
 // dataProvider.setMainCharacterOverride() でランタイム上書きし、この Context 経由で変更を配下に伝播する。
-// 本人ログイン時は set_main_character RPC で実DBも更新。ゲスト時（useIsGuest()）はローカル状態のみ変更
-// （実DBの is_main は変えない、ADR-0014）。mockモードはRPCなしでローカルのみ変更。
+// 本人ログイン時は set_main_character RPC で実DBも更新。ゲスト時（useIsGuest()=専用アカウント）は
+// ローカル状態のみ変更（実DBの is_main は変えない、ADR-0014）。mockモードはRPCなしでローカルのみ変更。
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
 import { dataProvider } from "../data";
 import { resolveNotesProviderKind } from "./providerMode";
 import { getSupabaseClient } from "../data/supabaseClient";
 import { useIsGuest } from "./guestContext";
-import { isWriter } from "./isWriter";
 
 const notesProviderKind = resolveNotesProviderKind(
   import.meta.env.VITE_NOTES_PROVIDER,
@@ -59,9 +58,9 @@ export function MainCharacterProvider({ children }: { children: ReactNode }) {
 
   const setMainCharacter = useCallback(
     async (characterId: string) => {
-      // is_writer() 相当の判定（migration 0005と同じ規則、isWriter()で一致を担保）。
-      // ゲスト（isGuest=true）はRPCを呼ばずローカルのみ更新（実DB非更新、ADR-0014）。
-      if (notesProviderKind === "supabase" && isWriter(isGuest)) {
+      // ゲスト（専用アカウント）はRPCを呼ばずローカルのみ更新（実DBのis_mainは変えない、ADR-0014）。
+      // 本人のみ set_main_character RPCで実DBも更新（DB側 is_writer()=オーナーuidガードで二重防御）。
+      if (notesProviderKind === "supabase" && !isGuest) {
         const { error } = await getSupabaseClient().rpc("set_main_character", {
           p_character_id: characterId,
         });

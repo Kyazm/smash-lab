@@ -1,6 +1,6 @@
-// ゲスト（匿名ログイン）サンドボックス用 NotesProvider（ADR-0014 / docs/08 G-3）。
+// ゲスト（専用アカウント）サンドボックス用 NotesProvider（ADR-0014 / docs/08 G-3）。
 // MockNotesProvider（localStorage永続）を継承し、初回のみ Supabase から notes/note_media/note_proposals を
-// anon SELECT で読み込んでシードにする。以降の読み書きは全てローカル（実DBには一切書き込まない）。
+// SELECT で読み込んでシードにする。以降の読み書きは全てローカル（実DBには一切書き込まない）。
 // リロードで残る（同じ storageKey を再利用）。リセットボタンで localStorage を消去する。
 import { MockNotesProvider, LocalStore, type Store } from "./MockNotesProvider";
 import type { Note, NoteMedia, NoteProposal } from "./types";
@@ -14,8 +14,8 @@ const PROPOSAL_COLUMNS =
   "id,note_id,proposed_body_md,change_summary,engine,base_updated_at,status,created_at";
 
 /**
- * Supabase から notes/note_media/note_proposals を anon SELECT で取得し Store 形にする。
- * RLS: 0005 で select は authenticated 全員（匿名含む）に開放されているため、匿名JWTでも読める。
+ * Supabase から notes/note_media/note_proposals を SELECT で取得し Store 形にする。
+ * RLS: 0005 で select は authenticated 全員（ゲストの専用アカウント含む）に開放されているため読める。
  * 失敗時（未ログイン・RLS拒否等）は空データにフォールバックする（ゲストは編集はできてよい）。
  */
 async function fetchSnapshot(): Promise<Store> {
