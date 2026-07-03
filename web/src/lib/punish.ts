@@ -8,8 +8,24 @@
 //   確定条件     = 実効発生(o) <= 不利F
 //   猶予F        = 不利F - 実効発生(o)
 //
+// ジャストシールド（isPerfectShield, FU-3）: ガード解除の11Fを省略できるため、
+// oosType === 'shield_drop' の候補のみ実効発生から SHIELD_DROP_EXTRA_FRAMES(11) を引く。
+// 直接OoS（aerial/up_b/up_smash/grab）は不変。不利F(=-on_shield)も不変。
+//
 // 入力は DB 行そのものではなく、計算に必要な最小構造体（UI 側で move と oos を結合してから渡す）。
 // これにより本モジュールは Supabase 非依存で純粋関数のままテストできる。
+
+/** shield_drop 候補に乗っているガード解除ぶんの追加F。ジャスガ時はこの分を差し引く。 */
+const SHIELD_DROP_EXTRA_FRAMES = 11;
+
+/** isPerfectShield 時、shield_drop 候補の実効発生からガード解除ぶん(11F)を差し引く。他タイプは不変。 */
+function effectiveStartupFor(candidate: OosCandidate, isPerfectShield: boolean): number {
+  const base = candidate.startup + candidate.extraFrames;
+  if (isPerfectShield && candidate.oosType === "shield_drop") {
+    return base - SHIELD_DROP_EXTRA_FRAMES;
+  }
+  return base;
+}
 
 /** OoS（Out of Shield）反撃候補。move.startup と oos.extra_frames を結合済みの計算用構造体。 */
 export interface OosCandidate {
@@ -59,11 +75,13 @@ export type DefensivePunishResult =
  *
  * @param oppMove       ガードさせた相手の技（on_shield が効く）
  * @param myOosOptions  自分（ZSS）の OoS 反撃候補
+ * @param isPerfectShield ジャストシールド時は shield_drop 候補の実効発生を11F短縮する（FU-3）
  * @returns on_shield >= 0 なら反撃不可。それ以外は確定行動を実効発生の昇順で返す
  */
 export function defensivePunish(
   oppMove: ShieldedMove,
   myOosOptions: OosCandidate[],
+  isPerfectShield = false,
 ): DefensivePunishResult {
   // on_shield >= 0 → 相手有利〜五分。反撃不可
   if (oppMove.onShield >= 0) {
@@ -74,7 +92,7 @@ export function defensivePunish(
 
   const hits = myOosOptions
     .map<PunishHit>((candidate) => {
-      const effectiveStartup = candidate.startup + candidate.extraFrames;
+      const effectiveStartup = effectiveStartupFor(candidate, isPerfectShield);
       return {
         candidate,
         effectiveStartup,
@@ -106,11 +124,13 @@ export type OffensiveSafetyResult =
  *
  * @param myMove          自分がガードさせた技（on_shield が効く）
  * @param oppOosOptions   相手キャラの OoS 反撃候補
+ * @param isPerfectShield ジャストシールド時は shield_drop 候補の実効発生を11F短縮する（FU-3）
  * @returns myMove.on_shield >= 0 → 安全。相手OoSの実効発生 <= 不利F → その行動で反撃確定
  */
 export function offensiveSafety(
   myMove: ShieldedMove,
   oppOosOptions: OosCandidate[],
+  isPerfectShield = false,
 ): OffensiveSafetyResult {
   if (myMove.onShield >= 0) {
     return { safe: true, reason: "safe_on_shield", disadvantageFrames: 0, punishedBy: [] };
@@ -120,7 +140,7 @@ export function offensiveSafety(
 
   const punishedBy = oppOosOptions
     .map<PunishHit>((candidate) => {
-      const effectiveStartup = candidate.startup + candidate.extraFrames;
+      const effectiveStartup = effectiveStartupFor(candidate, isPerfectShield);
       return {
         candidate,
         effectiveStartup,

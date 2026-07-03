@@ -111,6 +111,75 @@ describe("defensivePunish（守り）", () => {
       expect(r.hits[0].candidate.oosType).toBe("up_b");
     }
   });
+
+  describe("isPerfectShield（ジャストシールド, FU-3）", () => {
+    it("shield_drop候補は実効発生が11F短縮され、通常なら確定しないものが確定する", () => {
+      // 不利F=10。ガード解除→横強: startup8+extra11=19（通常は除外）。
+      // ジャスガ時は 19-11=8 <= 10 → 確定
+      const candidate = oos({
+        startup: 8,
+        extraFrames: 11,
+        oosType: "shield_drop",
+        label: "ガード解除→横強",
+      });
+      const normal = defensivePunish({ onShield: -10 }, [candidate]);
+      const perfect = defensivePunish({ onShield: -10 }, [candidate], true);
+
+      expect(normal.canPunish).toBe(true);
+      if (normal.canPunish) expect(normal.hits).toHaveLength(0);
+
+      expect(perfect.canPunish).toBe(true);
+      if (perfect.canPunish) {
+        expect(perfect.hits).toHaveLength(1);
+        expect(perfect.hits[0].effectiveStartup).toBe(8);
+        expect(perfect.hits[0].slackFrames).toBe(2);
+      }
+    });
+
+    it("直接OoS（aerial/up_b/up_smash/grab）はisPerfectShieldでも実効発生が不変", () => {
+      const candidates = [
+        oos({ startup: 6, extraFrames: 3, oosType: "aerial", label: "空N" }),
+        oos({ startup: 3, extraFrames: 0, oosType: "up_b", label: "上B" }),
+        oos({ startup: 3, extraFrames: 0, oosType: "up_smash", label: "上スマ" }),
+        oos({ startup: 6, extraFrames: 4, oosType: "grab", label: "掴み" }),
+      ];
+      const normal = defensivePunish({ onShield: -16 }, candidates);
+      const perfect = defensivePunish({ onShield: -16 }, candidates, true);
+
+      expect(normal.canPunish).toBe(true);
+      expect(perfect.canPunish).toBe(true);
+      if (normal.canPunish && perfect.canPunish) {
+        const normalMap = new Map(normal.hits.map((h) => [h.candidate.label, h.effectiveStartup]));
+        const perfectMap = new Map(perfect.hits.map((h) => [h.candidate.label, h.effectiveStartup]));
+        expect(perfectMap).toEqual(normalMap);
+      }
+    });
+
+    it("デフォルト（省略時）はisPerfectShield=falseと同じ挙動", () => {
+      const candidate = oos({ startup: 8, extraFrames: 11, oosType: "shield_drop", label: "x" });
+      const withoutArg = defensivePunish({ onShield: -10 }, [candidate]);
+      const withFalse = defensivePunish({ onShield: -10 }, [candidate], false);
+      expect(withoutArg).toEqual(withFalse);
+    });
+
+    it("offensiveSafetyでも同様にshield_dropのみ11F短縮される", () => {
+      const candidate = oos({
+        startup: 8,
+        extraFrames: 11,
+        oosType: "shield_drop",
+        label: "ガード解除→横強",
+      });
+      const normal = offensiveSafety({ onShield: -10 }, [candidate]);
+      const perfect = offensiveSafety({ onShield: -10 }, [candidate], true);
+
+      expect(normal.safe).toBe(true); // 通常は確定しない=安全
+      expect(perfect.safe).toBe(false); // ジャスガでは確定する
+      if (!perfect.safe) {
+        expect(perfect.punishedBy).toHaveLength(1);
+        expect(perfect.punishedBy[0].effectiveStartup).toBe(8);
+      }
+    });
+  });
 });
 
 describe("offensiveSafety（攻め）", () => {
