@@ -1,6 +1,6 @@
 // ノート1件のカード表示。デフォルト折りたたみ（タイトル+冒頭2行+メタ）、タップで展開（docs/06 A-3）。
 // 長文ノート展開時は見出しへのTOCチップを表示。スター/ピン切替・編集・削除の導線と、タグ・メディアを表示。
-import { useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { renderMarkdown } from "../../lib/markdown";
 import { sectionLabel } from "../../lib/noteSections";
 import { extractHeadings, extractPreviewLines, isLongNote } from "../../lib/notePreview";
@@ -190,15 +190,17 @@ export function NoteCard({
   );
 }
 
-/** renderMarkdown の出力に見出しID(idPrefix-hN)を後付けする軽量ラッパー。 */
+/** renderMarkdown の出力に見出しID(idPrefix-hN)を後付けする軽量ラッパー。
+ *  DOM後処理は useEffect で行う（毎レンダー生成のcallback refはStrictModeで
+ *  余計に呼ばれるため、useRef+useEffectの正攻法に統一）。 */
 function HeadingAnchoredMarkdown({ body, idPrefix }: { body: string; idPrefix: string }) {
-  // renderMarkdown はReact要素を直接返すためDOM後処理でid付与する（見出し数は少なく許容範囲）。
-  const ref = (el: HTMLDivElement | null) => {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    const el = containerRef.current;
     if (!el) return;
-    const headings = el.querySelectorAll("h3, h4, h5");
-    headings.forEach((h, i) => {
+    el.querySelectorAll("h3, h4, h5").forEach((h, i) => {
       h.id = `${idPrefix}-h${i}`;
     });
-  };
-  return <div ref={ref}>{renderMarkdown(body)}</div>;
+  }, [body, idPrefix]);
+  return <div ref={containerRef}>{renderMarkdown(body)}</div>;
 }
