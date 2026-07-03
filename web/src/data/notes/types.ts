@@ -77,3 +77,22 @@ export interface NoteQuery {
   starred?: boolean;
   pinned?: boolean;
 }
+
+// ── AI整頓の提案・承認（ADR-0010 / supabase/migrations/0002_note_proposals.sql）──
+
+export type NoteProposalStatus = "pending" | "accepted" | "rejected" | "stale";
+
+export interface NoteProposal {
+  id: string;
+  note_id: string;
+  proposed_body_md: string;
+  change_summary: string | null;
+  engine: string | null;
+  /** 生成時点の notes.updated_at。承認時にこれと現在値を照合する楽観ロック用 */
+  base_updated_at: string;
+  status: NoteProposalStatus;
+  created_at: string;
+}
+
+/** apply_note_proposal RPC の返り値。stale の場合は元メモが編集されたため再生成が必要。 */
+export type ApplyProposalResult = "accepted" | "stale";

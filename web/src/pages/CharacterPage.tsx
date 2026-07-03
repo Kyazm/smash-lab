@@ -117,6 +117,7 @@ export function CharacterPage() {
             key={bundle.character.id}
             characterId={bundle.character.id}
             characterNameJa={bundle.character.name_ja}
+            characterSlug={bundle.character.slug}
           />
         ) : tab === "own" ? (
           <OwnPlayTab />

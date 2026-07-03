@@ -10,15 +10,19 @@ import type {
   NoteUpdateInput,
   NoteMediaCreateInput,
   NoteQuery,
+  NoteProposal,
+  ApplyProposalResult,
 } from "./types";
 import { filterAndSort, searchAndSort } from "../../lib/noteQuery";
-import { SEED_NOTES, SEED_MEDIA } from "./mockSeed";
+import { SEED_NOTES, SEED_MEDIA, SEED_PROPOSALS } from "./mockSeed";
 
-const STORAGE_KEY = "smash-lab.notes.v1";
+// シードデータ形状の変更（AI整頓の提案seed追加）に伴い、旧バージョンのlocalStorageと衝突しないようにバージョンを上げる。
+const STORAGE_KEY = "smash-lab.notes.v2";
 
 interface Store {
   notes: Note[];
   media: NoteMedia[];
+  proposals: NoteProposal[];
 }
 
 function nowIso(): string {
@@ -75,6 +79,7 @@ class LocalStore {
     return {
       notes: SEED_NOTES.map((n) => ({ ...n, tags: [...n.tags] })),
       media: SEED_MEDIA.map((m) => ({ ...m })),
+      proposals: SEED_PROPOSALS.map((p) => ({ ...p })),
     };
   }
 }
@@ -177,5 +182,49 @@ export class MockNotesProvider implements NotesProvider {
   async searchNotes(keyword: string): Promise<NoteWithMedia[]> {
     const { notes, media } = this.store.read();
     return searchAndSort(notes, keyword).map((n) => this.attachMedia(n, media));
+  }
+
+  async listProposals(noteId?: string): Promise<NoteProposal[]> {
+    const { proposals } = this.store.read();
+    const filtered = noteId === undefined ? proposals : proposals.filter((p) => p.note_id === noteId);
+    return [...filtered].sort((a, b) => (a.created_at < b.created_at ? 1 : -1));
+  }
+
+  /**
+   * apply_note_proposal RPC(0002_note_proposals.sql)と同じ楽観ロック挙動をローカルで再現する。
+   * base_updated_at と現在の notes.updated_at が不一致なら stale にして中断（承認前の手動編集を上書きしない）。
+   */
+  async applyProposal(proposalId: string): Promise<ApplyProposalResult> {
+    const store = this.store.read();
+    const proposal = store.proposals.find((p) => p.id === proposalId);
+    if (!proposal) throw new Error(`note_proposal ${proposalId} not found`);
+    if (proposal.status !== "pending") {
+      throw new Error(`note_proposal ${proposalId} is not pending (status=${proposal.status})`);
+    }
+    const note = store.notes.find((n) => n.id === proposal.note_id);
+    if (!note) throw new Error(`note ${proposal.note_id} not found`);
+
+    if (note.updated_at !== proposal.base_updated_at) {
+      proposal.status = "stale";
+      this.store.write(store);
+      return "stale";
+    }
+
+    note.body_md = proposal.proposed_body_md;
+    note.updated_at = nowIso();
+    proposal.status = "accepted";
+    this.store.write(store);
+    return "accepted";
+  }
+
+  async rejectProposal(proposalId: string): Promise<void> {
+    const store = this.store.read();
+    const proposal = store.proposals.find((p) => p.id === proposalId);
+    if (!proposal) throw new Error(`note_proposal ${proposalId} not found`);
+    if (proposal.status !== "pending") {
+      throw new Error(`note_proposal ${proposalId} is not pending (status=${proposal.status})`);
+    }
+    proposal.status = "rejected";
+    this.store.write(store);
   }
 }

@@ -11,11 +11,16 @@ import type {
   NoteUpdateInput,
   NoteMediaCreateInput,
   NoteQuery,
+  NoteProposal,
+  ApplyProposalResult,
 } from "./types";
 import { getSupabaseClient, NOTE_MEDIA_BUCKET } from "../supabaseClient";
 
 const NOTE_COLUMNS =
   "id,kind,character_id,move_id,player_name,title,body_md,section,starred,pinned,tags,source,created_at,updated_at";
+
+const PROPOSAL_COLUMNS =
+  "id,note_id,proposed_body_md,change_summary,engine,base_updated_at,status,created_at";
 
 function genPath(fileName: string): string {
   const ext = fileName.includes(".") ? fileName.split(".").pop() : "png";
@@ -176,5 +181,28 @@ export class SupabaseNotesProvider implements NotesProvider {
       if (!seen.has(n.id)) merged.push(n);
     }
     return this.attach(merged);
+  }
+
+  async listProposals(noteId?: string): Promise<NoteProposal[]> {
+    let q = this.sb.from("note_proposals").select(PROPOSAL_COLUMNS);
+    if (noteId !== undefined) q = q.eq("note_id", noteId);
+    const { data, error } = await q.order("created_at", { ascending: false });
+    if (error) throw error;
+    return (data ?? []) as NoteProposal[];
+  }
+
+  async applyProposal(proposalId: string): Promise<ApplyProposalResult> {
+    const { data, error } = await this.sb.rpc("apply_note_proposal", {
+      p_proposal_id: proposalId,
+    });
+    if (error) throw error;
+    return data as ApplyProposalResult;
+  }
+
+  async rejectProposal(proposalId: string): Promise<void> {
+    const { error } = await this.sb.rpc("reject_note_proposal", {
+      p_proposal_id: proposalId,
+    });
+    if (error) throw error;
   }
 }

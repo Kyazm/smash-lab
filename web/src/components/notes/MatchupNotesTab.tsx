@@ -1,20 +1,25 @@
 // キャラ対メモタブ。docs/01 F4 / docs/05: 対戦の合間に数秒でスキャンできることを最優先。
-//   - pinned(TL;DR) を冒頭に固定表示
-//   - セクションテンプレート（ニュートラル/不利状況/復帰阻止/飛び道具対策/ステージ選択）で分類表示
+//   - pinned(TL;DR) を冒頭に固定表示（常時展開）
+//   - 外部リンク欄（UFD/スマアナ、ADR-0011）
+//   - セクションチップでフィルタ + セクションテンプレート別表示
 //   - ⭐フィルタ
 //   - player スコープのメモ一覧
+//   - AI整頓の提案（ADR-0010）: matchupノートに提案があれば ProposalReview を表示
 import { useMemo, useState } from "react";
 import { useNotes } from "../../hooks/useNotes";
 import { MATCHUP_SECTIONS } from "../../lib/noteSections";
 import { NoteCard } from "./NoteCard";
 import { NoteEditor } from "./NoteEditor";
 import { NoteMediaEditor } from "./NoteMediaEditor";
-import type { NoteCreateInput, NoteWithMedia, NoteKind } from "../../data/notes/types";
+import { ExternalLinksBar } from "./ExternalLinksBar";
+import { ProposalReview } from "./ProposalReview";
+import type { NoteCreateInput, NoteWithMedia, NoteKind, NoteSection } from "../../data/notes/types";
 
 interface Props {
   /** 相手キャラID */
   characterId: string;
   characterNameJa: string;
+  characterSlug: string;
 }
 
 type Composing =
@@ -22,11 +27,15 @@ type Composing =
   | { mode: "edit"; note: NoteWithMedia }
   | null;
 
-export function MatchupNotesTab({ characterId, characterNameJa }: Props) {
+const UNSECTIONED = "__unsectioned__" as const;
+type SectionFilter = NoteSection | typeof UNSECTIONED | null;
+
+export function MatchupNotesTab({ characterId, characterNameJa, characterSlug }: Props) {
   // matchup + player の両方を取得（character_id で絞る）
   const query = useMemo(() => ({ character_id: characterId }), [characterId]);
   const { notes, error, create, update, remove, toggleStar, togglePin, reload } = useNotes(query);
   const [starOnly, setStarOnly] = useState(false);
+  const [sectionFilter, setSectionFilter] = useState<SectionFilter>(null);
   const [composing, setComposing] = useState<Composing>(null);
 
   const matchupNotes = useMemo(
@@ -38,12 +47,17 @@ export function MatchupNotesTab({ characterId, characterNameJa }: Props) {
     [notes],
   );
 
-  const visible = (list: NoteWithMedia[]) => (starOnly ? list.filter((n) => n.starred) : list);
+  const visible = (list: NoteWithMedia[]) => {
+    let out = starOnly ? list.filter((n) => n.starred) : list;
+    if (sectionFilter === UNSECTIONED) out = out.filter((n) => n.section === null);
+    else if (sectionFilter !== null) out = out.filter((n) => n.section === sectionFilter);
+    return out;
+  };
 
   const pinned = useMemo(
     () => visible(matchupNotes).filter((n) => n.pinned),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [matchupNotes, starOnly],
+    [matchupNotes, starOnly, sectionFilter],
   );
 
   const cardHandlers = {
@@ -70,12 +84,20 @@ export function MatchupNotesTab({ characterId, characterNameJa }: Props) {
     return <p className="text-sm text-ink-muted">読み込み中…</p>;
   }
 
+  const sectionCounts = new Map<string, number>();
+  for (const n of matchupNotes) {
+    const key = n.section ?? UNSECTIONED;
+    sectionCounts.set(key, (sectionCounts.get(key) ?? 0) + 1);
+  }
+
   return (
     <div>
       {error ? <p className="mb-2 text-sm text-danger">読み込みエラー: {error}</p> : null}
 
+      <ExternalLinksBar character={{ slug: characterSlug }} />
+
       {/* 操作バー */}
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="mt-3 flex flex-wrap items-center gap-2">
         <button
           type="button"
           onClick={() => setComposing({ mode: "create", kind: "matchup" })}
@@ -100,6 +122,50 @@ export function MatchupNotesTab({ characterId, characterNameJa }: Props) {
           ⭐のみ
         </label>
       </div>
+
+      {/* セクションチップフィルタ */}
+      {matchupNotes.length > 0 ? (
+        <div className="mt-2 flex flex-wrap gap-1.5">
+          <button
+            type="button"
+            onClick={() => setSectionFilter(null)}
+            className={`min-h-9 rounded-full border px-3 py-1 text-xs font-medium ${
+              sectionFilter === null
+                ? "border-action bg-action/15 text-action-strong"
+                : "border-border-subtle text-ink-secondary hover:border-action"
+            }`}
+          >
+            すべて
+          </button>
+          {MATCHUP_SECTIONS.filter((sec) => sectionCounts.has(sec.key)).map((sec) => (
+            <button
+              key={sec.key}
+              type="button"
+              onClick={() => setSectionFilter(sec.key)}
+              className={`min-h-9 rounded-full border px-3 py-1 text-xs font-medium ${
+                sectionFilter === sec.key
+                  ? "border-action bg-action/15 text-action-strong"
+                  : "border-border-subtle text-ink-secondary hover:border-action"
+              }`}
+            >
+              {sec.label} {sectionCounts.get(sec.key)}
+            </button>
+          ))}
+          {sectionCounts.has(UNSECTIONED) ? (
+            <button
+              type="button"
+              onClick={() => setSectionFilter(UNSECTIONED)}
+              className={`min-h-9 rounded-full border px-3 py-1 text-xs font-medium ${
+                sectionFilter === UNSECTIONED
+                  ? "border-action bg-action/15 text-action-strong"
+                  : "border-border-subtle text-ink-secondary hover:border-action"
+              }`}
+            >
+              未分類 {sectionCounts.get(UNSECTIONED)}
+            </button>
+          ) : null}
+        </div>
+      ) : null}
 
       {/* 作成/編集フォーム */}
       {composing ? (
@@ -126,7 +192,7 @@ export function MatchupNotesTab({ characterId, characterNameJa }: Props) {
         </div>
       ) : null}
 
-      {/* TL;DR ピン留め（冒頭固定） */}
+      {/* TL;DR ピン留め（冒頭固定・常時展開） */}
       {pinned.length > 0 ? (
         <section className="mt-4">
           <h2 className="mb-2 flex items-center gap-1 text-sm font-bold text-action-strong">
@@ -134,7 +200,10 @@ export function MatchupNotesTab({ characterId, characterNameJa }: Props) {
           </h2>
           <div className="space-y-2 rounded border border-action/40 bg-action/10 p-2">
             {pinned.map((n) => (
-              <NoteCard key={n.id} note={n} {...cardHandlers} />
+              <div key={n.id}>
+                <NoteCard note={n} defaultExpanded {...cardHandlers} />
+                <ProposalReview note={n} onNoteChanged={reload} />
+              </div>
             ))}
           </div>
         </section>
@@ -149,7 +218,10 @@ export function MatchupNotesTab({ characterId, characterNameJa }: Props) {
             <h2 className="mb-2 text-sm font-bold text-ink-secondary">{sec.label}</h2>
             <div className="space-y-2">
               {inSection.map((n) => (
-                <NoteCard key={n.id} note={n} {...cardHandlers} />
+                <div key={n.id}>
+                  <NoteCard note={n} {...cardHandlers} />
+                  <ProposalReview note={n} onNoteChanged={reload} />
+                </div>
               ))}
             </div>
           </section>
@@ -165,7 +237,10 @@ export function MatchupNotesTab({ characterId, characterNameJa }: Props) {
             <h2 className="mb-2 text-sm font-bold text-ink-secondary">未分類</h2>
             <div className="space-y-2">
               {unsectioned.map((n) => (
-                <NoteCard key={n.id} note={n} {...cardHandlers} />
+                <div key={n.id}>
+                  <NoteCard note={n} {...cardHandlers} />
+                  <ProposalReview note={n} onNoteChanged={reload} />
+                </div>
               ))}
             </div>
           </section>

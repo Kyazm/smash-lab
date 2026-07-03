@@ -8,6 +8,7 @@ import { defensivePunish, offensiveSafety } from "../lib/punish";
 import { buildOosCandidates, toShieldedMove } from "../lib/oosCandidates";
 import { PunishHitList } from "./PunishHitList";
 import { PunishAssumptionsNote } from "./PunishAssumptionsNote";
+import { MoveSelectSheet } from "./MoveSelectSheet";
 import type { CharacterBundle } from "../types";
 
 interface Props {
@@ -122,20 +123,15 @@ export function PunishPanel({ opponent, main }: Props) {
 
       {mode === "defense" ? (
         <div className="mt-3">
-          <label className="block text-sm text-ink-secondary">
+          <span className="mb-1 block text-sm text-ink-secondary">
             相手（{opponent.character.name_ja}）の技を選択
-            <select
-              className="mt-1 block min-h-11 w-full rounded border border-border bg-surface-1 p-2 text-sm text-ink-primary"
-              value={opponentMoveId}
-              onChange={(e) => setOpponentMoveId(e.target.value)}
-            >
-              {opponentMoves.map((m) => (
-                <option key={m.id} value={m.id}>
-                  {m.name_ja ?? m.name_en ?? m.slug}（ガード硬直差 {m.on_shield}）
-                </option>
-              ))}
-            </select>
-          </label>
+          </span>
+          <MoveSelectSheet
+            title={`${opponent.character.name_ja}の技を選択`}
+            moves={opponentMoves}
+            selectedMoveId={opponentMoveId}
+            onSelect={setOpponentMoveId}
+          />
 
           <div className="mt-4">
             {defenseResult == null ? null : defenseResult.canPunish === false ? (
@@ -150,20 +146,15 @@ export function PunishPanel({ opponent, main }: Props) {
         </div>
       ) : (
         <div className="mt-3">
-          <label className="block text-sm text-ink-secondary">
+          <span className="mb-1 block text-sm text-ink-secondary">
             ZSS（{main.character.name_ja}）の技を選択
-            <select
-              className="mt-1 block min-h-11 w-full rounded border border-border bg-surface-1 p-2 text-sm text-ink-primary"
-              value={mainMoveId}
-              onChange={(e) => setMainMoveId(e.target.value)}
-            >
-              {mainMoves.map((m) => (
-                <option key={m.id} value={m.id}>
-                  {m.name_ja ?? m.name_en ?? m.slug}（ガード硬直差 {m.on_shield}）
-                </option>
-              ))}
-            </select>
-          </label>
+          </span>
+          <MoveSelectSheet
+            title={`${main.character.name_ja}の技を選択`}
+            moves={mainMoves}
+            selectedMoveId={mainMoveId}
+            onSelect={setMainMoveId}
+          />
 
           <div className="mt-4">
             {offenseResult == null ? null : offenseResult.safe ? (
