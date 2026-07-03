@@ -6,7 +6,9 @@ import { MockNotesProvider, LocalStore, type Store } from "./MockNotesProvider";
 import type { Note, NoteMedia, NoteProposal } from "./types";
 import { getSupabaseClient } from "../supabaseClient";
 
-const GUEST_STORAGE_KEY = "smash-lab.guest-notes.v1";
+// v2: migration 0007 で notes/note_media/note_proposals の SELECT をオーナー限定にした。
+// 旧v1にはオーナーの実メモがキャッシュされている可能性があるため、キーを上げて破棄し空サンドボックスで再初期化する。
+const GUEST_STORAGE_KEY = "smash-lab.guest-notes.v2";
 
 const NOTE_COLUMNS =
   "id,kind,character_id,move_id,player_name,title,body_md,section,starred,pinned,tags,source,created_at,updated_at";
@@ -15,8 +17,10 @@ const PROPOSAL_COLUMNS =
 
 /**
  * Supabase から notes/note_media/note_proposals を SELECT で取得し Store 形にする。
- * RLS: 0005 で select は authenticated 全員（ゲストの専用アカウント含む）に開放されているため読める。
- * 失敗時（未ログイン・RLS拒否等）は空データにフォールバックする（ゲストは編集はできてよい）。
+ * RLS: 0006/0007 で notes/note_media/note_proposals の SELECT は is_writer()（オーナー）限定。
+ * ゲストの専用アカウントは非オーナーのため RLS で全行が除外され、error なしの空配列が返る（＝空サンドボックス）。
+ * ゲストはこの空スナップショットに自分のメモをローカルで自由に追加できる（実データは不変）。
+ * 失敗時（未ログイン・通信エラー等）も空データにフォールバックする。
  */
 async function fetchSnapshot(): Promise<Store> {
   const sb = getSupabaseClient();
