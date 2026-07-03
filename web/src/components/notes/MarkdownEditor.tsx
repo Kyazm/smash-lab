@@ -18,8 +18,8 @@ export function MarkdownEditor({ value, onChange, placeholder, rows = 8 }: Props
         <button
           type="button"
           onClick={() => setPreview(false)}
-          className={`rounded px-2 py-1 text-xs font-medium ${
-            !preview ? "bg-emerald-600 text-white" : "bg-slate-800 text-slate-300"
+          className={`min-h-11 rounded px-2 py-1 text-xs font-medium ${
+            !preview ? "bg-action text-white" : "bg-surface-2 text-ink-secondary"
           }`}
         >
           編集
@@ -27,8 +27,8 @@ export function MarkdownEditor({ value, onChange, placeholder, rows = 8 }: Props
         <button
           type="button"
           onClick={() => setPreview(true)}
-          className={`rounded px-2 py-1 text-xs font-medium ${
-            preview ? "bg-emerald-600 text-white" : "bg-slate-800 text-slate-300"
+          className={`min-h-11 rounded px-2 py-1 text-xs font-medium ${
+            preview ? "bg-action text-white" : "bg-surface-2 text-ink-secondary"
           }`}
         >
           プレビュー
@@ -36,9 +36,9 @@ export function MarkdownEditor({ value, onChange, placeholder, rows = 8 }: Props
       </div>
 
       {preview ? (
-        <div className="min-h-[6rem] rounded border border-slate-700 bg-slate-900/50 p-2">
+        <div className="min-h-[6rem] rounded border border-border bg-surface-1/50 p-2">
           {value.trim() === "" ? (
-            <p className="text-sm text-slate-500">（プレビューする内容がありません）</p>
+            <p className="text-sm text-ink-muted">（プレビューする内容がありません）</p>
           ) : (
             renderMarkdown(value)
           )}
@@ -49,7 +49,7 @@ export function MarkdownEditor({ value, onChange, placeholder, rows = 8 }: Props
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
           rows={rows}
-          className="w-full rounded border border-slate-700 bg-slate-900 p-2 font-mono text-sm text-slate-100"
+          className="w-full rounded border border-border bg-surface-1 p-2 font-mono text-sm text-ink-primary"
         />
       )}
     </div>

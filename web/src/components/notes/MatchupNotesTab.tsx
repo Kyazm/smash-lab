@@ -67,35 +67,35 @@ export function MatchupNotesTab({ characterId, characterNameJa }: Props) {
   };
 
   if (notes === null) {
-    return <p className="text-sm text-slate-400">読み込み中…</p>;
+    return <p className="text-sm text-ink-muted">読み込み中…</p>;
   }
 
   return (
     <div>
-      {error ? <p className="mb-2 text-sm text-red-400">読み込みエラー: {error}</p> : null}
+      {error ? <p className="mb-2 text-sm text-danger">読み込みエラー: {error}</p> : null}
 
       {/* 操作バー */}
       <div className="flex flex-wrap items-center gap-2">
         <button
           type="button"
           onClick={() => setComposing({ mode: "create", kind: "matchup" })}
-          className="rounded bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white"
+          className="min-h-11 rounded bg-action px-3 py-1.5 text-sm font-medium text-white"
         >
           + キャラ対メモ
         </button>
         <button
           type="button"
           onClick={() => setComposing({ mode: "create", kind: "player" })}
-          className="rounded bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white"
+          className="min-h-11 rounded bg-info px-3 py-1.5 text-sm font-medium text-white"
         >
           + プレイヤー別メモ
         </button>
-        <label className="flex items-center gap-1.5 text-xs text-slate-400 sm:ml-auto">
+        <label className="flex min-h-11 items-center gap-1.5 text-xs text-ink-secondary sm:ml-auto">
           <input
             type="checkbox"
             checked={starOnly}
             onChange={(e) => setStarOnly(e.target.checked)}
-            className="accent-amber-500"
+            className="accent-warning"
           />
           ⭐のみ
         </label>
@@ -129,10 +129,10 @@ export function MatchupNotesTab({ characterId, characterNameJa }: Props) {
       {/* TL;DR ピン留め（冒頭固定） */}
       {pinned.length > 0 ? (
         <section className="mt-4">
-          <h2 className="mb-2 flex items-center gap-1 text-sm font-bold text-emerald-400">
+          <h2 className="mb-2 flex items-center gap-1 text-sm font-bold text-action-strong">
             📌 TL;DR（要点）
           </h2>
-          <div className="space-y-2 rounded border border-emerald-800/60 bg-emerald-950/20 p-2">
+          <div className="space-y-2 rounded border border-action/40 bg-action/10 p-2">
             {pinned.map((n) => (
               <NoteCard key={n.id} note={n} {...cardHandlers} />
             ))}
@@ -146,7 +146,7 @@ export function MatchupNotesTab({ characterId, characterNameJa }: Props) {
         if (inSection.length === 0) return null;
         return (
           <section key={sec.key} className="mt-4">
-            <h2 className="mb-2 text-sm font-bold text-slate-200">{sec.label}</h2>
+            <h2 className="mb-2 text-sm font-bold text-ink-secondary">{sec.label}</h2>
             <div className="space-y-2">
               {inSection.map((n) => (
                 <NoteCard key={n.id} note={n} {...cardHandlers} />
@@ -162,7 +162,7 @@ export function MatchupNotesTab({ characterId, characterNameJa }: Props) {
         if (unsectioned.length === 0) return null;
         return (
           <section className="mt-4">
-            <h2 className="mb-2 text-sm font-bold text-slate-200">未分類</h2>
+            <h2 className="mb-2 text-sm font-bold text-ink-secondary">未分類</h2>
             <div className="space-y-2">
               {unsectioned.map((n) => (
                 <NoteCard key={n.id} note={n} {...cardHandlers} />
@@ -175,7 +175,7 @@ export function MatchupNotesTab({ characterId, characterNameJa }: Props) {
       {/* プレイヤー別メモ */}
       {visible(playerNotes).length > 0 ? (
         <section className="mt-4">
-          <h2 className="mb-2 text-sm font-bold text-indigo-300">プレイヤー別メモ</h2>
+          <h2 className="mb-2 text-sm font-bold text-info">プレイヤー別メモ</h2>
           <div className="space-y-2">
             {visible(playerNotes).map((n) => (
               <NoteCard key={n.id} note={n} {...cardHandlers} />
@@ -185,7 +185,7 @@ export function MatchupNotesTab({ characterId, characterNameJa }: Props) {
       ) : null}
 
       {matchupNotes.length === 0 && playerNotes.length === 0 ? (
-        <p className="mt-4 text-sm text-slate-400">
+        <p className="mt-4 text-sm text-ink-muted">
           {characterNameJa} のキャラ対メモはまだありません。上のボタンから追加できます。
         </p>
       ) : null}

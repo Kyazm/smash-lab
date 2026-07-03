@@ -2,6 +2,51 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * デザイントークン（docs/06_ui-redesign.md）。
+ * 審美方向: インダストリアル/テクニカル。ダーク基調は維持しつつ slate単調から脱却するため
+ * サーフェスに温度差（青みがかった中立グレー）を持たせる。ハードコード色は禁止、必ずこの変数か
+ * tailwind.config.js の theme.extend 経由で使う。
+ */
+:root {
+  /* サーフェス3層。#000純黒は避ける（research-ui-best-practices パターン15） */
+  --surface-0: #0b0e14; /* 最背面（body） */
+  --surface-1: #12161f; /* カード・パネル */
+  --surface-2: #1b212c; /* ネストしたパネル・ホバー */
+
+  --border-subtle: #262d3a;
+  --border-default: #333c4d;
+
+  --text-primary: #e7ebf3;
+  --text-secondary: #a2acc0;
+  --text-muted: #6b7690;
+
+  /* 機能色: action(既存emerald維持) / startup / active / recovery(フレームバー用 Dustloop方式) */
+  --color-action: #10b981;
+  --color-action-strong: #34d399;
+  --color-startup: #64748b; /* 発生: グレー */
+  --color-active: #ef4444; /* 持続: 赤 */
+  --color-recovery: #3b82f6; /* 硬直: 青 */
+
+  /* 硬直差(adv)スケール。フレーム表・確反タブで一貫使用 */
+  --adv-safe: #34d399; /* >=0 有利/五分 */
+  --adv-minor: #a2acc0; /* -1〜-4 中立 */
+  --adv-caution: #f59e0b; /* -5〜-9 要注意 */
+  --adv-punish: #f43f5e; /* <=-10 確定反撃圏 */
+
+  /* 状態色: エラー/警告/情報系（プレイヤー別メモの強調にも使用） */
+  --color-danger: #f43f5e;
+  --color-warning: #f59e0b;
+  --color-info: #6366f1;
+}
+
 body {
-  @apply bg-slate-950 text-slate-100;
+  background-color: var(--surface-0);
+  color: var(--text-primary);
+}
+
+/* フレーム数値専用のタイポグラフィアクセント。表中の全数値に適用（tabular-numsで桁ガタつき防止）。 */
+.font-frame {
+  font-variant-numeric: tabular-nums;
+  font-family: ui-monospace, "SF Mono", "Menlo", "Consolas", monospace;
 }

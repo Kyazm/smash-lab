@@ -1,5 +1,7 @@
 // 確定反撃タブ本体。守り/攻めトグル + 技選択 + 結果表示 + 前提注記。
+// 守り/攻めは `&mode=defend|attack` にURL状態化する（docs/06）。
 import { useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { defensivePunish, offensiveSafety } from "../lib/punish";
 import { buildOosCandidates, toShieldedMove } from "../lib/oosCandidates";
 import { PunishHitList } from "./PunishHitList";
@@ -22,8 +24,19 @@ function shieldableMoves(moves: Props["opponent"]["moves"]) {
   return moves.filter((m) => m.on_shield != null);
 }
 
+function modeFromParam(v: string | null): Mode {
+  return v === "attack" ? "offense" : "defense";
+}
+
 export function PunishPanel({ opponent, main }: Props) {
-  const [mode, setMode] = useState<Mode>("defense");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const mode = modeFromParam(searchParams.get("mode"));
+  const setMode = (next: Mode) => {
+    const params = new URLSearchParams(searchParams);
+    params.set("mode", next === "offense" ? "attack" : "defend");
+    setSearchParams(params, { replace: false });
+  };
+
   const opponentMoves = shieldableMoves(opponent.moves);
   const mainMoves = main ? shieldableMoves(main.moves) : [];
   const [opponentMoveId, setOpponentMoveId] = useState<string>(opponentMoves[0]?.id ?? "");
@@ -40,7 +53,7 @@ export function PunishPanel({ opponent, main }: Props) {
 
   if (!main) {
     return (
-      <p className="text-sm text-slate-400">
+      <p className="text-sm text-ink-muted">
         使用キャラ（is_main=true）のデータが見つからないため、確定反撃タブは利用できません。
       </p>
     );
@@ -58,35 +71,39 @@ export function PunishPanel({ opponent, main }: Props) {
 
   return (
     <div>
-      <div className="flex gap-2">
+      <div className="flex gap-2" role="tablist" aria-label="守り/攻め">
         <button
           type="button"
+          role="tab"
+          aria-selected={mode === "defense"}
           onClick={() => setMode("defense")}
-          className={`rounded px-3 py-1.5 text-sm font-medium ${
-            mode === "defense" ? "bg-emerald-600 text-white" : "bg-slate-800 text-slate-300"
+          className={`min-h-11 rounded px-3 py-1.5 text-sm font-medium ${
+            mode === "defense" ? "bg-action text-white" : "bg-surface-2 text-ink-secondary"
           }`}
         >
           守り
         </button>
         <button
           type="button"
+          role="tab"
+          aria-selected={mode === "offense"}
           onClick={() => setMode("offense")}
-          className={`rounded px-3 py-1.5 text-sm font-medium ${
-            mode === "offense" ? "bg-emerald-600 text-white" : "bg-slate-800 text-slate-300"
+          className={`min-h-11 rounded px-3 py-1.5 text-sm font-medium ${
+            mode === "offense" ? "bg-action text-white" : "bg-surface-2 text-ink-secondary"
           }`}
         >
           攻め
         </button>
       </div>
 
-      <p className="mt-3 text-xs text-slate-400">表記: {FRAME_CERTAIN_LABEL}</p>
+      <p className="mt-3 text-xs text-ink-muted">表記: {FRAME_CERTAIN_LABEL}</p>
 
       {mode === "defense" ? (
         <div className="mt-3">
-          <label className="block text-sm text-slate-300">
+          <label className="block text-sm text-ink-secondary">
             相手（{opponent.character.name_ja}）の技を選択
             <select
-              className="mt-1 block w-full rounded border border-slate-700 bg-slate-900 p-2 text-sm"
+              className="mt-1 block min-h-11 w-full rounded border border-border bg-surface-1 p-2 text-sm text-ink-primary"
               value={opponentMoveId}
               onChange={(e) => setOpponentMoveId(e.target.value)}
             >
@@ -100,7 +117,7 @@ export function PunishPanel({ opponent, main }: Props) {
 
           <div className="mt-4">
             {defenseResult == null ? null : defenseResult.canPunish === false ? (
-              <p className="text-sm text-slate-300">反撃不可（相手有利〜五分）</p>
+              <p className="text-sm text-ink-secondary">反撃不可（相手有利〜五分）</p>
             ) : (
               <PunishHitList
                 hits={defenseResult.hits}
@@ -111,10 +128,10 @@ export function PunishPanel({ opponent, main }: Props) {
         </div>
       ) : (
         <div className="mt-3">
-          <label className="block text-sm text-slate-300">
+          <label className="block text-sm text-ink-secondary">
             ZSS（{main.character.name_ja}）の技を選択
             <select
-              className="mt-1 block w-full rounded border border-slate-700 bg-slate-900 p-2 text-sm"
+              className="mt-1 block min-h-11 w-full rounded border border-border bg-surface-1 p-2 text-sm text-ink-primary"
               value={mainMoveId}
               onChange={(e) => setMainMoveId(e.target.value)}
             >
@@ -128,7 +145,7 @@ export function PunishPanel({ opponent, main }: Props) {
 
           <div className="mt-4">
             {offenseResult == null ? null : offenseResult.safe ? (
-              <p className="text-sm text-emerald-400">
+              <p className="text-sm text-action-strong">
                 フレーム上安全
                 {offenseResult.reason === "no_punish"
                   ? `（不利F ${offenseResult.disadvantageFrames} だが相手の実用OoSでは確定しない）`

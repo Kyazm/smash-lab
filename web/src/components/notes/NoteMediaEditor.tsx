@@ -74,18 +74,18 @@ export function NoteMediaEditor({ noteId, media, onChange }: Props) {
   };
 
   return (
-    <div className="mt-3 rounded border border-slate-700 bg-slate-900/40 p-3">
-      <h4 className="text-sm font-semibold text-slate-200">メディア</h4>
+    <div className="mt-3 rounded border border-border bg-surface-1/40 p-3">
+      <h4 className="text-sm font-semibold text-ink-secondary">メディア</h4>
 
       {media.length > 0 ? (
         <ul className="mt-2 space-y-3">
           {media.map((m) => (
-            <li key={m.id} className="rounded border border-slate-800 p-2">
+            <li key={m.id} className="rounded border border-border-subtle p-2">
               <NoteMediaView media={m} />
               <button
                 type="button"
                 onClick={() => remove(m.id)}
-                className="mt-2 text-xs text-red-400 hover:text-red-300"
+                className="mt-2 min-h-11 text-xs text-danger hover:opacity-80"
               >
                 削除
               </button>
@@ -93,12 +93,12 @@ export function NoteMediaEditor({ noteId, media, onChange }: Props) {
           ))}
         </ul>
       ) : (
-        <p className="mt-2 text-xs text-slate-500">まだメディアはありません。</p>
+        <p className="mt-2 text-xs text-ink-muted">まだメディアはありません。</p>
       )}
 
-      <div className="mt-3 space-y-2 border-t border-slate-800 pt-3">
+      <div className="mt-3 space-y-2 border-t border-border-subtle pt-3">
         <div>
-          <label className="block text-xs text-slate-400">画像を追加</label>
+          <label className="block text-xs text-ink-secondary">画像を追加</label>
           <input
             type="file"
             accept="image/*"
@@ -108,38 +108,38 @@ export function NoteMediaEditor({ noteId, media, onChange }: Props) {
               if (f) addImage(f);
               e.target.value = "";
             }}
-            className="mt-1 block w-full text-xs text-slate-300 file:mr-2 file:rounded file:border-0 file:bg-slate-700 file:px-2 file:py-1 file:text-slate-100"
+            className="mt-1 block w-full text-xs text-ink-secondary file:mr-2 file:rounded file:border-0 file:bg-surface-2 file:px-2 file:py-1 file:text-ink-primary"
           />
         </div>
 
         <div>
-          <label className="block text-xs text-slate-400">YouTube URL（開始秒 t= 対応）</label>
+          <label className="block text-xs text-ink-secondary">YouTube URL（開始秒 t= 対応）</label>
           <input
             type="text"
             value={ytUrl}
             onChange={(e) => setYtUrl(e.target.value)}
             placeholder="https://youtu.be/xxxx?t=30"
-            className="mt-1 w-full rounded border border-slate-700 bg-slate-900 p-2 text-sm text-slate-100"
+            className="mt-1 w-full rounded border border-border bg-surface-1 p-2 text-sm text-ink-primary"
           />
           <input
             type="text"
             value={ytCaption}
             onChange={(e) => setYtCaption(e.target.value)}
             placeholder="キャプション（任意）"
-            className="mt-1 w-full rounded border border-slate-700 bg-slate-900 p-2 text-sm text-slate-100"
+            className="mt-1 w-full rounded border border-border bg-surface-1 p-2 text-sm text-ink-primary"
           />
           <button
             type="button"
             onClick={addYoutube}
             disabled={busy || ytUrl.trim() === ""}
-            className="mt-1 rounded bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white disabled:opacity-50"
+            className="mt-1 min-h-11 rounded bg-action px-3 py-1.5 text-sm font-medium text-white disabled:opacity-50"
           >
             YouTube を追加
           </button>
         </div>
       </div>
 
-      {error ? <p className="mt-2 text-xs text-red-400">{error}</p> : null}
+      {error ? <p className="mt-2 text-xs text-danger">{error}</p> : null}
     </div>
   );
 }

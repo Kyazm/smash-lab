@@ -27,18 +27,18 @@ export function NoteCard({
   const canPin = PIN_KINDS.has(note.kind);
 
   return (
-    <div className="rounded border border-slate-700 bg-slate-900/50 p-3">
+    <div className="rounded border border-border bg-surface-1/50 p-3">
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="font-medium text-slate-100">{note.title || "（無題）"}</span>
+            <span className="font-medium text-ink-primary">{note.title || "（無題）"}</span>
             {note.section ? (
-              <span className="rounded bg-slate-800 px-2 py-0.5 text-xs text-slate-300">
+              <span className="rounded bg-surface-2 px-2 py-0.5 text-xs text-ink-secondary">
                 {sectionLabel(note.section)}
               </span>
             ) : null}
             {note.player_name ? (
-              <span className="rounded bg-indigo-700/70 px-2 py-0.5 text-xs text-white">
+              <span className="rounded bg-info/70 px-2 py-0.5 text-xs text-white">
                 vs {note.player_name}
               </span>
             ) : null}
@@ -51,7 +51,7 @@ export function NoteCard({
               type="button"
               onClick={() => onToggleStar(note)}
               title={note.starred ? "スターを外す" : "スターを付ける"}
-              className={`text-lg leading-none ${note.starred ? "text-amber-400" : "text-slate-600"}`}
+              className={`min-h-11 min-w-11 text-lg leading-none ${note.starred ? "text-warning" : "text-ink-muted"}`}
             >
               {note.starred ? "★" : "☆"}
             </button>
@@ -61,7 +61,7 @@ export function NoteCard({
               type="button"
               onClick={() => onTogglePin(note)}
               title={note.pinned ? "ピンを外す" : "冒頭に固定（TL;DR）"}
-              className={`text-sm leading-none ${note.pinned ? "text-emerald-400" : "text-slate-600"}`}
+              className={`min-h-11 min-w-11 text-sm leading-none ${note.pinned ? "text-action-strong" : "text-ink-muted"}`}
             >
               📌
             </button>
@@ -78,7 +78,7 @@ export function NoteCard({
       {note.tags.length > 0 ? (
         <div className="mt-2 flex flex-wrap gap-1">
           {note.tags.map((t) => (
-            <span key={t} className="rounded bg-slate-800 px-2 py-0.5 text-xs text-slate-300">
+            <span key={t} className="rounded bg-surface-2 px-2 py-0.5 text-xs text-ink-secondary">
               #{t}
             </span>
           ))}
@@ -87,7 +87,7 @@ export function NoteCard({
 
       {note.media.length > 0 ? (
         compact ? (
-          <p className="mt-2 text-xs text-slate-500">🎞 メディア {note.media.length}件</p>
+          <p className="mt-2 text-xs text-ink-muted">🎞 メディア {note.media.length}件</p>
         ) : (
           <ul className="mt-3 space-y-3">
             {note.media.map((m) => (
@@ -100,12 +100,12 @@ export function NoteCard({
       ) : null}
 
       {onEdit || onDelete ? (
-        <div className="mt-3 flex gap-3 border-t border-slate-800 pt-2">
+        <div className="mt-3 flex gap-3 border-t border-border-subtle pt-2">
           {onEdit ? (
             <button
               type="button"
               onClick={() => onEdit(note.id)}
-              className="text-xs text-slate-400 hover:text-slate-200"
+              className="min-h-11 text-xs text-ink-secondary hover:text-ink-primary"
             >
               編集
             </button>
@@ -116,7 +116,7 @@ export function NoteCard({
               onClick={() => {
                 if (window.confirm("このメモを削除しますか？")) onDelete(note.id);
               }}
-              className="text-xs text-red-400 hover:text-red-300"
+              className="min-h-11 text-xs text-danger hover:opacity-80"
             >
               削除
             </button>

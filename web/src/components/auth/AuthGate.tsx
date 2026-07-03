@@ -33,7 +33,7 @@ function SupabaseAuthGate({ children }: { children: ReactNode }) {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-950 text-sm text-slate-400">
+      <div className="flex min-h-screen items-center justify-center bg-surface-0 text-sm text-ink-muted">
         読み込み中…
       </div>
     );
@@ -66,13 +66,13 @@ function LoginForm() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-950 px-4">
+    <div className="flex min-h-screen items-center justify-center bg-surface-0 px-4">
       <form
         onSubmit={onSubmit}
-        className="w-full max-w-sm rounded-xl border border-slate-800 bg-slate-900 p-6"
+        className="w-full max-w-sm rounded-xl border border-border-subtle bg-surface-1 p-6"
       >
-        <h1 className="mb-4 text-lg font-bold text-slate-100">smash-lab</h1>
-        <label className="mb-1 block text-xs text-slate-400" htmlFor="email">
+        <h1 className="mb-4 text-lg font-bold text-ink-primary">smash-lab</h1>
+        <label className="mb-1 block text-xs text-ink-secondary" htmlFor="email">
           メールアドレス
         </label>
         <input
@@ -82,9 +82,9 @@ function LoginForm() {
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="mb-3 w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 focus:border-emerald-500 focus:outline-none"
+          className="mb-3 w-full min-h-11 rounded-md border border-border bg-surface-0 px-3 py-2 text-sm text-ink-primary focus:border-action focus:outline-none"
         />
-        <label className="mb-1 block text-xs text-slate-400" htmlFor="password">
+        <label className="mb-1 block text-xs text-ink-secondary" htmlFor="password">
           パスワード
         </label>
         <input
@@ -94,13 +94,13 @@ function LoginForm() {
           required
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="mb-4 w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 focus:border-emerald-500 focus:outline-none"
+          className="mb-4 w-full min-h-11 rounded-md border border-border bg-surface-0 px-3 py-2 text-sm text-ink-primary focus:border-action focus:outline-none"
         />
-        {error && <p className="mb-3 text-xs text-red-400">{error}</p>}
+        {error && <p className="mb-3 text-xs text-danger">{error}</p>}
         <button
           type="submit"
           disabled={submitting}
-          className="w-full rounded-md bg-emerald-600 px-3 py-2 text-sm font-semibold text-white hover:bg-emerald-500 disabled:opacity-50"
+          className="w-full min-h-11 rounded-md bg-action px-3 py-2 text-sm font-semibold text-white hover:bg-action-strong disabled:opacity-50"
         >
           {submitting ? "ログイン中…" : "ログイン"}
         </button>
@@ -114,7 +114,7 @@ function LogoutButton() {
     <button
       type="button"
       onClick={() => void getSupabaseClient().auth.signOut()}
-      className="fixed bottom-3 right-3 rounded-md border border-slate-700 bg-slate-900/90 px-2 py-1 text-xs text-slate-400 hover:text-slate-200"
+      className="fixed bottom-3 right-3 min-h-11 rounded-md border border-border bg-surface-1/90 px-2 py-1 text-xs text-ink-muted hover:text-ink-primary"
     >
       ログアウト
     </button>

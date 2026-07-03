@@ -1,5 +1,6 @@
 // 確定反撃の結果一覧（守り/攻め共通の行表示）。shield_drop はデフォルト非表示。
 import { useState } from "react";
+import { FrameValue } from "./shared/FrameValue";
 import type { PunishHit } from "../lib/punish";
 
 interface Props {
@@ -18,14 +19,14 @@ export function PunishHitList({ hits, title }: Props) {
   return (
     <div>
       <div className="flex items-center justify-between gap-2">
-        <h3 className="text-sm font-semibold text-slate-200">{title}</h3>
+        <h3 className="text-sm font-semibold text-ink-secondary">{title}</h3>
         {hasShieldDrop ? (
-          <label className="flex items-center gap-1.5 text-xs text-slate-400">
+          <label className="flex min-h-11 items-center gap-1.5 text-xs text-ink-secondary">
             <input
               type="checkbox"
               checked={showShieldDrop}
               onChange={(e) => setShowShieldDrop(e.target.checked)}
-              className="accent-emerald-500"
+              className="accent-action"
             />
             ガード解除反撃も表示
           </label>
@@ -33,28 +34,29 @@ export function PunishHitList({ hits, title }: Props) {
       </div>
 
       {hiddenCount > 0 ? (
-        <p className="mt-1 text-xs text-slate-500">ガード解除反撃 {hiddenCount}件 非表示</p>
+        <p className="mt-1 text-xs text-ink-muted">ガード解除反撃 {hiddenCount}件 非表示</p>
       ) : null}
 
       {visibleHits.length === 0 ? (
-        <p className="mt-2 text-sm text-slate-400">該当する行動はありません。</p>
+        <p className="mt-2 text-sm text-ink-secondary">該当する行動はありません。</p>
       ) : (
         <ul className="mt-2 space-y-2">
           {visibleHits.map((hit, i) => (
             <li
               key={hit.candidate.id ?? i}
-              className="rounded border border-slate-700 bg-slate-900/50 p-2 text-sm"
+              className="rounded border border-border bg-surface-1/50 p-2 text-sm"
             >
               <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-                <span className="font-medium text-slate-100">
+                <span className="font-medium text-ink-primary">
                   {hit.candidate.label ?? "（無名の行動）"}
                 </span>
-                <span className="text-xs text-slate-400">
-                  実効発生 {hit.effectiveStartup}F ／ 猶予 {hit.slackFrames}F
+                <span className="text-xs text-ink-secondary">
+                  実効発生 <FrameValue value={hit.effectiveStartup} />F ／ 猶予{" "}
+                  <FrameValue value={hit.slackFrames} />F
                 </span>
               </div>
               {hit.candidate.rangeNote ? (
-                <div className="mt-1 text-xs text-amber-400">※ {hit.candidate.rangeNote}</div>
+                <div className="mt-1 text-xs text-warning">※ {hit.candidate.rangeNote}</div>
               ) : null}
             </li>
           ))}
