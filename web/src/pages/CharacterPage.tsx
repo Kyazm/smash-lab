@@ -12,6 +12,8 @@ import { OwnPlayTab } from "../components/notes/OwnPlayTab";
 import { OwnMoveTab } from "../components/notes/OwnMoveTab";
 import { OwnMatchTab } from "../components/notes/OwnMatchTab";
 import { TabBar } from "../components/shared/TabBar";
+import { BrandMark } from "../components/BrandMark";
+import { CharacterIcon } from "../components/shared/CharacterIcon";
 import { useMainCharacter } from "../lib/mainCharacterContext";
 import type { CharacterBundle } from "../types";
 
@@ -134,33 +136,37 @@ export function CharacterPage() {
 
   return (
     <div className="mx-auto max-w-3xl p-4">
-      <Link to="/" className="text-xs text-ink-muted hover:text-ink-primary">
-        ← キャラ一覧
-      </Link>
-      <h1 className="mt-1 flex flex-wrap items-baseline gap-x-2 gap-y-1 text-ink-primary">
-        <span className="flex items-baseline gap-2">
-          <span className="font-display text-3xl leading-none tracking-wide">
+      <div className="flex items-center justify-between gap-2">
+        <Link to="/" className="text-xs text-ink-muted hover:text-ink-primary">
+          ← キャラ一覧
+        </Link>
+        <BrandMark size="sm" />
+      </div>
+      <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2">
+        <CharacterIcon character={bundle.character} size="lg" />
+        <div className="min-w-0">
+          <h1 className="font-display text-4xl leading-none tracking-wide text-ink-primary sm:text-5xl">
             {bundle.character.name_ja}
-          </span>
-          <span className="font-frame text-xs uppercase tracking-widest text-ink-muted">
+          </h1>
+          <p className="mt-1 font-frame text-xs uppercase tracking-[0.18em] text-ink-muted">
             {bundle.character.name_en}
-          </span>
-        </span>
+          </p>
+        </div>
         {isMain ? (
-          <span className="align-middle rounded bg-action/20 px-2 py-0.5 text-xs font-normal text-action-strong">
-            使用キャラ
+          <span className="inline-flex items-center gap-1 rounded-full border border-accent-red px-2.5 py-0.5 text-xs font-bold text-accent-red">
+            ★ 自キャラ
           </span>
         ) : (
           <button
             type="button"
             onClick={onSetMain}
             disabled={settingMain}
-            className="min-h-9 rounded-full border border-border-subtle px-3 py-1 text-xs font-medium text-ink-secondary hover:border-action hover:text-action-strong disabled:opacity-50"
+            className="min-h-9 rounded-full border border-border-subtle px-3 py-1 text-xs font-medium text-ink-secondary hover:border-accent-red hover:text-accent-red disabled:opacity-50"
           >
             {settingMain ? "設定中…" : "⭐ 自キャラに設定"}
           </button>
         )}
-      </h1>
+      </div>
       {settingMainError ? (
         <p className="mt-1 text-xs text-danger">自キャラの設定に失敗しました: {settingMainError}</p>
       ) : null}
