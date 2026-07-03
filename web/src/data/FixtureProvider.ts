@@ -7,7 +7,7 @@ import charactersJson from "../../../data/fixtures/characters.json";
 import movesJson from "../../../data/fixtures/moves.json";
 import oosOptionsJson from "../../../data/fixtures/oos_options.json";
 
-const characters = charactersJson as Character[];
+let characters = charactersJson as Character[];
 const moves = movesJson as Move[];
 const oosOptions = oosOptionsJson as OosOption[];
 
@@ -33,5 +33,10 @@ export class FixtureProvider implements DataProvider {
     const character = characters.find((c) => c.is_main);
     if (!character) return null;
     return buildBundle(character);
+  }
+
+  /** ADR-0013: is_main のランタイム上書き（テスト用途含む）。 */
+  setMainCharacterOverride(characterId: string): void {
+    characters = characters.map((c) => ({ ...c, is_main: c.id === characterId }));
   }
 }

@@ -64,7 +64,18 @@ export class SupabaseNotesProvider implements NotesProvider {
     if (query?.move_id !== undefined) q = q.eq("move_id", query.move_id);
     if (query?.starred !== undefined) q = q.eq("starred", query.starred);
     if (query?.pinned !== undefined) q = q.eq("pinned", query.pinned);
-    if (query?.character_id !== undefined) {
+    if (query?.character_id_in !== undefined) {
+      // ADR-0013 デプロイ移行用: character_id IN (...) に NULL を含める場合は .or() で組み立てる
+      // （PostgRESTの.in()はNULLを拾えないため）。
+      const ids = query.character_id_in;
+      const hasNull = ids.includes(null);
+      const nonNull = ids.filter((id): id is string => id !== null);
+      const clauses: string[] = [];
+      if (hasNull) clauses.push("character_id.is.null");
+      if (nonNull.length > 0) clauses.push(`character_id.in.(${nonNull.join(",")})`);
+      if (clauses.length > 0) q = q.or(clauses.join(","));
+      else q = q.eq("id", "00000000-0000-0000-0000-000000000000"); // 空条件=該当なし
+    } else if (query?.character_id !== undefined) {
       q = query.character_id === null ? q.is("character_id", null) : q.eq("character_id", query.character_id);
     }
     const { data, error } = await q.order("updated_at", { ascending: false });

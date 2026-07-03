@@ -14,4 +14,8 @@ export class SupabaseProvider implements DataProvider {
   async getMainCharacter(): Promise<CharacterBundle | null> {
     throw new Error("SupabaseProvider not implemented (Phase 1)");
   }
+
+  setMainCharacterOverride(_characterId: string): void {
+    throw new Error("SupabaseProvider not implemented (Phase 1)");
+  }
 }

@@ -7,7 +7,11 @@ import type { Note, NoteQuery } from "../data/notes/types";
 export function matchesQuery(note: Note, query?: NoteQuery): boolean {
   if (!query) return true;
   if (query.kind !== undefined && note.kind !== query.kind) return false;
-  if (query.character_id !== undefined && note.character_id !== query.character_id) return false;
+  if (query.character_id_in !== undefined) {
+    if (!query.character_id_in.includes(note.character_id)) return false;
+  } else if (query.character_id !== undefined && note.character_id !== query.character_id) {
+    return false;
+  }
   if (query.move_id !== undefined && note.move_id !== query.move_id) return false;
   if (query.starred !== undefined && note.starred !== query.starred) return false;
   if (query.pinned !== undefined && note.pinned !== query.pinned) return false;

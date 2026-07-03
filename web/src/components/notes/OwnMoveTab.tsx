@@ -8,9 +8,10 @@ import type { Move } from "../../types";
 
 interface Props {
   moves: Move[];
+  mainCharacterId: string;
 }
 
-export function OwnMoveTab({ moves }: Props) {
+export function OwnMoveTab({ moves, mainCharacterId }: Props) {
   const grouped = groupMovesBySection(moves);
   const [moveId, setMoveId] = useState<string>(() => grouped[0]?.moves[0]?.id ?? "");
 
@@ -61,6 +62,7 @@ export function OwnMoveTab({ moves }: Props) {
             key={moveId}
             kind="own_move"
             moveId={selectedMove?.id}
+            mainCharacterId={mainCharacterId}
             emptyLabel={`${selectedMove?.name_ja ?? "この技"}のメモはまだありません。`}
           />
         </div>
