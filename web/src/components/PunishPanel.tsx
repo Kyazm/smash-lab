@@ -88,8 +88,14 @@ export function PunishPanel({ opponent, main }: Props) {
   const defenseResult = selectedOpponentMove
     ? defensivePunish(toShieldedMove(selectedOpponentMove), mainOosCandidates)
     : null;
+  const defenseResultPerfect = selectedOpponentMove
+    ? defensivePunish(toShieldedMove(selectedOpponentMove), mainOosCandidates, true)
+    : null;
   const offenseResult = selectedMainMove
     ? offensiveSafety(toShieldedMove(selectedMainMove), opponentOosCandidates)
+    : null;
+  const offenseResultPerfect = selectedMainMove
+    ? offensiveSafety(toShieldedMove(selectedMainMove), opponentOosCandidates, true)
     : null;
 
   return (
@@ -139,6 +145,9 @@ export function PunishPanel({ opponent, main }: Props) {
             ) : (
               <PunishHitList
                 hits={defenseResult.hits}
+                perfectShieldHits={
+                  defenseResultPerfect?.canPunish === true ? defenseResultPerfect.hits : []
+                }
                 title={`${FRAME_CERTAIN_LABEL} なZSSの反撃（不利F ${defenseResult.disadvantageFrames}）`}
               />
             )}
@@ -167,6 +176,9 @@ export function PunishPanel({ opponent, main }: Props) {
             ) : (
               <PunishHitList
                 hits={offenseResult.punishedBy}
+                perfectShieldHits={
+                  offenseResultPerfect?.safe === false ? offenseResultPerfect.punishedBy : []
+                }
                 title={`${FRAME_CERTAIN_LABEL} な相手の反撃（不利F ${offenseResult.disadvantageFrames}）`}
               />
             )}
