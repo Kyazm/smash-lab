@@ -29,6 +29,10 @@ export default {
           strong: token("--color-action-strong"),
         },
         accent: {
+          // 赤アクセント（ブランド SMASH・★自キャラピル等）。CSS変数は action と共通の #e63950 系。
+          // action(CTA/操作系) とは別名で「ブランド/強調の赤」を意味的に区別して使う。
+          red: token("--color-action"),
+          "red-strong": token("--color-action-strong"),
           yellow: token("--accent-yellow"),
         },
         startup: token("--color-startup"),

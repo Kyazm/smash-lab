@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import { dataProvider } from "../data";
 import { notesProvider } from "../data/notes";
 import { useMainCharacter } from "../lib/mainCharacterContext";
+import { BrandMark } from "../components/BrandMark";
+import { CharacterIcon } from "../components/shared/CharacterIcon";
 import type { Character } from "../types";
 
 export function CharacterListPage() {
@@ -62,8 +64,9 @@ export function CharacterListPage() {
 
   return (
     <div className="mx-auto max-w-2xl p-4">
-      <div className="flex items-center justify-between gap-2">
-        <h1 className="font-display text-2xl tracking-wide text-ink-primary">キャラ一覧</h1>
+      <BrandMark size="sm" className="block" />
+      <div className="mt-2 flex items-center justify-between gap-2">
+        <h1 className="text-lg font-semibold text-ink-secondary">キャラ一覧</h1>
         <nav className="flex flex-wrap gap-2 text-sm">
           <Link
             to="/me"
@@ -116,20 +119,18 @@ export function CharacterListPage() {
                 className="flex min-h-11 items-center justify-between gap-2 py-3 text-ink-primary hover:bg-surface-2/50"
               >
                 <span className="flex items-center gap-2">
-                  {c.icon_url ? (
-                    <img src={c.icon_url} alt="" className="h-8 w-8 rounded object-contain" />
-                  ) : (
-                    <span className="flex h-8 w-8 items-center justify-center rounded bg-surface-2 text-xs text-ink-muted">
-                      {c.name_ja.slice(0, 1)}
-                    </span>
-                  )}
+                  <CharacterIcon character={c} size="sm" />
                   <span>
                     <span className="font-medium">{c.name_ja}</span>
-                    <span className="ml-2 text-xs text-ink-muted">{c.name_en}</span>
+                    <span className="ml-2 font-frame text-xs uppercase tracking-[0.18em] text-ink-muted">
+                      {c.name_en}
+                    </span>
                   </span>
                 </span>
                 {c.is_main ? (
-                  <span className="rounded bg-action px-2 py-0.5 text-xs text-white">使用キャラ</span>
+                  <span className="inline-flex items-center gap-1 rounded-full border border-accent-red px-2.5 py-0.5 text-xs font-bold text-accent-red">
+                    ★ 自キャラ
+                  </span>
                 ) : null}
               </Link>
             </li>
