@@ -1,6 +1,8 @@
 // 確定反撃タブ本体。守り/攻めトグル + 技選択 + 結果表示 + 前提注記。
 // 守り/攻めは `&mode=defend|attack` にURL状態化する（docs/06）。
-import { useMemo, useState } from "react";
+// フレーム表ドロワーからの「この技への確反を見る」クロスリンクは `&move=<moveId>`
+// （守りモード=相手の技を選択済み）で技を事前選択する。
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { defensivePunish, offensiveSafety } from "../lib/punish";
 import { buildOosCandidates, toShieldedMove } from "../lib/oosCandidates";
@@ -39,8 +41,28 @@ export function PunishPanel({ opponent, main }: Props) {
 
   const opponentMoves = shieldableMoves(opponent.moves);
   const mainMoves = main ? shieldableMoves(main.moves) : [];
-  const [opponentMoveId, setOpponentMoveId] = useState<string>(opponentMoves[0]?.id ?? "");
+  const preselectMoveId = searchParams.get("move");
+  const [opponentMoveId, setOpponentMoveId] = useState<string>(
+    (preselectMoveId && opponentMoves.some((m) => m.id === preselectMoveId)
+      ? preselectMoveId
+      : opponentMoves[0]?.id) ?? "",
+  );
   const [mainMoveId, setMainMoveId] = useState<string>(mainMoves[0]?.id ?? "");
+
+  // move= がURLにあり、かつフレーム表ドロワーからの遷移直後は守りモードへ強制し選択を反映する。
+  useEffect(() => {
+    if (!preselectMoveId) return;
+    if (!opponentMoves.some((m) => m.id === preselectMoveId)) return;
+    setOpponentMoveId(preselectMoveId);
+    const params = new URLSearchParams(searchParams);
+    let changed = false;
+    if (params.get("mode") !== "defend") {
+      params.set("mode", "defend");
+      changed = true;
+    }
+    if (changed) setSearchParams(params, { replace: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [preselectMoveId]);
 
   const mainOosCandidates = useMemo(
     () => (main ? buildOosCandidates(main.moves, main.oosOptions) : []),
