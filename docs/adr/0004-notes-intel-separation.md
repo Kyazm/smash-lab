@@ -11,6 +11,7 @@ Status: Accepted (2026-07-03)
 - 採用は2モード: `new_note`（新規ノート化）/ `append_proposal`（既存メモへの追記案。差分プレビューをユーザーが承認した時のみ反映）。いずれも `source=intel_adopted`+出典URL付き
 - 昇格経路はDB関数 `adopt_intel()` に一本化。パイプラインコードは `notes` への書込を実装しない
   （service roleはRLSをバイパスするため、この禁止はDB権限では担保されない。パイプラインのコードレビュー項目として運用で担保する）
+- **例外（2026-07-03追記）**: 一度きりのデータ移行（Discord移行 `source=discord_import`、docs/02 F8）はこの禁止の対象外。人間がマッピングCSVを確認してから実行する単発seedingであり、継続的な自動書込ではない
 
 ## Consequences
 - メモの信頼性が保たれ、出典を遡れる
