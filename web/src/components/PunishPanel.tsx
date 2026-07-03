@@ -5,7 +5,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { defensivePunish, offensiveSafety } from "../lib/punish";
-import { buildOosCandidates, toShieldedMove } from "../lib/oosCandidates";
+import { buildOosCandidates, buildAerialCandidates, toShieldedMove } from "../lib/oosCandidates";
 import { PunishHitList } from "./PunishHitList";
 import { PunishAssumptionsNote } from "./PunishAssumptionsNote";
 import { MoveSelectSheet } from "./MoveSelectSheet";
@@ -65,12 +65,23 @@ export function PunishPanel({ opponent, main }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [preselectMoveId]);
 
+  // ガーキャン空中攻撃は技ごとに buildAerialCandidates で生成して合流する（FU-5）。
+  // isMain=true（守り=ZSS）のときだけ ZSS 向けの間合い注記を付与する。相手側は注記なし。
   const mainOosCandidates = useMemo(
-    () => (main ? buildOosCandidates(main.moves, main.oosOptions) : []),
+    () =>
+      main
+        ? [
+            ...buildOosCandidates(main.moves, main.oosOptions),
+            ...buildAerialCandidates(main.moves, main.character.is_main),
+          ]
+        : [],
     [main],
   );
   const opponentOosCandidates = useMemo(
-    () => buildOosCandidates(opponent.moves, opponent.oosOptions),
+    () => [
+      ...buildOosCandidates(opponent.moves, opponent.oosOptions),
+      ...buildAerialCandidates(opponent.moves, opponent.character.is_main),
+    ],
     [opponent],
   );
 
