@@ -7,10 +7,10 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
   classifyUrl,
-  matchBareUrlLine,
-  matchMarkdownImageAttachmentLine,
-  matchBareAttachmentLine,
+  extractLineMedia,
   attachmentToStoragePath,
+  INLINE_URL_RE,
+  type LineSegment,
 } from "./embeds";
 import { youtubeInputToEmbedUrl } from "./youtube";
 import { loadTwitterWidgets } from "./twitterWidgets";
@@ -19,8 +19,9 @@ import { notesProvider } from "../data/notes";
 // インライン: **bold** / `code` / 裸URL（リンク化）に対応。< 等はReactが自動エスケープする。
 function renderInline(text: string, keyPrefix: string): ReactNode[] {
   const nodes: ReactNode[] = [];
-  // **bold** / `code` / 裸URL を分割トークン化
-  const re = /(\*\*[^*]+\*\*|`[^`]+`|https?:\/\/[^\s)\]]+)/g;
+  // **bold** / `code` / 裸URL を分割トークン化。URL部分は embeds.ts の INLINE_URL_RE と同一パターンを共有する
+  // （全角区切り文字でURLが連結されるケースへの対応、FU-1）。
+  const re = new RegExp(`(\\*\\*[^*]+\\*\\*|\`[^\`]+\`|${INLINE_URL_RE.source})`, "g");
   let last = 0;
   let m: RegExpExecArray | null;
   let i = 0;
@@ -177,6 +178,37 @@ function AttachmentImageBlock({ id, name, alt }: { id: string; name: string; alt
   return <ImageBlock src={src} alt={alt || name} />;
 }
 
+// FU-1: 行内（行頭・行末・テキスト中）に既知メディアがあってもブロック埋め込みにする。
+// extractLineMedia が返すセグメント列（テキスト/メディアの混在）をそのまま描画する。
+// 残りテキストはキャプションとして埋め込みブロックの直下に表示し、内容を失わない。
+function LineMediaBlock({ segments, keyPrefix }: { segments: LineSegment[]; keyPrefix: string }) {
+  return (
+    <div className="my-2 space-y-1">
+      {segments.map((seg, idx) => {
+        if (seg.type === "text") {
+          return (
+            <p key={`${keyPrefix}-t${idx}`} className="whitespace-pre-wrap text-sm leading-relaxed">
+              {renderInline(seg.text, `${keyPrefix}-t${idx}`)}
+            </p>
+          );
+        }
+        if (seg.type === "media-attachment") {
+          return (
+            <AttachmentImageBlock
+              key={`${keyPrefix}-m${idx}`}
+              id={seg.id}
+              name={seg.name}
+              alt={seg.alt}
+            />
+          );
+        }
+        // media-url
+        return <UrlEmbedBlock key={`${keyPrefix}-m${idx}`} url={seg.url} />;
+      })}
+    </div>
+  );
+}
+
 /** Markdown 文字列を React 要素へ。ブロック単位で解釈する。 */
 export function renderMarkdown(md: string): ReactNode {
   const lines = (md ?? "").replace(/\r\n/g, "\n").split("\n");
@@ -228,47 +260,22 @@ export function renderMarkdown(md: string): ReactNode {
       key++;
       continue;
     }
-    // リッチ埋め込み（ADR-0012）: 単独行の ![alt](attachment://...) / attachment://... / URL は
-    // 段落から分離してブロック要素にする（画像・iframe・blockquoteは<p>の外に出す）。
-    const mdImageAttachment = matchMarkdownImageAttachmentLine(line);
-    if (mdImageAttachment) {
-      flushParagraph();
-      flushList();
-      blocks.push(
-        <div key={`embed-${key}`} className="my-2">
-          <AttachmentImageBlock
-            id={mdImageAttachment.id}
-            name={mdImageAttachment.name}
-            alt={mdImageAttachment.alt}
-          />
-        </div>,
-      );
-      key++;
-      continue;
-    }
-    const bareAttachment = matchBareAttachmentLine(line);
-    if (bareAttachment) {
-      flushParagraph();
-      flushList();
-      blocks.push(
-        <div key={`embed-${key}`} className="my-2">
-          <AttachmentImageBlock id={bareAttachment.id} name={bareAttachment.name} alt="" />
-        </div>,
-      );
-      key++;
-      continue;
-    }
-    const bareUrl = matchBareUrlLine(line);
-    if (bareUrl) {
-      flushParagraph();
-      flushList();
-      blocks.push(
-        <div key={`embed-${key}`} className="my-2">
-          <UrlEmbedBlock url={bareUrl} />
-        </div>,
-      );
-      key++;
-      continue;
+    // リッチ埋め込み（ADR-0012, FU-1で行内対応に拡張）: 見出し/箇条書き/番号付き以外の行で
+    // ![alt](attachment://...) / attachment://... / 既知メディアURL（YouTube・画像・Twitter）が
+    // 行頭・行末・テキスト中のどこにあっても、その行全体をブロック要素として扱う。
+    // 残りのテキスト（日付や注記など）はキャプションとして保持し、内容を失わない（FU-1）。
+    // 見出し・箇条書き・番号付きリスト行は対象外（レイアウト崩れを避けるため従来どおりインライン扱い）。
+    const isStructuralLine =
+      /^(#{1,3})\s+/.test(line) || /^\s*[-*]\s+/.test(line) || /^\s*\d+\.\s+/.test(line);
+    if (!isStructuralLine) {
+      const media = extractLineMedia(line);
+      if (media) {
+        flushParagraph();
+        flushList();
+        blocks.push(<LineMediaBlock key={`embed-${key}`} segments={media} keyPrefix={`embed-${key}`} />);
+        key++;
+        continue;
+      }
     }
     // 見出し
     const h = line.match(/^(#{1,3})\s+(.*)$/);
