@@ -74,9 +74,16 @@ intel_items     id, character_id(NULL=汎用), type(article|video), source_url,
                 status(inbox|adopted|dismissed), adopted_note_id
 intel_requests  id, character_id, query_hint, status(pending|running|done|error),
                 requested_at, completed_at   -- オンデマンド深掘りのキュー（Web→ローカルの非同期連携）
+match_results   id, user_id, character_id(対戦相手キャラ), mode(vip|smamate|offline),
+                result(win|lose), created_at
+                -- 1タップ即記録の軽量勝敗ログ(ADR-0015)。追記専用で勝率/連勝/時系列/モード別/キャラ別を純関数導出。
+                -- 既存matchesとは責務が別(あちらはセッション/動画由来の詳細ログ)。RLSは行単位user_id分離(下記)
 ```
 
-- RLS: シングルユーザーのため全テーブル「authenticatedロールに全権」のシンプルなポリシーで統一（owner列は持たない）。サインアップ無効化により本人以外のauthユーザーは存在しない。anonキーは公開前提であり、**RLS+Authが唯一の防御線**
+- RLS/**Auth+RLSが唯一の防御線**（anonキーは公開前提）。防御モデルは2系統に分かれる:
+  - **単一オーナー系**（notes/note_media/note_proposals ほか自分の考察）: `is_writer()`（オーナーuid固定）で書込を限定。notes系はSELECTもオーナー限定（ゲストに実データを見せない、ADR-0014 / migration 0006・0007）。characters/moves/oos_options 等の静的リファレンスはSELECTを全authenticatedに開放（ゲストもフレームデータは読める）
+  - **行単位アカウント分離**（match_results、ADR-0015 / migration 0008）: `user_id = auth.uid()` で各実アカウントが自分の行だけを read/write。共有ゲストは `is_guest()` でDBレベルの書込排除（サンドボックスはローカル完結）。将来のサインアップ開放にそのまま対応
+  - サインアップは無効化中。owner列は持たず、上記述語（is_writer/is_guest/auth.uid）で制御する
 - intel→notesの昇格はDB関数 `adopt_intel(intel_id, mode, target_note_id)`（SECURITY DEFINER、転記とstatus更新を1トランザクションで実行）経由のみ。これが分離原則のDB側の入口を一本化する
 - パイプラインはservice roleキー（Macローカルの`.env`にのみ保管）で書込。service roleはRLSをバイパスするため、パイプラインコードは `notes` への書込を実装しない（ADR-0004。コードレビュー時のチェック項目）
 - 検索: `notes.body_md`/`title`/`tags`、`moves.name_ja/name_en`、`characters.name_*`、`intel_items.title/summary_md` に対する ILIKE + pg_trgm。検索結果でnotesとintelはレーンを分けて表示（混在させない）。キャラpage内はクライアントフィルタで十分

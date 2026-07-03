@@ -2,6 +2,8 @@
 
 Status: Accepted (2026-07-03)
 
+> 実装設計（プロバイダ分離・UI・テスト方針）は [docs/09_match-tracking.md](../09_match-tracking.md)、UI配置は [docs/06_ui-redesign.md](../06_ui-redesign.md) を参照。
+
 ## Context
 既存の一覧・キャラ詳細に「勝敗を1タップで記録し、モード別・マッチアップ別に勝率/連勝をグラフで見たい」という要望がある。既存の `matches` テーブルはセッション/動画由来の詳細ログ（`session_id` 必須、Gemini推定の `opponent_character_id`/`result` を前提）で、1タップ即記録という用途には重すぎる。
 
