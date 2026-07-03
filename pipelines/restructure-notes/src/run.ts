@@ -1,24 +1,32 @@
-// restructure-notes: kind='matchup' の全ノートをGeminiで整頓し note_proposals へ投入する。
+// restructure-notes: kind='matchup' の全ノートを整頓し note_proposals へ投入する。
 // docs/06_ui-redesign.md「キャラ対メモのAI整頓」/ ADR-0010。
 //
-// --dry-run: 3件だけ生成し .context/restructure-notes-dry-run/ にファイル出力する（DBには入れない）。
-// 本番実行: 全 matchup ノートを対象に、既存 pending 提案があるノートはスキップ（冪等）。
-import { mkdir, writeFile } from "node:fs/promises";
+// モード:
+//   （既定）      : Gemini APIで生成して投入。既存 pending 提案があるノートはスキップ（冪等）。
+//   --dry-run     : 3件だけGeminiで生成し .context/restructure-notes-dry-run/ にファイル出力（DB投入なし）。
+//   --from-file <path>: JSON配列 [{note_id, proposed_body_md, change_summary?}] を読み込み、
+//     Gemini呼び出しの代わりにその本文を使う（engine='claude-manual'）。
+//     検証器（数値・技名トークン保持チェック→欠落は needs_review マーク。リトライなし）と
+//     投入ロジック（base_updated_at=投入時点の notes.updated_at、pending重複スキップ）は共通。
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import {
   DRY_RUN_DIR,
   DRY_RUN_SAMPLE_SIZE,
+  FROM_FILE_ENGINE,
   GEMINI_MODEL,
   MAIN_REPO_ENV_PATH,
 } from "./config.js";
 import { loadEnvFile } from "./lib/load-env.js";
 import { generateRestructuredBody } from "./lib/gemini-client.js";
 import { restructureNote } from "./lib/restructure-note.js";
+import { evaluateFileProposal, parseProposalsFile } from "./lib/from-file.js";
 import {
   fetchCharactersById,
   fetchMatchupNotes,
   fetchPendingProposalNoteIds,
   insertNoteProposal,
+  type NoteRow,
   type SupabaseConfig,
 } from "./lib/supabase-client.js";
 
@@ -31,22 +39,91 @@ interface Stats {
   inserted: number;
 }
 
+function parseArgs(argv: string[]): { isDryRun: boolean; fromFile: string | null } {
+  const isDryRun = argv.includes("--dry-run");
+  const idx = argv.indexOf("--from-file");
+  let fromFile: string | null = null;
+  if (idx !== -1) {
+    fromFile = argv[idx + 1] ?? null;
+    if (!fromFile || fromFile.startsWith("--")) {
+      throw new Error("--from-file にはファイルパスを指定してください");
+    }
+  }
+  if (isDryRun && fromFile) {
+    throw new Error("--dry-run と --from-file は同時に指定できません");
+  }
+  return { isDryRun, fromFile };
+}
+
+async function runFromFile(
+  cfg: SupabaseConfig,
+  notes: NoteRow[],
+  pendingNoteIds: Set<string>,
+  fromFilePath: string,
+  stats: Stats,
+): Promise<void> {
+  const proposals = parseProposalsFile(await readFile(fromFilePath, "utf-8"));
+  console.log(`[from-file] ${proposals.length} 件の提案を ${fromFilePath} から読み込みました`);
+
+  const notesById = new Map(notes.map((n) => [n.id, n]));
+
+  for (const proposal of proposals) {
+    const note = notesById.get(proposal.note_id);
+    if (!note) {
+      console.log(`[warn] note=${proposal.note_id} は kind=matchup のノートに存在しません。スキップ`);
+      continue;
+    }
+    if (pendingNoteIds.has(note.id)) {
+      stats.skippedExistingPending++;
+      console.log(`[skip] note=${note.id} title="${note.title ?? ""}" (既存pending提案あり)`);
+      continue;
+    }
+
+    const result = evaluateFileProposal(
+      { title: note.title, bodyMd: note.body_md ?? "" },
+      proposal,
+    );
+
+    if (result.needsReview) {
+      stats.needsReview++;
+      console.log(
+        `[needs_review] note=${note.id} title="${note.title ?? ""}" missing=${result.missingTokens.join(",")}`,
+      );
+    } else {
+      stats.succeededNoRetry++;
+    }
+
+    await insertNoteProposal(cfg, {
+      note_id: note.id,
+      proposed_body_md: result.proposedBodyMd,
+      change_summary: result.changeSummary,
+      engine: FROM_FILE_ENGINE,
+      base_updated_at: note.updated_at,
+    });
+    stats.inserted++;
+    console.log(`[inserted] note=${note.id} title="${note.title ?? ""}"`);
+  }
+}
+
 async function main(): Promise<void> {
-  const isDryRun = process.argv.includes("--dry-run");
+  const { isDryRun, fromFile } = parseArgs(process.argv);
 
   const env = await loadEnvFile(MAIN_REPO_ENV_PATH);
   const geminiApiKey = env.GEMINI_API_KEY;
   const supabaseUrl = env.SUPABASE_URL;
   const serviceRoleKey = env.SUPABASE_SERVICE_ROLE_KEY;
 
-  if (!geminiApiKey) throw new Error(`GEMINI_API_KEY が ${MAIN_REPO_ENV_PATH} に見つかりません`);
+  if (!fromFile && !geminiApiKey) {
+    throw new Error(`GEMINI_API_KEY が ${MAIN_REPO_ENV_PATH} に見つかりません`);
+  }
   if (!supabaseUrl || !serviceRoleKey) {
     throw new Error(`SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY が ${MAIN_REPO_ENV_PATH} に見つかりません`);
   }
 
   const cfg: SupabaseConfig = { url: supabaseUrl, serviceRoleKey };
 
-  console.log(`[run] mode=${isDryRun ? "dry-run" : "production"} model=${GEMINI_MODEL}`);
+  const mode = fromFile ? "from-file" : isDryRun ? "dry-run" : "production";
+  console.log(`[run] mode=${mode} engine=${fromFile ? FROM_FILE_ENGINE : GEMINI_MODEL}`);
 
   const [notes, charactersById, pendingNoteIds] = await Promise.all([
     fetchMatchupNotes(cfg),
@@ -56,8 +133,6 @@ async function main(): Promise<void> {
 
   console.log(`[run] 対象ノート ${notes.length} 件（kind=matchup）`);
 
-  const targets = isDryRun ? notes.slice(0, DRY_RUN_SAMPLE_SIZE) : notes;
-
   const stats: Stats = {
     total: notes.length,
     skippedExistingPending: 0,
@@ -66,6 +141,14 @@ async function main(): Promise<void> {
     needsReview: 0,
     inserted: 0,
   };
+
+  if (fromFile) {
+    await runFromFile(cfg, notes, pendingNoteIds, fromFile, stats);
+    console.log("[run] 統計:", JSON.stringify(stats, null, 2));
+    return;
+  }
+
+  const targets = isDryRun ? notes.slice(0, DRY_RUN_SAMPLE_SIZE) : notes;
 
   if (isDryRun) {
     await mkdir(DRY_RUN_DIR, { recursive: true });
@@ -83,7 +166,7 @@ async function main(): Promise<void> {
       : null;
 
     const generate = (prompt: string) =>
-      generateRestructuredBody({ apiKey: geminiApiKey, prompt });
+      generateRestructuredBody({ apiKey: geminiApiKey!, prompt });
 
     const result = await restructureNote(
       { characterName, title: note.title, bodyMd: note.body_md ?? "" },

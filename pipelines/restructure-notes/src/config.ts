@@ -7,8 +7,15 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 // pipelines/restructure-notes/src → リポジトリ直下（このworktree）
 export const REPO_ROOT = join(__dirname, "..", "..", "..");
 
-// メインリポジトリの .env（worktreeには存在しないため絶対パスで参照する）
-export const MAIN_REPO_ENV_PATH = "/Users/matsumotokazuki/Desktop/work/smash-lab/.env";
+// メインリポジトリ（worktreeには .env / 共有 .context が存在しないため絶対パスで参照する）
+export const MAIN_REPO_ROOT = "/Users/matsumotokazuki/Desktop/work/smash-lab";
+export const MAIN_REPO_ENV_PATH = `${MAIN_REPO_ROOT}/.env`;
+
+// 対象ノートのエクスポート先（生成素材。Claudeエージェント等が読む。メインリポジトリ側 .context）
+export const NOTES_EXPORT_PATH = `${MAIN_REPO_ROOT}/.context/restructure-src/notes-export.json`;
+
+// --from-file モードで note_proposals.engine に入れる値
+export const FROM_FILE_ENGINE = "claude-manual";
 
 // dry-run 出力先（.context/ 以下。gitignore 済み想定）
 export const DRY_RUN_DIR = join(REPO_ROOT, ".context", "restructure-notes-dry-run");
