@@ -1,0 +1,22 @@
+{
+  "name": "restructure-notes",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "matchup notes（kind='matchup'）をGeminiでセクション構造に再構成し note_proposals へ投入するパイプライン（ADR-0010）",
+  "scripts": {
+    "run": "tsx src/run.ts",
+    "dry-run": "tsx src/run.ts --dry-run",
+    "export": "tsx src/export.ts",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "tsx": "^4.19.2"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.0",
+    "typescript": "^6.0.3",
+    "vitest": "^3.0.5"
+  }
+}
