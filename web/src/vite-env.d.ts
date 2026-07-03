@@ -10,3 +10,9 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+// ?raw インポート（docs/*.md をビルド時に文字列として取り込む。ライブラリ記事のオフライン描画）。
+declare module "*?raw" {
+  const content: string;
+  export default content;
+}
