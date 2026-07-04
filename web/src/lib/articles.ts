@@ -3,6 +3,8 @@
 // これらは設計内向けの制作メモ/リサーチノートをそのまま公開するもの（個人ツールのため）。ArticlePage 冒頭に注記を添える。
 import practiceScienceRaw from "../../../docs/05_practice-science.md?raw";
 import researchFindingsRaw from "../../../docs/04_research-findings.md?raw";
+import mentalGameRaw from "../../../docs/10_mental-game.md?raw";
+import practiceFocusRaw from "../../../docs/11_practice-focus.md?raw";
 
 export interface Article {
   slug: string;
@@ -47,8 +49,11 @@ interface ArticleSource {
 }
 
 // 記事の並び順と slug は明示定義。タイトル・説明は本文h1から導出する。
+// 並びは読む順を意図: 練習科学(基礎) → 練習と集中(深掘り) → メンタル → 開発リサーチノート。
 const sources: ArticleSource[] = [
   { slug: "practice-science", raw: practiceScienceRaw },
+  { slug: "practice-focus", raw: practiceFocusRaw },
+  { slug: "mental-game", raw: mentalGameRaw },
   { slug: "research-findings", raw: researchFindingsRaw },
 ];
 

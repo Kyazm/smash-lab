@@ -41,8 +41,18 @@ describe("deriveArticleMeta", () => {
 });
 
 describe("articles（docs取り込み）", () => {
-  it("練習科学と調査結果の2記事を公開する", () => {
-    expect(articles.map((a) => a.slug)).toEqual(["practice-science", "research-findings"]);
+  it("4記事を読む順（基礎→深掘り→メンタル→開発ノート）で公開する", () => {
+    expect(articles.map((a) => a.slug)).toEqual([
+      "practice-science",
+      "practice-focus",
+      "mental-game",
+      "research-findings",
+    ]);
+  });
+
+  it("新規2記事もh1タイトルが導出される", () => {
+    expect(getArticle("mental-game")?.title).toContain("メンタル");
+    expect(getArticle("practice-focus")?.title).toContain("練習と集中");
   });
 
   it("各記事はh1由来のタイトルと非空の本文を持つ", () => {

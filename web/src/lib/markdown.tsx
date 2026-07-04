@@ -17,19 +17,36 @@ import { youtubeInputToEmbedUrl } from "./youtube";
 import { loadTwitterWidgets } from "./twitterWidgets";
 import { notesProvider } from "../data/notes";
 
-// インライン: **bold** / `code` / 裸URL（リンク化）に対応。< 等はReactが自動エスケープする。
+// インライン: [text](url) / **bold** / `code` / 裸URL（リンク化）に対応。< 等はReactが自動エスケープする。
 function renderInline(text: string, keyPrefix: string): ReactNode[] {
   const nodes: ReactNode[] = [];
-  // **bold** / `code` / 裸URL を分割トークン化。URL部分は embeds.ts の INLINE_URL_RE と同一パターンを共有する
+  // [text](url) / **bold** / `code` / 裸URL を分割トークン化。URL部分は embeds.ts の INLINE_URL_RE と同一パターンを共有する
   // （全角区切り文字でURLが連結されるケースへの対応、FU-1）。
-  const re = new RegExp(`(\\*\\*[^*]+\\*\\*|\`[^\`]+\`|${INLINE_URL_RE.source})`, "g");
+  // mdリンクはライブラリ記事の相互参照（例: [練習科学](practice-science)）用。相対hrefは現在パス基準で解決される。
+  const re = new RegExp(
+    `(\\[[^\\]]+\\]\\([^)\\s]+\\)|\\*\\*[^*]+\\*\\*|\`[^\`]+\`|${INLINE_URL_RE.source})`,
+    "g",
+  );
   let last = 0;
   let m: RegExpExecArray | null;
   let i = 0;
   while ((m = re.exec(text)) !== null) {
     if (m.index > last) nodes.push(text.slice(last, m.index));
     const tok = m[0];
-    if (tok.startsWith("**")) {
+    if (tok.startsWith("[")) {
+      // [text](url)。外部URLは新規タブ、相対パス（記事間リンク等）は同タブ遷移。
+      const lm = /^\[([^\]]+)\]\(([^)\s]+)\)$/.exec(tok);
+      nodes.push(
+        <a
+          key={`${keyPrefix}-l${i}`}
+          href={lm?.[2] ?? "#"}
+          {...(/^https?:\/\//.test(lm?.[2] ?? "") ? { target: "_blank", rel: "noreferrer" } : {})}
+          className="text-action-strong underline decoration-action/40 hover:decoration-action-strong"
+        >
+          {lm?.[1] ?? tok}
+        </a>,
+      );
+    } else if (tok.startsWith("**")) {
       nodes.push(<strong key={`${keyPrefix}-b${i}`}>{tok.slice(2, -2)}</strong>);
     } else if (tok.startsWith("`")) {
       nodes.push(
