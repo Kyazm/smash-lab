@@ -107,7 +107,8 @@ export function CharacterListPage() {
   }, [characters, query]);
 
   return (
-    <div className="mx-auto max-w-2xl p-4">
+    // 12行×列流しグリッド（下記）が横に伸びるため、このページはコンテナを広めに取る。
+    <div className="mx-auto max-w-6xl p-4">
       <BrandMark size="sm" className="block" />
       <div className="mt-2 flex items-center justify-between gap-2">
         <h1 className="text-lg font-semibold text-ink-secondary">キャラ一覧</h1>
@@ -159,7 +160,7 @@ export function CharacterListPage() {
         placeholder="キャラ名で検索（日本語/英語）"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        className="mt-3 w-full min-h-11 rounded border border-border bg-surface-1 p-2 text-sm text-ink-primary"
+        className="mt-3 w-full max-w-xl min-h-11 rounded border border-border bg-surface-1 p-2 text-sm text-ink-primary"
       />
 
       {/* 勝敗記録のモード切替。各行の勝/負ボタンはこのモードに記録される（ADR-0015）。 */}
@@ -170,45 +171,45 @@ export function CharacterListPage() {
 
       {characters === null ? (
         <p className="mt-4 text-sm text-ink-muted">読み込み中…</p>
+      ) : filtered.length === 0 ? (
+        <p className="mt-4 py-3 text-sm text-ink-muted">該当するキャラが見つかりません。</p>
       ) : (
-        <ul className="mt-4 divide-y divide-border-subtle">
-          {filtered.map((c) => {
-            const rec = recordsByChar.get(c.id) ?? { wins: 0, losses: 0, current: 0 };
-            return (
-              // hover背景・タップ領域は行(li)全体に。Link(左)とWinLoseControl(右)のネスト不正を回避（ADR-0015）。
-              <li key={c.id} className="flex items-center gap-2 rounded pr-1 hover:bg-surface-2/50">
-                <Link
-                  to={`/c/${c.slug}`}
-                  className="flex min-h-11 min-w-0 flex-1 items-center gap-2 py-3 text-ink-primary"
-                >
-                  <CharacterIcon character={c} size="sm" />
-                  <span className="min-w-0 truncate">
-                    <span className="font-medium">{c.name_ja}</span>
-                    <span className="ml-2 font-frame text-xs uppercase tracking-[0.18em] text-ink-muted">
-                      {c.name_en}
-                    </span>
-                  </span>
-                  {c.is_main ? (
-                    <span className="ml-1 shrink-0 rounded-full border border-accent-red px-1.5 py-0.5 text-[10px] font-bold text-accent-red">
-                      ★
-                    </span>
-                  ) : null}
-                </Link>
-                <WinLoseControl
-                  characterId={c.id}
-                  mode={mode}
-                  wins={rec.wins}
-                  losses={rec.losses}
-                  current={rec.current}
-                  onChanged={() => setRecordRefresh((x) => x + 1)}
-                />
-              </li>
-            );
-          })}
-          {filtered.length === 0 ? (
-            <li className="py-3 text-sm text-ink-muted">該当するキャラが見つかりません。</li>
-          ) : null}
-        </ul>
+        // 12キャラずつ縦に並べ、13キャラ目から右の列へ流す（grid-flow-col + 12行固定）。
+        // 89キャラなら 12×7列+5。窮屈回避のため英語名は非表示（詳細ページで見られる）。
+        // 列が画面幅を超える場合は横スクロール（wrapperにoverflow-x-auto、ulはw-maxで内容幅）。
+        <div className="mt-4 overflow-x-auto pb-2">
+          <ul className="grid w-max grid-flow-col grid-rows-[repeat(12,auto)] gap-x-6 gap-y-0.5">
+            {filtered.map((c) => {
+              const rec = recordsByChar.get(c.id) ?? { wins: 0, losses: 0, current: 0 };
+              return (
+                // hover背景・タップ領域は行(li)全体に。Link(左)とWinLoseControl(右)のネスト不正を回避（ADR-0015）。
+                <li key={c.id} className="flex items-center gap-1 rounded pr-1 hover:bg-surface-2/50">
+                  <Link
+                    to={`/c/${c.slug}`}
+                    className="flex min-h-11 min-w-0 flex-1 items-center gap-2 py-1.5 text-ink-primary"
+                  >
+                    <CharacterIcon character={c} size="sm" />
+                    <span className="min-w-0 max-w-[8em] truncate font-medium">{c.name_ja}</span>
+                    {c.is_main ? (
+                      <span className="shrink-0 rounded-full border border-accent-red px-1.5 py-0.5 text-[10px] font-bold text-accent-red">
+                        ★
+                      </span>
+                    ) : null}
+                  </Link>
+                  <WinLoseControl
+                    characterId={c.id}
+                    mode={mode}
+                    wins={rec.wins}
+                    losses={rec.losses}
+                    current={rec.current}
+                    onChanged={() => setRecordRefresh((x) => x + 1)}
+                    showRecord={false}
+                  />
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       )}
     </div>
   );
