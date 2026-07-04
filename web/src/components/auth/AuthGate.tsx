@@ -4,7 +4,7 @@
 // disable_signup=true が signInAnonymously() もブロックするため、匿名認証はやめ専用アカウント方式に変更。
 // ゲスト判定は session.user.id === GUEST_UID。GuestProviderで配下に伝播し、
 // NotesProviderをGuestNotesProviderに切替える。
-import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import type { Session } from "@supabase/supabase-js";
 import { BrandMark } from "../BrandMark";
 import { resolveNotesProviderKind } from "../../lib/providerMode";
@@ -31,43 +31,41 @@ export function AuthGate({ children }: { children: ReactNode }) {
 function SupabaseAuthGate({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
-  const guestSeeded = useRef(false);
+  // ゲストのNotesProviderはインスタンスを保持（再ゲスト化でもローカルサンドボックスを維持）。
+  const guestNotesRef = useRef<GuestNotesProvider | null>(null);
+
+  // session に応じて notes/match プロバイダを「同期的に」確定する。
+  // 重要: これを setSession の前に呼ぶ。子ページのマウント（=初回 listNotes/listResults）は setSession 後の
+  // 再レンダーで起きるため、切替を useEffect（親effectは子effectの後に走る）に置くと、子の初回fetchが
+  // 旧プロバイダのまま発行される競合があった。session 確定と同じ同期タイミングで切り替えて競合を無くす。
+  const applyProviders = useCallback((s: Session | null) => {
+    const guest = s?.user.id === GUEST_UID;
+    if (guest) {
+      if (!guestNotesRef.current) guestNotesRef.current = new GuestNotesProvider();
+      setActiveNotesProvider(guestNotesRef.current);
+      void guestNotesRef.current.seedFromSupabaseIfEmpty(); // exists() で冪等（多重発火でも二重シードしない）
+      setActiveMatchProvider(new LocalMatchProvider(GUEST_MATCH_KEY));
+    } else {
+      setActiveNotesProvider(defaultNotesProvider);
+      setActiveMatchProvider(defaultMatchProvider);
+    }
+  }, []);
 
   useEffect(() => {
     const supabase = getSupabaseClient();
     supabase.auth.getSession().then(({ data }) => {
+      applyProviders(data.session);
       setSession(data.session);
       setLoading(false);
     });
     const { data: sub } = supabase.auth.onAuthStateChange((_event, s) => {
-      // ゲストセッションからログアウト/別セッションに変わったら、次回ゲスト化時に再シードできるようにフラグを戻す。
-      if (s?.user.id !== GUEST_UID) {
-        guestSeeded.current = false;
-        setActiveNotesProvider(defaultNotesProvider);
-        setActiveMatchProvider(defaultMatchProvider);
-      }
+      applyProviders(s);
       setSession(s);
     });
     return () => sub.subscription.unsubscribe();
-  }, []);
+  }, [applyProviders]);
 
   const isGuest = session?.user.id === GUEST_UID;
-
-  // ゲストセッション確立時に一度だけ NotesProvider を GuestNotesProvider へ切替 + 初回シード。
-  // 本人ログイン時は既定の notesProvider（Mock/Supabase切替済み）のまま。
-  useEffect(() => {
-    if (!isGuest || guestSeeded.current) return;
-    guestSeeded.current = true;
-    const guestProvider = new GuestNotesProvider();
-    setActiveNotesProvider(guestProvider);
-    void guestProvider.seedFromSupabaseIfEmpty();
-  }, [isGuest]);
-
-  // 戦績プロバイダの切替（ADR-0015）。match はシード不要なので notes の guestSeeded とは別 useEffect。
-  // ゲスト時はローカルサンドボックス（GUEST_MATCH_KEY）、非ゲスト時は既定（Supabase/mock）へ戻す。
-  useEffect(() => {
-    setActiveMatchProvider(isGuest ? new LocalMatchProvider(GUEST_MATCH_KEY) : defaultMatchProvider);
-  }, [isGuest]);
 
   if (loading) {
     return (

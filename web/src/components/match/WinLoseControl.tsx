@@ -31,6 +31,16 @@ export function WinLoseControl({
     };
   }, []);
 
+  // mode / 対戦相手が変わったら未確定のundo（取消）を破棄する。
+  // 例: VIPで勝ちを記録→取消表示中にスマメイトへ切替、のとき取消を残すと別モードの記録を誤って消してしまう。
+  useEffect(() => {
+    setLastId(null);
+    if (timer.current) {
+      window.clearTimeout(timer.current);
+      timer.current = null;
+    }
+  }, [mode, characterId]);
+
   const record = async (result: MatchOutcome) => {
     if (busy) return;
     setBusy(true);
