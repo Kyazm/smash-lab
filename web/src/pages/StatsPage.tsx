@@ -13,6 +13,7 @@ import {
   rankByCharacter,
   winRateSeries,
 } from "../lib/matchStats";
+import { makeGroupResolver } from "../lib/characterGroups";
 import { BrandMark } from "../components/BrandMark";
 import {
   CharacterRanking,
@@ -54,7 +55,12 @@ export function StatsPage() {
     };
   }, []);
 
-  const all = results ?? [];
+  // ポケトレ/ホムヒカは1キャラ扱い。対戦相手idを代表に正規化してから集計・ランキングする。
+  const resolver = useMemo(() => makeGroupResolver([...charById.values()]), [charById]);
+  const all = useMemo(
+    () => (results ?? []).map((r) => ({ ...r, characterId: resolver.normalizeId(r.characterId) })),
+    [results, resolver],
+  );
   const byMode = useMemo(() => groupByMode(all), [all]);
   const filtered = filter === "all" ? all : byMode[filter];
   const summary = computeSummary(filtered);
@@ -122,7 +128,7 @@ export function StatsPage() {
             <p className="mb-3 font-frame text-[10px] uppercase tracking-[0.18em] text-ink-muted">
               キャラ別ランキング（勝率順）
             </p>
-            <CharacterRanking entries={ranking} charById={charById} />
+            <CharacterRanking entries={ranking} charById={charById} nameFor={resolver.displayNameForId} />
           </section>
         </div>
       )}

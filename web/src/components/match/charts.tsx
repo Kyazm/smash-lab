@@ -128,10 +128,13 @@ export function CharacterRanking({
   entries,
   charById,
   limit,
+  nameFor,
 }: {
   entries: CharacterRankEntry[];
   charById: Map<string, Character>;
   limit?: number;
+  /** 表示名の上書き（ポケトレ/ホムヒカを「ポケモントレーナー」等のグループ名にする）。 */
+  nameFor?: (id: string) => string;
 }) {
   const shown = limit ? entries.slice(0, limit) : entries;
   if (shown.length === 0) {
@@ -141,11 +144,12 @@ export function CharacterRanking({
     <ul className="divide-y divide-border-subtle">
       {shown.map((e) => {
         const c = charById.get(e.characterId);
+        const name = nameFor ? nameFor(e.characterId) : c?.name_ja ?? "不明";
         return (
           <li key={e.characterId} className="flex items-center gap-3 py-2">
             <span className="flex min-w-0 shrink-0 items-center gap-2" style={{ width: "9rem" }}>
               {c ? <CharacterIcon character={c} size="sm" /> : null}
-              <span className="truncate text-sm text-ink-primary">{c?.name_ja ?? "不明"}</span>
+              <span className="truncate text-sm text-ink-primary">{name}</span>
             </span>
             <div className="flex-1">
               <WinRateBar wins={e.wins} losses={e.losses} />

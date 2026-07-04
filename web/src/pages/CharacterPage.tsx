@@ -3,8 +3,9 @@
 // ADR-0013 (G-2): is_main の実効値は useMainCharacter() （Context、Supabase実値+ランタイム上書き）で判定する。
 // bundle.character.is_main（静的JSON由来）はフォールバックに留める。
 import { useEffect, useMemo, useState } from "react";
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { dataProvider } from "../data";
+import { groupForSlug } from "../lib/characterGroups";
 import { FrameDataTable } from "../components/FrameDataTable";
 import { PunishPanel } from "../components/PunishPanel";
 import { MatchupNotesTab } from "../components/notes/MatchupNotesTab";
@@ -44,12 +45,15 @@ function isValidTab(v: string | null, isMain: boolean): v is Tab {
 
 export function CharacterPage() {
   const { slug } = useParams<{ slug: string }>();
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [bundle, setBundle] = useState<CharacterBundle | null | undefined>(undefined);
   const [main, setMain] = useState<CharacterBundle | null | undefined>(undefined);
   const { mainCharacterId, setMainCharacter } = useMainCharacter();
   const [settingMain, setSettingMain] = useState(false);
   const [settingMainError, setSettingMainError] = useState<string | null>(null);
+  // グループ（ポケトレ/ホムヒカ）の代表情報。戦績・メモを「1キャラ」に集約するために代表idへ寄せる。
+  const [repInfo, setRepInfo] = useState<{ id: string; slug: string; name: string } | null>(null);
 
   useEffect(() => {
     if (!slug) return;
@@ -89,6 +93,27 @@ export function CharacterPage() {
       cancelled = true;
     };
   }, [mainCharacterId]);
+
+  // グループメンバーのページなら、代表ファイターのid/slug/表示名を解決する（戦績・メモの集約先）。
+  const group = bundle ? groupForSlug(bundle.character.slug) : undefined;
+  useEffect(() => {
+    if (!group) {
+      setRepInfo(null);
+      return;
+    }
+    let cancelled = false;
+    dataProvider
+      .listCharacters()
+      .then((list) => {
+        if (cancelled) return;
+        const rep = list.find((c) => c.slug === group.representativeSlug);
+        if (rep) setRepInfo({ id: rep.id, slug: rep.slug, name: group.displayName });
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [group?.key]);
 
   const isMain = bundle != null && mainCharacterId != null && bundle.character.id === mainCharacterId;
   const tabParam = searchParams.get("tab");
@@ -174,6 +199,31 @@ export function CharacterPage() {
         <p className="mt-1 text-xs text-danger">自キャラの設定に失敗しました: {settingMainError}</p>
       ) : null}
 
+      {/* ポケトレ/ホムヒカのサブキャラ切替（キャラ選択画面と同じ1枠。フレーム表・確反は各ファイター個別）。 */}
+      {group ? (
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          <span className="font-frame text-[10px] uppercase tracking-[0.18em] text-ink-muted">
+            {group.displayName}
+          </span>
+          <div className="inline-flex rounded-md border border-border-subtle bg-surface-1 p-0.5">
+            {group.members.map((m) => (
+              <button
+                key={m.slug}
+                type="button"
+                onClick={() => navigate(`/c/${m.slug}?${searchParams.toString()}`)}
+                className={`min-h-9 rounded px-3 text-xs font-medium transition-colors ${
+                  m.slug === bundle.character.slug
+                    ? "bg-action text-white"
+                    : "text-ink-secondary hover:text-ink-primary"
+                }`}
+              >
+                {m.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      ) : null}
+
       <div className="mt-4">
         <TabBar tabs={tabs} active={tab} onChange={setTab} />
       </div>
@@ -185,14 +235,19 @@ export function CharacterPage() {
           // key でキャラ切替時に選択状態をリセット（技選択の持ち越し防止）
           <PunishPanel key={bundle.character.id} opponent={bundle} main={main ?? null} />
         ) : tab === "notes" ? (
+          // メモはグループを1キャラ扱いにするため代表(ポケモントレーナー等)に集約する。
           <MatchupNotesTab
-            key={bundle.character.id}
-            characterId={bundle.character.id}
-            characterNameJa={bundle.character.name_ja}
-            characterSlug={bundle.character.slug}
+            key={repInfo?.id ?? bundle.character.id}
+            characterId={repInfo?.id ?? bundle.character.id}
+            characterNameJa={repInfo?.name ?? bundle.character.name_ja}
+            characterSlug={repInfo?.slug ?? bundle.character.slug}
           />
         ) : tab === "record" ? (
-          <CharacterStatsTab key={bundle.character.id} characterId={bundle.character.id} />
+          // 戦績も代表に集約（サブキャラを切り替えても同じ戦績）。
+          <CharacterStatsTab
+            key={repInfo?.id ?? bundle.character.id}
+            characterId={repInfo?.id ?? bundle.character.id}
+          />
         ) : tab === "own" ? (
           <OwnPlayTab mainCharacterId={bundle.character.id} />
         ) : tab === "moves" ? (

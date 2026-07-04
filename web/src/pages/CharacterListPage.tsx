@@ -13,7 +13,16 @@ import { BrandMark } from "../components/BrandMark";
 import { CharacterIcon } from "../components/shared/CharacterIcon";
 import { ModeSelector } from "../components/match/ModeSelector";
 import { WinLoseControl } from "../components/match/WinLoseControl";
+import { groupForSlug, makeGroupResolver, type CharacterGroup } from "../lib/characterGroups";
 import type { Character } from "../types";
+
+// 一覧の1行。ポケトレ/ホムヒカは代表ファイターを character に、group に定義を持つ（キャラ選択画面と同じ1枠）。
+interface DisplayEntry {
+  character: Character;
+  displayName: string;
+  group?: CharacterGroup;
+  searchText: string;
+}
 
 interface CharRecord {
   wins: number;
@@ -34,16 +43,20 @@ export function CharacterListPage() {
   const [recordRefresh, setRecordRefresh] = useState(0);
 
   useEffect(() => {
+    if (!characters) return;
     let cancelled = false;
+    // 対戦相手idをグループ代表に正規化してから集計（ポケトレ/ホムヒカは1枠に集約）。
+    const { normalizeId } = makeGroupResolver(characters);
     matchProvider
       .listResults({ mode })
       .then((results) => {
         if (cancelled) return;
         const byChar = new Map<string, typeof results>();
         for (const r of results) {
-          const list = byChar.get(r.characterId);
+          const cid = normalizeId(r.characterId);
+          const list = byChar.get(cid);
           if (list) list.push(r);
-          else byChar.set(r.characterId, [r]);
+          else byChar.set(cid, [r]);
         }
         const next = new Map<string, CharRecord>();
         for (const [cid, list] of byChar) {
@@ -58,7 +71,7 @@ export function CharacterListPage() {
     return () => {
       cancelled = true;
     };
-  }, [mode, recordRefresh]);
+  }, [mode, recordRefresh, characters]);
 
   useEffect(() => {
     let cancelled = false;
@@ -97,14 +110,37 @@ export function CharacterListPage() {
     };
   }, []);
 
-  const filtered = useMemo(() => {
+  // グループ（ポケトレ/ホムヒカ）を代表位置の1枠に畳み込む。メンバー個別は一覧から除外する。
+  const entries = useMemo<DisplayEntry[]>(() => {
     if (!characters) return [];
+    const out: DisplayEntry[] = [];
+    for (const c of characters) {
+      const g = groupForSlug(c.slug);
+      if (g) {
+        if (c.slug !== g.representativeSlug) continue; // 代表以外は畳む
+        out.push({
+          character: c,
+          displayName: g.displayName,
+          group: g,
+          // 検索は表示名+全メンバー名（ゼニガメ等）+英名を対象にする。
+          searchText: `${g.displayName} ${g.members.map((m) => m.label).join(" ")} ${c.name_en}`.toLowerCase(),
+        });
+      } else {
+        out.push({
+          character: c,
+          displayName: c.name_ja,
+          searchText: `${c.name_ja} ${c.name_en}`.toLowerCase(),
+        });
+      }
+    }
+    return out;
+  }, [characters]);
+
+  const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return characters;
-    return characters.filter(
-      (c) => c.name_ja.toLowerCase().includes(q) || c.name_en.toLowerCase().includes(q),
-    );
-  }, [characters, query]);
+    if (!q) return entries;
+    return entries.filter((e) => e.searchText.includes(q));
+  }, [entries, query]);
 
   return (
     // 12行×列流しグリッド（下記）が横に伸びるため、このページはコンテナを広めに取る。
@@ -179,7 +215,9 @@ export function CharacterListPage() {
         // 列が画面幅を超える場合は横スクロール（wrapperにoverflow-x-auto、ulはw-maxで内容幅）。
         <div className="mt-4 overflow-x-auto pb-2">
           <ul className="grid w-max grid-flow-col grid-rows-[repeat(12,auto)] gap-x-6 gap-y-0.5">
-            {filtered.map((c) => {
+            {filtered.map((e) => {
+              const c = e.character;
+              // ポケトレ/ホムヒカは代表id（=グループ集約先）に勝敗を記録する。
               const rec = recordsByChar.get(c.id) ?? { wins: 0, losses: 0, current: 0 };
               return (
                 // hover背景・タップ領域は行(li)全体に。Link(左)とWinLoseControl(右)のネスト不正を回避（ADR-0015）。
@@ -189,7 +227,12 @@ export function CharacterListPage() {
                     className="flex min-h-11 min-w-0 flex-1 items-center gap-2 py-1.5 text-ink-primary"
                   >
                     <CharacterIcon character={c} size="sm" />
-                    <span className="min-w-0 max-w-[8em] truncate font-medium">{c.name_ja}</span>
+                    <span className="min-w-0 max-w-[10em] truncate font-medium">{e.displayName}</span>
+                    {e.group ? (
+                      <span className="shrink-0 rounded border border-border-subtle px-1 text-[10px] text-ink-muted">
+                        {e.group.members.length}体
+                      </span>
+                    ) : null}
                     {c.is_main ? (
                       <span className="shrink-0 rounded-full border border-accent-red px-1.5 py-0.5 text-[10px] font-bold text-accent-red">
                         ★
