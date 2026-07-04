@@ -9,7 +9,6 @@ import {
   computeStreaks,
   computeSummary,
   groupByMode,
-  winRateSeries,
 } from "../../lib/matchStats";
 import { ModeSelector } from "./ModeSelector";
 import { WinLoseControl } from "./WinLoseControl";
@@ -50,7 +49,6 @@ export function CharacterStatsTab({ characterId }: { characterId: string }) {
   const modeResults = byMode[mode]; // provider が createdAt 昇順で返すため順序は保持される
   const summary = computeSummary(modeResults);
   const streaks = computeStreaks(modeResults);
-  const series = winRateSeries(modeResults);
   const onChanged = () => setRefresh((x) => x + 1);
 
   return (
@@ -74,7 +72,7 @@ export function CharacterStatsTab({ characterId }: { characterId: string }) {
         </p>
         <StreakBadges current={streaks.current} maxWin={streaks.maxWin} maxLose={streaks.maxLose} />
         <div className="mt-4">
-          <CumulativeWinRateChart series={series} />
+          <CumulativeWinRateChart results={modeResults} />
         </div>
       </section>
 

@@ -13,6 +13,7 @@ import { BrandMark } from "../components/BrandMark";
 import { CharacterIcon } from "../components/shared/CharacterIcon";
 import { ModeSelector } from "../components/match/ModeSelector";
 import { WinLoseControl } from "../components/match/WinLoseControl";
+import { MatchDigest } from "../components/match/MatchDigest";
 import { groupForSlug, isMiiSlug, makeGroupResolver, type CharacterGroup } from "../lib/characterGroups";
 import type { Character } from "../types";
 
@@ -202,6 +203,16 @@ export function CharacterListPage() {
         onChange={(e) => setQuery(e.target.value)}
         className="mt-3 w-full max-w-xl min-h-11 rounded border border-border bg-surface-1 p-2 text-sm text-ink-primary"
       />
+
+      {/* 戦績ダイジェスト（VIPランク計算・全体・モード別サマリ）。折りたたみ可、既定は展開。 */}
+      <details open className="mt-3 max-w-xl rounded-xl border border-border-subtle bg-surface-0">
+        <summary className="min-h-11 cursor-pointer list-none px-4 py-2.5 font-frame text-[10px] uppercase tracking-[0.18em] text-ink-secondary [&::-webkit-details-marker]:hidden">
+          ▾ 戦績サマリ
+        </summary>
+        <div className="px-3 pb-3">
+          <MatchDigest refreshKey={recordRefresh} />
+        </div>
+      </details>
 
       {/* 勝敗記録のモード切替。各行の勝/負ボタンはこのモードに記録される（ADR-0015）。 */}
       <div className="mt-3 flex items-center gap-2">

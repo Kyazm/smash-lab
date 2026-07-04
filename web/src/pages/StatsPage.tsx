@@ -11,7 +11,6 @@ import {
   computeSummary,
   groupByMode,
   rankByCharacter,
-  winRateSeries,
 } from "../lib/matchStats";
 import { makeGroupResolver } from "../lib/characterGroups";
 import { MatchTimeline } from "../components/match/MatchTimeline";
@@ -79,7 +78,6 @@ export function StatsPage() {
   const filtered = filter === "all" ? all : byMode[filter];
   const summary = computeSummary(filtered);
   const streaks = computeStreaks(filtered);
-  const series = winRateSeries(filtered);
   const ranking = useMemo(() => rankByCharacter(filtered), [filtered]);
 
   return (
@@ -132,7 +130,7 @@ export function StatsPage() {
             </div>
             <StreakBadges current={streaks.current} maxWin={streaks.maxWin} maxLose={streaks.maxLose} />
             <div className="mt-4">
-              <CumulativeWinRateChart series={series} />
+              <CumulativeWinRateChart results={filtered} nameFor={resolver.displayNameForId} />
             </div>
           </section>
 

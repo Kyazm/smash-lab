@@ -1,14 +1,19 @@
 // 戦績グラフ部品（ADR-0015）。チャートライブラリ非導入のため手書きSVG/CSS＋デザイントークン。
 // 色: 勝ち=accent-red（このデザインの主アクセント＝ポジ）、負け=中立グレー（surface-2/border/muted）。
 // 数値は font-frame tabular-nums で桁を揃える（フレーム表と同じ流儀）。
+import { useState } from "react";
 import type { MatchMode, MatchResult } from "../../data/match/types";
 import { MATCH_MODES, MATCH_MODE_LABELS } from "../../data/match/types";
-import { computeSummary, type CharacterRankEntry, type WinRatePoint } from "../../lib/matchStats";
+import { computeSummary, type CharacterRankEntry } from "../../lib/matchStats";
 import { CharacterIcon } from "../shared/CharacterIcon";
 import type { Character } from "../../types";
 
 function pct(rate: number): string {
   return `${Math.round(rate * 100)}%`;
+}
+
+function hhmm(iso: string): string {
+  return new Date(iso).toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit" });
 }
 
 /** 勝率の横バー。wins=赤、losses=中立トラック。右に W-L と勝率%。 */
@@ -64,36 +69,102 @@ export function StreakBadges({
   );
 }
 
-/** 累積勝率の折れ線（SVG）。x=試合番号、y=0..100%。50%薄グリッド・終点ドット・薄いエリア塗り。 */
-export function CumulativeWinRateChart({ series }: { series: WinRatePoint[] }) {
-  if (series.length === 0) {
+/**
+ * 累積勝率の折れ線（SVG）。x=試合番号、y=0..100%。各試合を点で打ち（勝=白/負=赤）、
+ * ホバー/タップでその試合の相手・勝敗・時刻・その時点の勝率をツールチップ表示する。
+ * results は createdAt 昇順の対戦記録。nameFor を渡すと相手名も出す（1キャラ表示など不要なら省略可）。
+ */
+export function CumulativeWinRateChart({
+  results,
+  nameFor,
+}: {
+  results: MatchResult[];
+  nameFor?: (id: string) => string;
+}) {
+  const [active, setActive] = useState<number | null>(null);
+  if (results.length === 0) {
     return <p className="py-6 text-center text-sm text-ink-muted">記録がありません。</p>;
   }
   const W = 300;
   const H = 100;
-  const n = series.length;
-  // 1点のみだと線が引けないので横一直線にする。
-  const x = (i: number) => (n === 1 ? W / 2 : (i / (n - 1)) * W);
-  const y = (rate: number) => H - rate * H;
-  const pts = series.map((p, i) => `${x(i).toFixed(1)},${y(p.winRate).toFixed(1)}`);
-  const linePath = `M ${pts.join(" L ")}`;
-  const areaPath = `M ${x(0).toFixed(1)},${H} L ${pts.join(" L ")} L ${x(n - 1).toFixed(1)},${H} Z`;
-  const last = series[n - 1];
+  const n = results.length;
+  const xAt = (i: number) => (n === 1 ? W / 2 : (i / (n - 1)) * W);
+  const yAt = (rate: number) => H - rate * H;
+
+  // 各試合の累積勝率と点座標＋メタ。
+  let wins = 0;
+  const pts = results.map((r, i) => {
+    if (r.result === "win") wins += 1;
+    const winRate = wins / (i + 1);
+    return { x: xAt(i), y: yAt(winRate), winRate, result: r.result, characterId: r.characterId, createdAt: r.createdAt };
+  });
+  const coordStr = pts.map((p) => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(" L ");
+  const linePath = `M ${coordStr}`;
+  const areaPath = `M ${pts[0].x.toFixed(1)},${H} L ${coordStr} L ${pts[n - 1].x.toFixed(1)},${H} Z`;
+  const last = pts[n - 1];
+  const cur = active != null ? pts[active] : null;
+
   return (
-    <div>
+    <div className="relative">
       <svg
         viewBox={`0 0 ${W} ${H}`}
         preserveAspectRatio="none"
         className="h-24 w-full"
         role="img"
         aria-label={`累積勝率 ${pct(last.winRate)}`}
+        onMouseLeave={() => setActive(null)}
       >
         {/* 50% 基準線 */}
         <line x1="0" y1={H / 2} x2={W} y2={H / 2} stroke="rgb(var(--border-subtle))" strokeWidth="1" strokeDasharray="4 4" />
         <path d={areaPath} fill="rgb(var(--color-action) / 0.12)" />
         <path d={linePath} fill="none" stroke="rgb(var(--color-action))" strokeWidth="2" vectorEffect="non-scaling-stroke" />
-        <circle cx={x(n - 1)} cy={y(last.winRate)} r="3" fill="rgb(var(--color-action))" />
+        {/* アクティブ点の縦ガイド */}
+        {cur ? (
+          <line x1={cur.x} y1="0" x2={cur.x} y2={H} stroke="rgb(var(--color-action) / 0.4)" strokeWidth="1" vectorEffect="non-scaling-stroke" />
+        ) : null}
+        {/* 各試合の点。勝=オフホワイト / 負=赤。 */}
+        {pts.map((p, i) => (
+          <circle
+            key={i}
+            cx={p.x}
+            cy={p.y}
+            r={active === i ? 3.5 : 2}
+            fill={p.result === "lose" ? "rgb(var(--color-action))" : "rgb(var(--text-primary))"}
+          />
+        ))}
+        {/* 当たり判定（透明・広め）。ホバーとタップの両対応。 */}
+        {pts.map((p, i) => (
+          <circle
+            key={`hit-${i}`}
+            cx={p.x}
+            cy={p.y}
+            r={7}
+            fill="transparent"
+            style={{ cursor: "pointer" }}
+            onMouseEnter={() => setActive(i)}
+            onClick={() => setActive((v) => (v === i ? null : i))}
+          />
+        ))}
       </svg>
+
+      {cur ? (
+        <div
+          className="pointer-events-none absolute top-0 z-10 -translate-x-1/2 whitespace-nowrap rounded-md border border-border-subtle bg-surface-2 px-2 py-1 text-[10px] leading-tight shadow-xl"
+          style={{ left: `${Math.min(90, Math.max(10, (cur.x / W) * 100))}%` }}
+        >
+          <div className="font-frame tabular-nums text-ink-muted">
+            {active! + 1}試合目 · {hhmm(cur.createdAt)}
+          </div>
+          <div className="font-medium text-ink-primary">
+            <span className={cur.result === "lose" ? "text-action" : "text-ink-secondary"}>
+              {cur.result === "lose" ? "負" : "勝"}
+            </span>
+            {nameFor ? ` ${nameFor(cur.characterId)}` : ""}
+          </div>
+          <div className="font-frame tabular-nums text-ink-muted">勝率 {pct(cur.winRate)}</div>
+        </div>
+      ) : null}
+
       <div className="mt-1 flex justify-between font-frame text-[10px] tabular-nums text-ink-muted">
         <span>1試合目</span>
         <span>直近 {pct(last.winRate)}（{n}試合）</span>
