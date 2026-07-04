@@ -13,7 +13,7 @@ import { BrandMark } from "../components/BrandMark";
 import { CharacterIcon } from "../components/shared/CharacterIcon";
 import { ModeSelector } from "../components/match/ModeSelector";
 import { WinLoseControl } from "../components/match/WinLoseControl";
-import { groupForSlug, makeGroupResolver, type CharacterGroup } from "../lib/characterGroups";
+import { groupForSlug, isMiiSlug, makeGroupResolver, type CharacterGroup } from "../lib/characterGroups";
 import type { Character } from "../types";
 
 // 一覧の1行。ポケトレ/ホムヒカは代表ファイターを character に、group に定義を持つ（キャラ選択画面と同じ1枠）。
@@ -113,8 +113,12 @@ export function CharacterListPage() {
   // グループ（ポケトレ/ホムヒカ）を代表位置の1枠に畳み込む。メンバー個別は一覧から除外する。
   const entries = useMemo<DisplayEntry[]>(() => {
     if (!characters) return [];
+    // Mii系（格闘/剣術/射撃）を末尾へ。安定ソートなので他キャラの並び（fighter_number順）は保持する。
+    const ordered = [...characters].sort(
+      (a, b) => (isMiiSlug(a.slug) ? 1 : 0) - (isMiiSlug(b.slug) ? 1 : 0),
+    );
     const out: DisplayEntry[] = [];
-    for (const c of characters) {
+    for (const c of ordered) {
       const g = groupForSlug(c.slug);
       if (g) {
         if (c.slug !== g.representativeSlug) continue; // 代表以外は畳む

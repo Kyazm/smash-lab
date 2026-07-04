@@ -85,3 +85,10 @@ export function makeGroupResolver(characters: { id: string; slug: string; name_j
 
   return { normalizeId, displayNameForId, idBySlug };
 }
+
+// Miiファイター（格闘/剣術/射撃）。一覧では末尾に回す（要望）。
+const MII_SLUGS = new Set(["mii_brawler", "mii_swordfighter", "mii_gunner"]);
+
+export function isMiiSlug(slug: string): boolean {
+  return MII_SLUGS.has(slug);
+}
