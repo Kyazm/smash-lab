@@ -14,6 +14,7 @@ import {
   winRateSeries,
 } from "../lib/matchStats";
 import { makeGroupResolver } from "../lib/characterGroups";
+import { MatchTimeline } from "../components/match/MatchTimeline";
 import { BrandMark } from "../components/BrandMark";
 import {
   CharacterRanking,
@@ -30,6 +31,7 @@ export function StatsPage() {
   const [results, setResults] = useState<MatchResult[] | null>(null);
   const [charById, setCharById] = useState<Map<string, Character>>(new Map());
   const [filter, setFilter] = useState<Filter>("all");
+  const [refresh, setRefresh] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -53,7 +55,18 @@ export function StatsPage() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [refresh]);
+
+  // 対戦履歴からの誤記録削除（undoを逃した記録の訂正）。
+  const onDeleteResult = async (id: string) => {
+    if (!window.confirm("この対戦記録を削除しますか？")) return;
+    try {
+      await matchProvider.deleteResult(id);
+      setRefresh((x) => x + 1);
+    } catch (e) {
+      console.error("[StatsPage] deleteResult 失敗", e);
+    }
+  };
 
   // ポケトレ/ホムヒカは1キャラ扱い。対戦相手idを代表に正規化してから集計・ランキングする。
   const resolver = useMemo(() => makeGroupResolver([...charById.values()]), [charById]);
@@ -129,6 +142,18 @@ export function StatsPage() {
               キャラ別ランキング（勝率順）
             </p>
             <CharacterRanking entries={ranking} charById={charById} nameFor={resolver.displayNameForId} />
+          </section>
+
+          <section className="rounded-xl border border-border-subtle bg-surface-1 p-4">
+            <p className="mb-3 font-frame text-[10px] uppercase tracking-[0.18em] text-ink-muted">
+              対戦履歴（新しい順）
+            </p>
+            <MatchTimeline
+              results={filtered}
+              charById={charById}
+              nameFor={resolver.displayNameForId}
+              onDelete={onDeleteResult}
+            />
           </section>
         </div>
       )}
