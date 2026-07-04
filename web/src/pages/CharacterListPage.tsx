@@ -204,7 +204,13 @@ export function CharacterListPage() {
         className="mt-3 w-full max-w-xl min-h-11 rounded border border-border bg-surface-1 p-2 text-sm text-ink-primary"
       />
 
-      {/* 戦績ダイジェスト（VIPランク計算・全体・モード別サマリ）。折りたたみ可、既定は展開。 */}
+      {/* モード選択（記録先＝戦績サマリ表示で共通・連動）。勝/負ボタンはこのモードに記録される（ADR-0015）。 */}
+      <div className="mt-3 flex items-center gap-2">
+        <span className="font-frame text-[10px] uppercase tracking-[0.18em] text-ink-muted">モード</span>
+        <ModeSelector />
+      </div>
+
+      {/* 戦績ダイジェスト（選択モードのサマリ＋モード別サマリ＋VIPランク）。上のモードに連動。折りたたみ可・既定は展開。 */}
       <details open className="mt-3 max-w-xl rounded-xl border border-border-subtle bg-surface-0">
         <summary className="min-h-11 cursor-pointer list-none px-4 py-2.5 font-frame text-[10px] uppercase tracking-[0.18em] text-ink-secondary [&::-webkit-details-marker]:hidden">
           ▾ 戦績サマリ
@@ -213,12 +219,6 @@ export function CharacterListPage() {
           <MatchDigest refreshKey={recordRefresh} />
         </div>
       </details>
-
-      {/* 勝敗記録のモード切替。各行の勝/負ボタンはこのモードに記録される（ADR-0015）。 */}
-      <div className="mt-3 flex items-center gap-2">
-        <span className="font-frame text-[10px] uppercase tracking-[0.18em] text-ink-muted">記録先</span>
-        <ModeSelector />
-      </div>
 
       {characters === null ? (
         <p className="mt-4 text-sm text-ink-muted">読み込み中…</p>
