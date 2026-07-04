@@ -15,6 +15,7 @@ import {
 } from "../lib/matchStats";
 import { makeGroupResolver } from "../lib/characterGroups";
 import { MatchTimeline } from "../components/match/MatchTimeline";
+import { VipRankCalculator } from "../components/match/VipRankCalculator";
 import { BrandMark } from "../components/BrandMark";
 import {
   CharacterRanking,
@@ -106,6 +107,13 @@ export function StatsPage() {
           </button>
         ))}
       </div>
+
+      {/* VIPランク計算（VIP関連なので全体/VIP選択時のみ）。戦績0でも使えるよう条件分岐の外に置く。 */}
+      {filter === "all" || filter === "vip" ? (
+        <div className="mt-4">
+          <VipRankCalculator />
+        </div>
+      ) : null}
 
       {results === null ? (
         <p className="mt-4 text-sm text-ink-muted">読み込み中…</p>
