@@ -1,6 +1,6 @@
 // 勝敗記録の集計（ADR-0015）。全て純関数で、追記専用ログ（MatchResult[]）から導出する。
 // 時系列・連勝の計算は「createdAt 昇順に並んだ配列」を前提とする（provider が昇順で返す）。
-import type { MatchMode, MatchResult } from "../data/match/types";
+import type { MatchMode, MatchOutcome, MatchResult } from "../data/match/types";
 import { MATCH_MODES } from "../data/match/types";
 
 export interface MatchSummary {
@@ -111,4 +111,40 @@ export function rankByCharacter(results: MatchResult[]): CharacterRankEntry[] {
     if (b.winRate !== a.winRate) return b.winRate - a.winRate;
     return b.total - a.total;
   });
+}
+
+export interface RecentFormStats {
+  /** 古い→新しい（末尾が最新）の勝敗列。 */
+  outcomes: MatchOutcome[];
+  wins: number;
+  total: number;
+  winRate: number;
+}
+
+/** 直近 n 戦（createdAt 昇順配列の末尾）のフォーム。 */
+export function recentForm(resultsAsc: MatchResult[], n = 20): RecentFormStats {
+  const recent = resultsAsc.slice(Math.max(0, resultsAsc.length - n));
+  const wins = recent.filter((r) => r.result === "win").length;
+  const total = recent.length;
+  return { outcomes: recent.map((r) => r.result), wins, total, winRate: total === 0 ? 0 : wins / total };
+}
+
+/**
+ * 得意・苦手の相手キャラ。rankByCharacter の結果（勝率降順）から、min戦以上を対象に
+ * 上位（得意）と下位（苦手）を返す。best/worst は重複しない。
+ */
+export function bestWorstMatchups(
+  ranking: CharacterRankEntry[],
+  opts: { min?: number; count?: number } = {},
+): { best: CharacterRankEntry[]; worst: CharacterRankEntry[] } {
+  const min = opts.min ?? 3;
+  const count = opts.count ?? 3;
+  const qualified = ranking.filter((e) => e.total >= min); // 既に勝率降順
+  const best = qualified.slice(0, count);
+  const bestSet = new Set(best.map((e) => e.characterId));
+  const worst = qualified
+    .filter((e) => !bestSet.has(e.characterId))
+    .slice(-count)
+    .reverse(); // 勝率が低い順
+  return { best, worst };
 }

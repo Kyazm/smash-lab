@@ -1,10 +1,12 @@
 import { describe, expect, it } from "vitest";
 import type { MatchMode, MatchOutcome, MatchResult } from "../data/match/types";
 import {
+  bestWorstMatchups,
   computeStreaks,
   computeSummary,
   groupByMode,
   rankByCharacter,
+  recentForm,
   winRateSeries,
 } from "./matchStats";
 
@@ -98,5 +100,36 @@ describe("rankByCharacter", () => {
     expect(ranked.map((e) => e.characterId)).toEqual(["c1", "c2", "c3"]);
     expect(ranked[0]).toEqual({ characterId: "c1", wins: 2, losses: 0, total: 2, winRate: 1 });
     expect(ranked[2].winRate).toBe(0.5);
+  });
+});
+
+describe("recentForm", () => {
+  it("直近n戦だけを新しい方を末尾にして返す", () => {
+    const f = recentForm([w(), l(), w(), w(), l()], 3);
+    expect(f.outcomes).toEqual(["win", "win", "lose"]); // 末尾3件
+    expect(f).toMatchObject({ wins: 2, total: 3 });
+  });
+  it("空配列は0", () => {
+    expect(recentForm([])).toEqual({ outcomes: [], wins: 0, total: 0, winRate: 0 });
+  });
+});
+
+describe("bestWorstMatchups", () => {
+  it("min戦以上で得意/苦手を返し、重複しない", () => {
+    // c1:3-0(1.0), c2:1-0(1.0,1戦=min未満), c3:2-1(0.67), c4:0-3(0), c5:1-2(0.33)
+    const ranking = rankByCharacter([
+      w("c1"), w("c1"), w("c1"),
+      w("c2"),
+      w("c3"), w("c3"), l("c3"),
+      l("c4"), l("c4"), l("c4"),
+      w("c5"), l("c5"), l("c5"),
+    ]);
+    const { best, worst } = bestWorstMatchups(ranking, { min: 3, count: 2 });
+    // 3戦以上: c1(1.0), c3(0.67), c5(0.33), c4(0)。c2は1戦で除外
+    expect(best.map((e) => e.characterId)).toEqual(["c1", "c3"]);
+    expect(worst.map((e) => e.characterId)).toEqual(["c4", "c5"]); // 勝率低い順
+    // best と worst は重複しない
+    const overlap = best.filter((b) => worst.some((wm) => wm.characterId === b.characterId));
+    expect(overlap).toEqual([]);
   });
 });

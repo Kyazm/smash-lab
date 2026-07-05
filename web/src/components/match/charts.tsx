@@ -4,7 +4,7 @@
 import { useState } from "react";
 import type { MatchMode, MatchResult } from "../../data/match/types";
 import { MATCH_MODES, MATCH_MODE_LABELS } from "../../data/match/types";
-import { computeSummary, type CharacterRankEntry } from "../../lib/matchStats";
+import { computeSummary, recentForm, type CharacterRankEntry } from "../../lib/matchStats";
 import { CharacterIcon } from "../shared/CharacterIcon";
 import type { Character } from "../../types";
 
@@ -229,5 +229,74 @@ export function CharacterRanking({
         );
       })}
     </ul>
+  );
+}
+
+/** 直近フォーム。勝=○(白) / 負=●(赤) を古い→新しい順に並べ、直近勝率を出す。 */
+export function RecentForm({ results, n = 20 }: { results: MatchResult[]; n?: number }) {
+  const f = recentForm(results, n);
+  if (f.total === 0) {
+    return <p className="py-6 text-center text-sm text-ink-muted">記録がありません。</p>;
+  }
+  return (
+    <div>
+      <div className="flex flex-wrap gap-1">
+        {f.outcomes.map((o, i) => (
+          <span
+            key={i}
+            className={`inline-flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold ${
+              o === "lose" ? "bg-action text-white" : "border border-border-subtle text-ink-secondary"
+            }`}
+          >
+            {o === "lose" ? "●" : "○"}
+          </span>
+        ))}
+      </div>
+      <p className="mt-2 font-frame text-xs tabular-nums text-ink-muted">
+        直近 {f.total} 戦 <span className="text-ink-primary">{pct(f.winRate)}</span>（{f.wins}-{f.total - f.wins}）
+        <span className="ml-2">← 古い / 新しい →</span>
+      </p>
+    </div>
+  );
+}
+
+/** 得意・苦手キャラ。得意=白見出し / 苦手=赤見出しで、勝率と勝敗数を並べる。 */
+export function TopMatchups({
+  best,
+  worst,
+  charById,
+  nameFor,
+}: {
+  best: CharacterRankEntry[];
+  worst: CharacterRankEntry[];
+  charById: Map<string, Character>;
+  nameFor: (id: string) => string;
+}) {
+  if (best.length === 0 && worst.length === 0) {
+    return <p className="py-6 text-center text-sm text-ink-muted">3戦以上戦った相手がまだいません。</p>;
+  }
+  const row = (e: CharacterRankEntry) => {
+    const c = charById.get(e.characterId);
+    return (
+      <li key={e.characterId} className="flex items-center gap-2 py-1">
+        {c ? <CharacterIcon character={c} size="sm" /> : null}
+        <span className="min-w-0 flex-1 truncate text-sm text-ink-primary">{nameFor(e.characterId)}</span>
+        <span className="shrink-0 font-frame text-xs tabular-nums text-ink-secondary">
+          {pct(e.winRate)} <span className="text-ink-muted">{e.wins}-{e.losses}</span>
+        </span>
+      </li>
+    );
+  };
+  return (
+    <div className="grid gap-3 sm:grid-cols-2">
+      <div>
+        <p className="mb-1 font-frame text-[10px] uppercase tracking-[0.18em] text-adv-safe">得意</p>
+        {best.length ? <ul className="divide-y divide-border-subtle">{best.map(row)}</ul> : <p className="text-xs text-ink-muted">—</p>}
+      </div>
+      <div>
+        <p className="mb-1 font-frame text-[10px] uppercase tracking-[0.18em] text-action">苦手</p>
+        {worst.length ? <ul className="divide-y divide-border-subtle">{worst.map(row)}</ul> : <p className="text-xs text-ink-muted">—</p>}
+      </div>
+    </div>
   );
 }

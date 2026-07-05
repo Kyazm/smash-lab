@@ -150,9 +150,9 @@ export function CharacterListPage() {
   return (
     // 12行×列流しグリッド（下記）が横に伸びるため、このページはコンテナを広めに取る。
     <div className="mx-auto max-w-6xl p-4">
-      <BrandMark size="sm" className="block" />
-      <div className="mt-2 flex items-center justify-between gap-2">
-        <h1 className="text-lg font-semibold text-ink-secondary">キャラ一覧</h1>
+      {/* ヘッダーは1行に（BrandMark左・ナビ右）。右上の空きを解消。 */}
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+        <BrandMark size="sm" />
         <nav className="flex flex-wrap gap-2 text-sm">
           <Link
             to="/me"
@@ -211,7 +211,7 @@ export function CharacterListPage() {
       </div>
 
       {/* 戦績ダイジェスト（選択モードのサマリ＋モード別サマリ＋VIPランク）。上のモードに連動。折りたたみ可・既定は展開。 */}
-      <details open className="mt-3 max-w-xl rounded-xl border border-border-subtle bg-surface-0">
+      <details open className="mt-3 max-w-4xl rounded-xl border border-border-subtle bg-surface-0">
         <summary className="min-h-11 cursor-pointer list-none px-4 py-2.5 font-frame text-[10px] uppercase tracking-[0.18em] text-ink-secondary [&::-webkit-details-marker]:hidden">
           ▾ 戦績サマリ
         </summary>

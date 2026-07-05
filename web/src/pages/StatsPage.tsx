@@ -7,6 +7,7 @@ import type { MatchMode, MatchResult } from "../data/match/types";
 import { MATCH_MODES, MATCH_MODE_LABELS } from "../data/match/types";
 import { dataProvider } from "../data";
 import {
+  bestWorstMatchups,
   computeStreaks,
   computeSummary,
   groupByMode,
@@ -20,7 +21,9 @@ import {
   CharacterRanking,
   CumulativeWinRateChart,
   ModeSummary,
+  RecentForm,
   StreakBadges,
+  TopMatchups,
   WinRateBar,
 } from "../components/match/charts";
 import type { Character } from "../types";
@@ -79,9 +82,10 @@ export function StatsPage() {
   const summary = computeSummary(filtered);
   const streaks = computeStreaks(filtered);
   const ranking = useMemo(() => rankByCharacter(filtered), [filtered]);
+  const { best, worst } = useMemo(() => bestWorstMatchups(ranking), [ranking]);
 
   return (
-    <div className="mx-auto max-w-2xl p-4">
+    <div className="mx-auto max-w-5xl p-4">
       <div className="flex items-center justify-between gap-2">
         <Link to="/" className="text-xs text-ink-muted hover:text-ink-primary">
           ← キャラ一覧
@@ -108,7 +112,7 @@ export function StatsPage() {
 
       {/* VIPランク計算（VIP関連なので全体/VIP選択時のみ）。戦績0でも使えるよう条件分岐の外に置く。 */}
       {filter === "all" || filter === "vip" ? (
-        <div className="mt-4">
+        <div className="mt-4 max-w-2xl">
           <VipRankCalculator />
         </div>
       ) : null}
@@ -120,7 +124,9 @@ export function StatsPage() {
           まだ戦績がありません。キャラ一覧の各キャラ横の「勝／負」ボタンから記録できます。
         </p>
       ) : (
-        <div className="mt-4 space-y-4">
+        // デスクトップは2カラム（余白活用）。サマリ+グラフと履歴は横幅がある方が見やすいので全幅。
+        // カードは適切幅で2カラムに並べ、余白を埋める。履歴のみ横幅がある方が見やすいので全幅。
+        <div className="mt-4 grid items-start gap-4 md:grid-cols-2">
           <section className="rounded-xl border border-border-subtle bg-surface-1 p-4">
             <p className="mb-3 font-frame text-[10px] uppercase tracking-[0.18em] text-ink-muted">
               {filter === "all" ? "全体" : MATCH_MODE_LABELS[filter]}（{summary.total}試合）
@@ -132,6 +138,20 @@ export function StatsPage() {
             <div className="mt-4">
               <CumulativeWinRateChart results={filtered} nameFor={resolver.displayNameForId} />
             </div>
+          </section>
+
+          <section className="rounded-xl border border-border-subtle bg-surface-1 p-4">
+            <p className="mb-3 font-frame text-[10px] uppercase tracking-[0.18em] text-ink-muted">
+              直近フォーム
+            </p>
+            <RecentForm results={filtered} />
+          </section>
+
+          <section className="rounded-xl border border-border-subtle bg-surface-1 p-4">
+            <p className="mb-3 font-frame text-[10px] uppercase tracking-[0.18em] text-ink-muted">
+              得意・苦手キャラ（3戦以上）
+            </p>
+            <TopMatchups best={best} worst={worst} charById={charById} nameFor={resolver.displayNameForId} />
           </section>
 
           {filter === "all" ? (
@@ -150,7 +170,7 @@ export function StatsPage() {
             <CharacterRanking entries={ranking} charById={charById} nameFor={resolver.displayNameForId} />
           </section>
 
-          <section className="rounded-xl border border-border-subtle bg-surface-1 p-4">
+          <section className="rounded-xl border border-border-subtle bg-surface-1 p-4 md:col-span-2">
             <p className="mb-3 font-frame text-[10px] uppercase tracking-[0.18em] text-ink-muted">
               対戦履歴（新しい順）
             </p>

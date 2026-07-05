@@ -38,9 +38,14 @@ export function MatchDigest({ refreshKey }: { refreshKey: number }) {
   const streaks = computeStreaks(modeResults);
 
   return (
-    <div className="space-y-3">
+    // デスクトップは横並び（余白活用）。VIPランクは入力欄があり横長なので全幅。
+    <div className="grid gap-3 md:grid-cols-2">
       {/* VIPランク計算（VIP選択時のみ。世界戦闘力→段位） */}
-      {mode === "vip" ? <VipRankCalculator /> : null}
+      {mode === "vip" ? (
+        <div className="md:col-span-2">
+          <VipRankCalculator />
+        </div>
+      ) : null}
 
       {/* 選択モード（記録先と連動）のサマリ */}
       <section className="rounded-xl border border-border-subtle bg-surface-1 p-4">
