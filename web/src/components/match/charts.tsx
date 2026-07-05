@@ -194,41 +194,73 @@ export function ModeSummary({ byMode }: { byMode: Record<MatchMode, MatchResult[
   );
 }
 
-/** 対戦相手キャラ別ランキング（勝率降順）。得意/苦手が一目で分かる。 */
+type RankSort = "character" | "winRate" | "total";
+const RANK_SORTS: { key: RankSort; label: string }[] = [
+  { key: "character", label: "キャラ順" },
+  { key: "winRate", label: "勝率" },
+  { key: "total", label: "対戦数" },
+];
+
+/**
+ * 対戦相手キャラ別ランキング。キャラ一覧と同じ「12行×列流し」のグリッドで表示し、
+ * ソート（キャラの並び順=fighter_number / 勝率 / 対戦数）を切り替えられる。
+ */
 export function CharacterRanking({
   entries,
   charById,
-  limit,
   nameFor,
 }: {
   entries: CharacterRankEntry[];
   charById: Map<string, Character>;
-  limit?: number;
   /** 表示名の上書き（ポケトレ/ホムヒカを「ポケモントレーナー」等のグループ名にする）。 */
   nameFor?: (id: string) => string;
 }) {
-  const shown = limit ? entries.slice(0, limit) : entries;
-  if (shown.length === 0) {
+  const [sort, setSort] = useState<RankSort>("winRate");
+  if (entries.length === 0) {
     return <p className="py-6 text-center text-sm text-ink-muted">まだ記録がありません。</p>;
   }
+  const sorted = [...entries].sort((a, b) => {
+    if (sort === "character") {
+      return (charById.get(a.characterId)?.fighter_number ?? 9999) - (charById.get(b.characterId)?.fighter_number ?? 9999);
+    }
+    if (sort === "total") return b.total - a.total || b.winRate - a.winRate;
+    return b.winRate - a.winRate || b.total - a.total;
+  });
   return (
-    <ul className="divide-y divide-border-subtle">
-      {shown.map((e) => {
-        const c = charById.get(e.characterId);
-        const name = nameFor ? nameFor(e.characterId) : c?.name_ja ?? "不明";
-        return (
-          <li key={e.characterId} className="flex items-center gap-3 py-2">
-            <span className="flex min-w-0 shrink-0 items-center gap-2" style={{ width: "9rem" }}>
-              {c ? <CharacterIcon character={c} size="sm" /> : null}
-              <span className="truncate text-sm text-ink-primary">{name}</span>
-            </span>
-            <div className="flex-1">
-              <WinRateBar wins={e.wins} losses={e.losses} />
-            </div>
-          </li>
-        );
-      })}
-    </ul>
+    <div>
+      <div className="mb-3 inline-flex rounded-md border border-border-subtle bg-surface-1 p-0.5">
+        {RANK_SORTS.map((s) => (
+          <button
+            key={s.key}
+            type="button"
+            onClick={() => setSort(s.key)}
+            className={`min-h-9 rounded px-3 text-xs font-medium transition-colors ${
+              sort === s.key ? "bg-action text-white" : "text-ink-secondary hover:text-ink-primary"
+            }`}
+          >
+            {s.label}
+          </button>
+        ))}
+      </div>
+      {/* キャラ一覧と同じ列流しグリッド（12行固定、あふれは横スクロール）。 */}
+      <div className="overflow-x-auto pb-2">
+        <ul className="grid w-max grid-flow-col grid-rows-[repeat(12,auto)] gap-x-6 gap-y-0.5">
+          {sorted.map((e) => {
+            const c = charById.get(e.characterId);
+            const name = nameFor ? nameFor(e.characterId) : c?.name_ja ?? "不明";
+            return (
+              <li key={e.characterId} className="flex min-h-8 items-center gap-2">
+                {c ? <CharacterIcon character={c} size="sm" /> : null}
+                <span className="min-w-0 max-w-[8em] truncate text-sm text-ink-primary">{name}</span>
+                <span className="ml-auto shrink-0 font-frame text-xs tabular-nums text-ink-secondary">
+                  {pct(e.winRate)} <span className="text-ink-muted">{e.wins}-{e.losses}</span>
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </div>
   );
 }
 
