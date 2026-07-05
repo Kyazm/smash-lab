@@ -163,9 +163,9 @@ export function StatsPage() {
             </section>
           ) : null}
 
-          <section className="rounded-xl border border-border-subtle bg-surface-1 p-4">
+          <section className="rounded-xl border border-border-subtle bg-surface-1 p-4 md:col-span-2">
             <p className="mb-3 font-frame text-[10px] uppercase tracking-[0.18em] text-ink-muted">
-              キャラ別ランキング（勝率順）
+              キャラ別ランキング
             </p>
             <CharacterRanking entries={ranking} charById={charById} nameFor={resolver.displayNameForId} />
           </section>
