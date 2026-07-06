@@ -16,8 +16,8 @@ export default defineConfig({
     VitePWA({
       registerType: "autoUpdate",
       manifest: {
-        name: "Personal Smash Lab",
-        short_name: "Smash Lab",
+        name: "Smash DB",
+        short_name: "Smash DB",
         description: "スマブラSP上達用の個人ツール（フレームデータ・確定反撃・キャラ対メモ）",
         theme_color: "#0a0a0a",
         background_color: "#0a0a0a",

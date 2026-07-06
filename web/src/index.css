@@ -70,3 +70,27 @@ body {
   font-variant-numeric: tabular-nums;
   font-family: "JetBrains Mono", ui-monospace, "SF Mono", "Menlo", "Consolas", monospace;
 }
+
+/*
+ * モバイル可読性の底上げ（〜640px）。ラベル多用の最小サイズ帯（10/11px）と text-xs を一段拡大する。
+ * unlayered ルールなので @tailwind utilities（layered）に優先し、該当クラスをまとめて上書きできる。
+ * デスクトップ（sm以上）は既存の詰まったサイズのまま。
+ */
+@media (max-width: 640px) {
+  .text-\[10px\] { font-size: 12px; }
+  .text-\[11px\] { font-size: 12px; }
+  .text-xs { font-size: 0.8125rem; line-height: 1.1rem; } /* 12→13px */
+  .text-sm { font-size: 0.9375rem; line-height: 1.375rem; } /* 14→15px */
+}
+
+/*
+ * モバイル(=sm未満)での最小フォントサイズ底上げ（可読性）。
+ * ラベル/補助テキストに多用する極小サイズ(text-[10px]/[11px]/xs/sm)を一段引き上げる。
+ * @tailwind utilities はレイヤー内のため、未レイヤーのこのブロックが確実に上書きする（デスクトップは不変）。
+ */
+@media (max-width: 639px) {
+  .text-\[10px\] { font-size: 11.5px; }
+  .text-\[11px\] { font-size: 12px; }
+  .text-xs { font-size: 0.8125rem; }   /* 12→13px */
+  .text-sm { font-size: 0.9375rem; }   /* 14→15px */
+}
