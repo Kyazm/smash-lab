@@ -113,26 +113,37 @@ export function rankByCharacter(results: MatchResult[]): CharacterRankEntry[] {
   });
 }
 
-/** 勝率カードの範囲絞り込み（全体 / 直近n戦 / 直近days日）。 */
-export type MatchRange = { kind: "all" } | { kind: "games"; n: number } | { kind: "days"; days: number };
+/** 勝率カードの範囲絞り込み（全体 / 直近n戦 / 直近hours時間 / 直近days日）。 */
+export type MatchRange =
+  | { kind: "all" }
+  | { kind: "games"; n: number }
+  | { kind: "hours"; hours: number }
+  | { kind: "days"; days: number };
 
 export const MATCH_RANGE_PRESETS: { range: MatchRange; label: string }[] = [
   { range: { kind: "all" }, label: "全体" },
+  { range: { kind: "games", n: 10 }, label: "直近10戦" },
   { range: { kind: "games", n: 20 }, label: "直近20戦" },
   { range: { kind: "games", n: 50 }, label: "直近50戦" },
+  { range: { kind: "hours", hours: 1 }, label: "1時間" },
+  { range: { kind: "days", days: 1 }, label: "1日" },
   { range: { kind: "days", days: 7 }, label: "7日間" },
   { range: { kind: "days", days: 30 }, label: "30日間" },
 ];
 
 export function matchRangeKey(r: MatchRange): string {
-  return r.kind === "all" ? "all" : r.kind === "games" ? `g${r.n}` : `d${r.days}`;
+  if (r.kind === "all") return "all";
+  if (r.kind === "games") return `g${r.n}`;
+  if (r.kind === "hours") return `h${r.hours}`;
+  return `d${r.days}`;
 }
 
-/** createdAt昇順の配列を範囲で絞る（順序は保持）。daysはepoch比較（ISO表記揺れ対策）。 */
+/** createdAt昇順の配列を範囲で絞る（順序は保持）。時間系はepoch比較（ISO表記揺れ対策）。 */
 export function filterByRange(resultsAsc: MatchResult[], range: MatchRange, now: Date = new Date()): MatchResult[] {
   if (range.kind === "all") return resultsAsc;
   if (range.kind === "games") return resultsAsc.slice(Math.max(0, resultsAsc.length - range.n));
-  const cutoff = now.getTime() - range.days * 86_400_000;
+  const windowMs = range.kind === "hours" ? range.hours * 3_600_000 : range.days * 86_400_000;
+  const cutoff = now.getTime() - windowMs;
   return resultsAsc.filter((r) => Date.parse(r.createdAt) >= cutoff);
 }
 

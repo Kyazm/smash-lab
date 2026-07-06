@@ -166,6 +166,21 @@ describe("filterByRange", () => {
     expect(out.map((r) => r.id)).toEqual(["id-7-lose", "id-2-win"]);
   });
 
+  it("hours は時間窓で絞る（1時間）", () => {
+    const mkMin = (minAgo: number, result: MatchOutcome): MatchResult => ({
+      id: `idm-${minAgo}`,
+      characterId: "c1",
+      mode: "vip",
+      result,
+      createdAt: new Date(NOW.getTime() - minAgo * 60_000).toISOString(),
+    });
+    const rs = [mkMin(90, "win"), mkMin(59, "lose"), mkMin(5, "win")];
+    expect(filterByRange(rs, { kind: "hours", hours: 1 }, NOW).map((r) => r.id)).toEqual([
+      "idm-59",
+      "idm-5",
+    ]);
+  });
+
   it("空配列は空", () => {
     expect(filterByRange([], { kind: "days", days: 7 }, NOW)).toEqual([]);
   });
