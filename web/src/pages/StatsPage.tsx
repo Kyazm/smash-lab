@@ -10,8 +10,10 @@ import {
   bestWorstMatchups,
   computeStreaks,
   computeSummary,
+  filterByRange,
   groupByMode,
   rankByCharacter,
+  type MatchRange,
 } from "../lib/matchStats";
 import { makeGroupResolver } from "../lib/characterGroups";
 import { MatchTimeline } from "../components/match/MatchTimeline";
@@ -21,6 +23,7 @@ import {
   CharacterRanking,
   CumulativeWinRateChart,
   ModeSummary,
+  RangePicker,
   RecentForm,
   StreakBadges,
   TopMatchups,
@@ -34,6 +37,7 @@ export function StatsPage() {
   const [results, setResults] = useState<MatchResult[] | null>(null);
   const [charById, setCharById] = useState<Map<string, Character>>(new Map());
   const [filter, setFilter] = useState<Filter>("all");
+  const [range, setRange] = useState<MatchRange>({ kind: "all" });
   const [refresh, setRefresh] = useState(0);
 
   useEffect(() => {
@@ -79,8 +83,10 @@ export function StatsPage() {
   );
   const byMode = useMemo(() => groupByMode(all), [all]);
   const filtered = filter === "all" ? all : byMode[filter];
-  const summary = computeSummary(filtered);
-  const streaks = computeStreaks(filtered);
+  // 勝率カードだけ範囲絞り込み（全体/直近N戦/N日間）を適用する。ランキング・履歴はモードフィルタのまま。
+  const rangeResults = useMemo(() => filterByRange(filtered, range), [filtered, range]);
+  const summary = computeSummary(rangeResults);
+  const streaks = computeStreaks(rangeResults);
   const ranking = useMemo(() => rankByCharacter(filtered), [filtered]);
   const { best, worst } = useMemo(() => bestWorstMatchups(ranking), [ranking]);
 
@@ -128,15 +134,18 @@ export function StatsPage() {
         // カードは適切幅で2カラムに並べ、余白を埋める。履歴のみ横幅がある方が見やすいので全幅。
         <div className="mt-4 grid items-start gap-4 md:grid-cols-2">
           <section className="rounded-xl border border-border-subtle bg-surface-1 p-4">
-            <p className="mb-3 font-frame text-[10px] uppercase tracking-[0.18em] text-ink-muted">
-              {filter === "all" ? "全体" : MATCH_MODE_LABELS[filter]}（{summary.total}試合）
-            </p>
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+              <p className="font-frame text-[10px] uppercase tracking-[0.18em] text-ink-muted">
+                {filter === "all" ? "全体" : MATCH_MODE_LABELS[filter]}（{summary.total}試合）
+              </p>
+              <RangePicker value={range} onChange={setRange} />
+            </div>
             <div className="mb-4">
               <WinRateBar wins={summary.wins} losses={summary.losses} />
             </div>
             <StreakBadges current={streaks.current} maxWin={streaks.maxWin} maxLose={streaks.maxLose} />
             <div className="mt-4">
-              <CumulativeWinRateChart results={filtered} nameFor={resolver.displayNameForId} />
+              <CumulativeWinRateChart results={rangeResults} nameFor={resolver.displayNameForId} />
             </div>
           </section>
 

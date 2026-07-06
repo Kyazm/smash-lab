@@ -7,8 +7,14 @@ import type { MatchResult } from "../../data/match/types";
 import { MATCH_MODE_LABELS } from "../../data/match/types";
 import { useMatchMode } from "../../lib/matchModeContext";
 import { makeGroupResolver } from "../../lib/characterGroups";
-import { computeStreaks, computeSummary, groupByMode } from "../../lib/matchStats";
-import { CumulativeWinRateChart, ModeSummary, StreakBadges, WinRateBar } from "./charts";
+import {
+  computeStreaks,
+  computeSummary,
+  filterByRange,
+  groupByMode,
+  type MatchRange,
+} from "../../lib/matchStats";
+import { CumulativeWinRateChart, ModeSummary, RangePicker, StreakBadges, WinRateBar } from "./charts";
 import { VipRankCalculator } from "./VipRankCalculator";
 import type { Character } from "../../types";
 
@@ -16,6 +22,7 @@ export function MatchDigest({ refreshKey }: { refreshKey: number }) {
   const { mode } = useMatchMode();
   const [results, setResults] = useState<MatchResult[] | null>(null);
   const [charById, setCharById] = useState<Map<string, Character>>(new Map());
+  const [range, setRange] = useState<MatchRange>({ kind: "all" });
 
   useEffect(() => {
     let cancelled = false;
@@ -51,7 +58,8 @@ export function MatchDigest({ refreshKey }: { refreshKey: number }) {
   const resolver = useMemo(() => makeGroupResolver([...charById.values()]), [charById]);
   const all = results ?? [];
   const byMode = groupByMode(all);
-  const modeResults = byMode[mode];
+  // 範囲絞り込み（全体/直近N戦/N日間）は選択モードのサマリ+グラフに適用。モード別サマリは全体のまま。
+  const modeResults = useMemo(() => filterByRange(byMode[mode], range), [byMode, mode, range]);
   const summary = computeSummary(modeResults);
   const streaks = computeStreaks(modeResults);
 
@@ -66,9 +74,12 @@ export function MatchDigest({ refreshKey }: { refreshKey: number }) {
 
       {/* 選択モード（記録先と連動）のサマリ（左） */}
       <section className="rounded-xl border border-border-subtle bg-surface-1 p-4">
-        <p className="mb-3 font-frame text-[10px] uppercase tracking-[0.18em] text-ink-muted">
-          {MATCH_MODE_LABELS[mode]}（{summary.total}試合）
-        </p>
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+          <p className="font-frame text-[10px] uppercase tracking-[0.18em] text-ink-muted">
+            {MATCH_MODE_LABELS[mode]}（{summary.total}試合）
+          </p>
+          <RangePicker value={range} onChange={setRange} />
+        </div>
         <WinRateBar wins={summary.wins} losses={summary.losses} />
         <div className="mt-3">
           <StreakBadges current={streaks.current} maxWin={streaks.maxWin} maxLose={streaks.maxLose} />

@@ -4,7 +4,14 @@
 import { useState } from "react";
 import type { MatchMode, MatchResult } from "../../data/match/types";
 import { MATCH_MODES, MATCH_MODE_LABELS } from "../../data/match/types";
-import { computeSummary, recentForm, type CharacterRankEntry } from "../../lib/matchStats";
+import {
+  computeSummary,
+  matchRangeKey,
+  recentForm,
+  MATCH_RANGE_PRESETS,
+  type CharacterRankEntry,
+  type MatchRange,
+} from "../../lib/matchStats";
 import { CharacterIcon } from "../shared/CharacterIcon";
 import type { Character } from "../../types";
 
@@ -14,6 +21,28 @@ function pct(rate: number): string {
 
 function hhmm(iso: string): string {
   return new Date(iso).toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit" });
+}
+
+/** 勝率カードの範囲絞り込み（全体/直近N戦/N日間）。小さめのセグメントコントロール。 */
+export function RangePicker({ value, onChange }: { value: MatchRange; onChange: (r: MatchRange) => void }) {
+  return (
+    <div className="inline-flex flex-wrap rounded-md border border-border-subtle bg-surface-2/50 p-0.5">
+      {MATCH_RANGE_PRESETS.map(({ range, label }) => (
+        <button
+          key={matchRangeKey(range)}
+          type="button"
+          onClick={() => onChange(range)}
+          className={`min-h-8 rounded px-2 text-[11px] font-medium transition-colors ${
+            matchRangeKey(range) === matchRangeKey(value)
+              ? "bg-action text-white"
+              : "text-ink-secondary hover:text-ink-primary"
+          }`}
+        >
+          {label}
+        </button>
+      ))}
+    </div>
+  );
 }
 
 /** 勝率の横バー。wins=赤、losses=中立トラック。右に W-L と勝率%。 */

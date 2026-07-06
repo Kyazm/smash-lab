@@ -4,6 +4,7 @@ import {
   bestWorstMatchups,
   computeStreaks,
   computeSummary,
+  filterByRange,
   groupByMode,
   rankByCharacter,
   recentForm,
@@ -131,5 +132,41 @@ describe("bestWorstMatchups", () => {
     // best と worst は重複しない
     const overlap = best.filter((b) => worst.some((wm) => wm.characterId === b.characterId));
     expect(overlap).toEqual([]);
+  });
+});
+
+describe("filterByRange", () => {
+  const NOW = new Date("2026-07-06T12:00:00Z");
+  const mk = (daysAgo: number, result: MatchOutcome): MatchResult => ({
+    id: `id-${daysAgo}-${result}`,
+    characterId: "c1",
+    mode: "vip",
+    result,
+    createdAt: new Date(NOW.getTime() - daysAgo * 86_400_000).toISOString(),
+  });
+
+  it("all はそのまま返す", () => {
+    const rs = [mk(3, "win"), mk(1, "lose")];
+    expect(filterByRange(rs, { kind: "all" }, NOW)).toEqual(rs);
+  });
+
+  it("games は末尾n件（直近）を順序保持で返す", () => {
+    const rs = [mk(5, "win"), mk(3, "lose"), mk(1, "win")];
+    expect(filterByRange(rs, { kind: "games", n: 2 }, NOW).map((r) => r.id)).toEqual([
+      "id-3-lose",
+      "id-1-win",
+    ]);
+    // n が総数超過でも全件
+    expect(filterByRange(rs, { kind: "games", n: 99 }, NOW)).toHaveLength(3);
+  });
+
+  it("days は窓内のみ（境界ちょうどは含む）", () => {
+    const rs = [mk(10, "win"), mk(7, "lose"), mk(2, "win")];
+    const out = filterByRange(rs, { kind: "days", days: 7 }, NOW);
+    expect(out.map((r) => r.id)).toEqual(["id-7-lose", "id-2-win"]);
+  });
+
+  it("空配列は空", () => {
+    expect(filterByRange([], { kind: "days", days: 7 }, NOW)).toEqual([]);
   });
 });
