@@ -117,7 +117,8 @@ export function CharacterPage() {
 
   const isMain = bundle != null && mainCharacterId != null && bundle.character.id === mainCharacterId;
   const tabParam = searchParams.get("tab");
-  const tab: Tab = isValidTab(tabParam, isMain) ? tabParam : "frames";
+  // 既定タブはキャラ対メモ（対策を最初に見たい）。?tab= 指定時はそれを優先。
+  const tab: Tab = isValidTab(tabParam, isMain) ? tabParam : "notes";
 
   const tabs = useMemo(
     () => (isMain ? [...COMMON_TABS, ...MAIN_ONLY_TABS] : COMMON_TABS),
