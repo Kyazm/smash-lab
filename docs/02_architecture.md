@@ -51,7 +51,9 @@ notes           id, kind(own_play|own_move|matchup|player),
                 -- sectionはキャラ対テンプレートの分類(任意)。pinned=trueはキャラ対ページ冒頭に固定表示
 note_media      id, note_id, type(image|youtube|local_video),
                 storage_path|url, caption
-sessions        id, date, goal, retro_md   -- 練習セッション(目的設定→振り返り)
+sessions        id, date, goal, retro_md, user_id, started_at, ended_at
+                -- 練習セッション(目的設定→振り返り、ADR-0018)。戦績との紐づけは時間窓
+                -- (match_results.created_at ∈ [started_at, ended_at))。activeはユーザーごと最大1(部分ユニーク)
                 -- goalはプロセス目標を促す(結果目標の言い換えナッジ)。振り返り必須質問・ティルト休憩提案・
                 -- 分散練習の可視化などの組込仕様は docs/05_practice-science.md の表に従う
 matches         id, session_id(nullable), played_at, opponent_character_id, result(win|lose),
@@ -64,7 +66,7 @@ ai_reviews      id, match_id, model, status(pending|done|error),
                 focus_evaluations jsonb,  -- [{focus_point_id, verdict, evidence}]
                 created_at
                 -- findingsは「候補」。承認/棄却をUIで操作し、癖統計はrejected除外で集計(MLLM精度は人間未満: docs/04 #9)
-focus_points    id, body, category(technical|mental), active, created_at
+focus_points    id, body, category(technical|mental), active, created_at, user_id  -- ADR-0018でuser分離
                 -- 「意識すること」リスト。アクティブは1〜3個に制限(1スキル集中→実戦転移: docs/04 #10)
                 -- mentalカテゴリは技術と同格に扱う(感情制御は第3の専門技能: docs/05 #8)
                 -- 達成度はfocus_evaluationsを時系列集計して推移グラフ表示
@@ -82,7 +84,7 @@ match_results   id, user_id, character_id(対戦相手キャラ), mode(vip|smama
 
 - RLS/**Auth+RLSが唯一の防御線**（anonキーは公開前提）。防御モデルは2系統に分かれる:
   - **単一オーナー系**（notes/note_media/note_proposals ほか自分の考察）: `is_writer()`（オーナーuid固定）で書込を限定。notes系はSELECTもオーナー限定（ゲストに実データを見せない、ADR-0014 / migration 0006・0007）。characters/moves/oos_options 等の静的リファレンスはSELECTを全authenticatedに開放（ゲストもフレームデータは読める）
-  - **行単位アカウント分離**（match_results、ADR-0015 / migration 0008）: `user_id = auth.uid()` で各実アカウントが自分の行だけを read/write。共有ゲストは `is_guest()` でDBレベルの書込排除（サンドボックスはローカル完結）。将来のサインアップ開放にそのまま対応
+  - **行単位アカウント分離**（match_results=ADR-0015 / sessions・focus_points=ADR-0018）: `user_id = auth.uid()` で各実アカウントが自分の行だけを read/write。共有ゲストは `is_guest()` でDBレベルの書込排除（サンドボックスはローカル完結）。将来のサインアップ開放にそのまま対応
   - サインアップは無効化中。owner列は持たず、上記述語（is_writer/is_guest/auth.uid）で制御する
 - intel→notesの昇格はDB関数 `adopt_intel(intel_id, mode, target_note_id)`（SECURITY DEFINER、転記とstatus更新を1トランザクションで実行）経由のみ。これが分離原則のDB側の入口を一本化する
 - パイプラインはservice roleキー（Macローカルの`.env`にのみ保管）で書込。service roleはRLSをバイパスするため、パイプラインコードは `notes` への書込を実装しない（ADR-0004。コードレビュー時のチェック項目）

@@ -14,6 +14,7 @@ import { CharacterIcon } from "../components/shared/CharacterIcon";
 import { ModeSelector } from "../components/match/ModeSelector";
 import { WinLoseControl } from "../components/match/WinLoseControl";
 import { MatchDigest } from "../components/match/MatchDigest";
+import { PracticeCard } from "../components/practice/PracticeCard";
 import { groupForSlug, isMiiSlug, makeGroupResolver, type CharacterGroup } from "../lib/characterGroups";
 import type { Character } from "../types";
 
@@ -42,6 +43,28 @@ export function CharacterListPage() {
   // 現モードの対戦相手キャラ別戦績（ADR-0015）。勝敗記録・undo後に再取得する。
   const [recordsByChar, setRecordsByChar] = useState<Map<string, CharRecord>>(new Map());
   const [recordRefresh, setRecordRefresh] = useState(0);
+  // キャラ対メモが存在する対戦相手（代表idに正規化済み）。「負け越し×メモなし」の注意ドット用（ADR-0018）。
+  const [notedCharIds, setNotedCharIds] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    if (!characters) return;
+    let cancelled = false;
+    const { normalizeId } = makeGroupResolver(characters);
+    notesProvider
+      .listNotes({ kind: "matchup" })
+      .then((notes) => {
+        if (cancelled) return;
+        const ids = new Set<string>();
+        for (const n of notes) {
+          if (n.character_id) ids.add(normalizeId(n.character_id));
+        }
+        setNotedCharIds(ids);
+      })
+      .catch(() => {}); // 補助表示。失敗しても致命的でない
+    return () => {
+      cancelled = true;
+    };
+  }, [characters, recordRefresh]);
 
   useEffect(() => {
     if (!characters) return;
@@ -210,6 +233,9 @@ export function CharacterListPage() {
         <ModeSelector />
       </div>
 
+      {/* 今日の練習（意識ポイント・セッション・ティルト検知）。ADR-0018。 */}
+      <PracticeCard refreshKey={recordRefresh} />
+
       {/* 戦績ダイジェスト（選択モードのサマリ＋モード別サマリ＋VIPランク）。上のモードに連動。折りたたみ可・既定は展開。 */}
       <details open className="mt-3 max-w-4xl rounded-xl border border-border-subtle bg-surface-0">
         <summary className="min-h-11 cursor-pointer list-none px-4 py-2.5 font-frame text-[10px] uppercase tracking-[0.18em] text-ink-secondary [&::-webkit-details-marker]:hidden">
@@ -234,6 +260,8 @@ export function CharacterListPage() {
               const c = e.character;
               // ポケトレ/ホムヒカは代表id（=グループ集約先）に勝敗を記録する。
               const rec = recordsByChar.get(c.id) ?? { wins: 0, losses: 0, current: 0 };
+              // 負け越しているのに対策メモが無い相手＝次の学習対象として注意ドット（ADR-0018）。
+              const needsNote = rec.losses > rec.wins && !notedCharIds.has(c.id);
               return (
                 // hover背景・タップ領域は行(li)全体に。Link(左)とWinLoseControl(右)のネスト不正を回避（ADR-0015）。
                 <li key={c.id} className="flex items-center gap-1 rounded pr-1 hover:bg-surface-2/50">
@@ -253,6 +281,14 @@ export function CharacterListPage() {
                         ★
                       </span>
                     ) : null}
+                    {needsNote ? (
+                      <span
+                        title="負け越し中・対策メモなし"
+                        className="shrink-0 rounded-full bg-warning px-1.5 text-[10px] font-bold text-surface-0"
+                      >
+                        !
+                      </span>
+                    ) : null}
                   </Link>
                   <WinLoseControl
                     characterId={c.id}
@@ -262,6 +298,7 @@ export function CharacterListPage() {
                     current={rec.current}
                     onChanged={() => setRecordRefresh((x) => x + 1)}
                     showRecord={false}
+                    noteHref={`/c/${c.slug}?tab=notes`}
                   />
                 </li>
               );

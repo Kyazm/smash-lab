@@ -1,8 +1,13 @@
 // 勝敗ワンタップ記録（ADR-0015）。一覧の各行と戦績タブで共用。
 // タップ→addResult→onChanged で親が再取得。直後数秒は「取消」を出し deleteResult で undo（行内完結・グローバルtoast不要）。
+// ADR-0018: 負け記録直後は「メモ→」リンク（キャラ対メモ）を併置し、負けを学習に繋げる。負け時はundo窓を長めにする。
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { matchProvider } from "../../data/match";
 import type { MatchMode, MatchOutcome } from "../../data/match/types";
+
+const UNDO_MS_WIN = 5000;
+const UNDO_MS_LOSE = 9000; // 負け→メモの導線を踏む余裕を持たせる
 
 export function WinLoseControl({
   characterId,
@@ -12,6 +17,7 @@ export function WinLoseControl({
   current,
   onChanged,
   showRecord = true,
+  noteHref,
 }: {
   characterId: string;
   mode: MatchMode;
@@ -20,9 +26,11 @@ export function WinLoseControl({
   current: number;
   onChanged: () => void;
   showRecord?: boolean;
+  /** 負け記録直後に出すキャラ対メモへのリンク先（例: /c/mario?tab=notes）。省略時はリンク非表示。 */
+  noteHref?: string;
 }) {
   const [busy, setBusy] = useState(false);
-  const [lastId, setLastId] = useState<string | null>(null);
+  const [last, setLast] = useState<{ id: string; result: MatchOutcome } | null>(null);
   const timer = useRef<number | null>(null);
 
   useEffect(() => {
@@ -34,7 +42,7 @@ export function WinLoseControl({
   // mode / 対戦相手が変わったら未確定のundo（取消）を破棄する。
   // 例: VIPで勝ちを記録→取消表示中にスマメイトへ切替、のとき取消を残すと別モードの記録を誤って消してしまう。
   useEffect(() => {
-    setLastId(null);
+    setLast(null);
     if (timer.current) {
       window.clearTimeout(timer.current);
       timer.current = null;
@@ -46,9 +54,9 @@ export function WinLoseControl({
     setBusy(true);
     try {
       const rec = await matchProvider.addResult({ characterId, mode, result });
-      setLastId(rec.id);
+      setLast({ id: rec.id, result });
       if (timer.current) window.clearTimeout(timer.current);
-      timer.current = window.setTimeout(() => setLastId(null), 5000);
+      timer.current = window.setTimeout(() => setLast(null), result === "lose" ? UNDO_MS_LOSE : UNDO_MS_WIN);
       onChanged();
     } catch (e) {
       console.error("[WinLoseControl] addResult 失敗", e);
@@ -58,11 +66,11 @@ export function WinLoseControl({
   };
 
   const undo = async () => {
-    if (!lastId || busy) return;
+    if (!last || busy) return;
     setBusy(true);
     try {
-      await matchProvider.deleteResult(lastId);
-      setLastId(null);
+      await matchProvider.deleteResult(last.id);
+      setLast(null);
       if (timer.current) window.clearTimeout(timer.current);
       onChanged();
     } catch (e) {
@@ -80,15 +88,25 @@ export function WinLoseControl({
           {current !== 0 ? (current > 0 ? ` 🔥${current}` : ` ❄${-current}`) : ""}
         </span>
       ) : null}
-      {lastId ? (
-        <button
-          type="button"
-          onClick={undo}
-          disabled={busy}
-          className="min-h-11 rounded-md border border-border-subtle px-2 text-xs text-ink-muted hover:text-ink-primary disabled:opacity-50"
-        >
-          取消
-        </button>
+      {last ? (
+        <>
+          {last.result === "lose" && noteHref ? (
+            <Link
+              to={noteHref}
+              className="min-h-11 rounded-md border border-warning/40 bg-warning/10 px-2 py-2.5 text-xs font-medium text-warning hover:bg-warning/20"
+            >
+              メモ→
+            </Link>
+          ) : null}
+          <button
+            type="button"
+            onClick={undo}
+            disabled={busy}
+            className="min-h-11 rounded-md border border-border-subtle px-2 text-xs text-ink-muted hover:text-ink-primary disabled:opacity-50"
+          >
+            取消
+          </button>
+        </>
       ) : (
         <>
           <button
