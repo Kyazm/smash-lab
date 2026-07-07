@@ -65,8 +65,8 @@ export function StatsPage() {
   }, [refresh]);
 
   // 対戦履歴からの誤記録削除（undoを逃した記録の訂正）。
+  // 確認はMatchTimelineのインライン2段階（削除/やめる）に委ねる（window.confirmはモバイルPWAで抑制され得るため使わない）。
   const onDeleteResult = async (id: string) => {
-    if (!window.confirm("この対戦記録を削除しますか？")) return;
     try {
       await matchProvider.deleteResult(id);
       setRefresh((x) => x + 1);

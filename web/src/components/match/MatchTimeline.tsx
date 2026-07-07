@@ -32,6 +32,8 @@ export function MatchTimeline({
   onDelete?: (id: string) => void;
 }) {
   const [limit, setLimit] = useState(PAGE_SIZE);
+  // 削除の確認はインライン2段階（× → 削除/やめる）。window.confirm はモバイルPWAで抑制され効かないことがあるため使わない。
+  const [confirmId, setConfirmId] = useState<string | null>(null);
   if (results.length === 0) {
     return <p className="py-6 text-center text-sm text-ink-muted">まだ対戦記録がありません。</p>;
   }
@@ -78,14 +80,36 @@ export function MatchTimeline({
                     {MATCH_MODE_LABELS[r.mode]}
                   </span>
                   {onDelete ? (
-                    <button
-                      type="button"
-                      onClick={() => onDelete(r.id)}
-                      aria-label="この記録を削除"
-                      className="shrink-0 rounded px-1.5 text-ink-muted hover:text-action-strong"
-                    >
-                      ×
-                    </button>
+                    confirmId === r.id ? (
+                      <span className="flex shrink-0 items-center gap-1">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            onDelete(r.id);
+                            setConfirmId(null);
+                          }}
+                          className="min-h-8 rounded bg-action px-2 text-xs font-bold text-white hover:bg-action-strong"
+                        >
+                          削除
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setConfirmId(null)}
+                          className="min-h-8 rounded px-1.5 text-xs text-ink-muted hover:text-ink-primary"
+                        >
+                          やめる
+                        </button>
+                      </span>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setConfirmId(r.id)}
+                        aria-label="この記録を削除"
+                        className="min-h-8 min-w-8 shrink-0 rounded px-2 text-base text-ink-muted hover:text-action-strong"
+                      >
+                        ×
+                      </button>
+                    )
                   ) : null}
                 </li>
               );

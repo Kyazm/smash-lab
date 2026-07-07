@@ -245,31 +245,48 @@ export function CharacterRanking({
   nameFor?: (id: string) => string;
 }) {
   const [sort, setSort] = useState<RankSort>("winRate");
+  // 降順(desc)を既定。キャラ順は「番号が小さい順」を昇順とする。
+  const [dir, setDir] = useState<"asc" | "desc">("desc");
   if (entries.length === 0) {
     return <p className="py-6 text-center text-sm text-ink-muted">まだ記録がありません。</p>;
   }
   const sorted = [...entries].sort((a, b) => {
+    let cmp: number;
     if (sort === "character") {
-      return (charById.get(a.characterId)?.fighter_number ?? 9999) - (charById.get(b.characterId)?.fighter_number ?? 9999);
+      cmp = (charById.get(a.characterId)?.fighter_number ?? 9999) - (charById.get(b.characterId)?.fighter_number ?? 9999);
+    } else if (sort === "total") {
+      cmp = b.total - a.total || b.winRate - a.winRate;
+    } else {
+      cmp = b.winRate - a.winRate || b.total - a.total;
     }
-    if (sort === "total") return b.total - a.total || b.winRate - a.winRate;
-    return b.winRate - a.winRate || b.total - a.total;
+    // 各ソートの基準比較は「降順」を正とし、昇順選択時に反転する。
+    return dir === "asc" ? -cmp : cmp;
   });
   return (
     <div>
-      <div className="mb-3 inline-flex rounded-md border border-border-subtle bg-surface-1 p-0.5">
-        {RANK_SORTS.map((s) => (
-          <button
-            key={s.key}
-            type="button"
-            onClick={() => setSort(s.key)}
-            className={`min-h-9 rounded px-3 text-xs font-medium transition-colors ${
-              sort === s.key ? "bg-action text-white" : "text-ink-secondary hover:text-ink-primary"
-            }`}
-          >
-            {s.label}
-          </button>
-        ))}
+      <div className="mb-3 flex flex-wrap items-center gap-2">
+        <div className="inline-flex rounded-md border border-border-subtle bg-surface-1 p-0.5">
+          {RANK_SORTS.map((s) => (
+            <button
+              key={s.key}
+              type="button"
+              onClick={() => setSort(s.key)}
+              className={`min-h-9 rounded px-3 text-xs font-medium transition-colors ${
+                sort === s.key ? "bg-action text-white" : "text-ink-secondary hover:text-ink-primary"
+              }`}
+            >
+              {s.label}
+            </button>
+          ))}
+        </div>
+        <button
+          type="button"
+          onClick={() => setDir((d) => (d === "desc" ? "asc" : "desc"))}
+          aria-label={dir === "desc" ? "降順（大きい順）" : "昇順（小さい順）"}
+          className="inline-flex min-h-9 items-center rounded-md border border-border-subtle bg-surface-1 px-3 text-xs font-medium text-ink-secondary hover:text-ink-primary"
+        >
+          {dir === "desc" ? "↓ 降順" : "↑ 昇順"}
+        </button>
       </div>
       {/* キャラ一覧と同じ列流しグリッド（12行固定、あふれは横スクロール）。 */}
       <div className="overflow-x-auto pb-2">
