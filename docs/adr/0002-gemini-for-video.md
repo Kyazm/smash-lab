@@ -1,6 +1,6 @@
 # ADR-0002: 動画解析エンジンはGemini API
 
-Status: Accepted (2026-07-03)
+Status: Accepted (2026-07-03) — ADR-0019に全面supersede（2026-07-09）
 
 ## Context
 Claude APIはビデオ入力非対応。フレーム抽出して画像列で渡す方式は5分の試合で数十万トークン（数百円/試合）かかり、コマ間の動き情報も失われる。Gemini APIは動画をネイティブ入力でき（約263トークン/秒）、Flash系なら数円〜十数円/試合。
