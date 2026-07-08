@@ -30,6 +30,45 @@ export function parseTimeParam(raw: string | null | undefined): number | null {
   return null;
 }
 
+/**
+ * mm:ss / h:mm:ss / 純数値秒 / XhYmZs 形式を秒に変換する（YouTube UIのコピー時刻表記を吸収）。
+ * コロン区切り以外は parseTimeParam に委譲する。パース不能・範囲外（分/秒が60以上等）は null。
+ * docs/13_match-review.md ②画面仕様: /review フォームのタイムスタンプ入力で使用する。
+ */
+export function parseFlexibleTime(input: string | null | undefined): number | null {
+  if (input == null) return null;
+  const s = input.trim();
+  if (s === "") return null;
+  if (s.includes(":")) {
+    const parts = s.split(":");
+    if (parts.length < 2 || parts.length > 3 || !parts.every((p) => /^\d+$/.test(p))) return null;
+    const nums = parts.map((p) => parseInt(p, 10));
+    if (parts.length === 3) {
+      const [h, m, sec] = nums;
+      if (m >= 60 || sec >= 60) return null;
+      return h * 3600 + m * 60 + sec;
+    }
+    const [m, sec] = nums;
+    if (sec >= 60) return null;
+    return m * 60 + sec;
+  }
+  return parseTimeParam(s);
+}
+
+/**
+ * 秒数を mm:ss（1時間未満）/ h:mm:ss（1時間以上）表示用文字列に整形する。
+ * docs/13_match-review.md ②画面仕様: findingカードのt_sec表示・タイムスタンプチップ表示で使用する。
+ */
+export function formatTimeDisplay(totalSeconds: number): string {
+  const s = Math.max(0, Math.floor(totalSeconds));
+  const h = Math.floor(s / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  const sec = s % 60;
+  const ss = String(sec).padStart(2, "0");
+  if (h > 0) return `${h}:${String(m).padStart(2, "0")}:${ss}`;
+  return `${m}:${ss}`;
+}
+
 const VIDEO_ID_RE = /^[a-zA-Z0-9_-]{11}$/;
 
 /**

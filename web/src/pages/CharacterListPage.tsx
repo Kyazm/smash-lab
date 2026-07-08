@@ -203,6 +203,15 @@ export function CharacterListPage() {
               ) : null}
             </Link>
           ) : null}
+          {/* AIレビューもオーナー個人のレビューキュー（Macパイプライン依存・ADR-0019）。ゲストには出さない。 */}
+          {!isGuest ? (
+            <Link
+              to="/review"
+              className="flex min-h-11 items-center rounded bg-surface-2 px-3 py-1.5 font-medium text-ink-secondary hover:text-ink-primary"
+            >
+              AIレビュー
+            </Link>
+          ) : null}
           {/* 戦績ダッシュボードはゲストにも表示（自分のローカル戦績を試せる。個人情報漏洩はない）。 */}
           <Link
             to="/stats"

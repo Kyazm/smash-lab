@@ -1,5 +1,12 @@
 import { describe, it, expect } from "vitest";
-import { parseYouTube, parseTimeParam, toEmbedUrl, youtubeInputToEmbedUrl } from "./youtube";
+import {
+  parseYouTube,
+  parseTimeParam,
+  parseFlexibleTime,
+  toEmbedUrl,
+  youtubeInputToEmbedUrl,
+  formatTimeDisplay,
+} from "./youtube";
 
 describe("parseTimeParam", () => {
   it("数値のみは秒として解釈", () => {
@@ -71,6 +78,49 @@ describe("parseYouTube", () => {
 
   it("v= が11文字でない場合は null", () => {
     expect(parseYouTube("https://www.youtube.com/watch?v=short")).toBeNull();
+  });
+});
+
+describe("parseFlexibleTime", () => {
+  it("mm:ss 表記", () => {
+    expect(parseFlexibleTime("1:33")).toBe(93);
+  });
+  it("h:mm:ss 表記", () => {
+    expect(parseFlexibleTime("1:02:03")).toBe(3723);
+  });
+  it("純数値秒", () => {
+    expect(parseFlexibleTime("93")).toBe(93);
+  });
+  it("XhYmZs 表記は parseTimeParam に委譲", () => {
+    expect(parseFlexibleTime("1m33s")).toBe(93);
+  });
+  it("空文字は null", () => {
+    expect(parseFlexibleTime("")).toBeNull();
+  });
+  it("不正表記は null", () => {
+    expect(parseFlexibleTime("abc")).toBeNull();
+  });
+  it("コロンが3つ以上は null", () => {
+    expect(parseFlexibleTime("1:2:3:4")).toBeNull();
+  });
+  it("秒が60以上は null", () => {
+    expect(parseFlexibleTime("1:99")).toBeNull();
+  });
+  it("null/undefined は null", () => {
+    expect(parseFlexibleTime(null)).toBeNull();
+    expect(parseFlexibleTime(undefined)).toBeNull();
+  });
+});
+
+describe("formatTimeDisplay", () => {
+  it("1時間未満は mm:ss", () => {
+    expect(formatTimeDisplay(93)).toBe("1:33");
+  });
+  it("1時間以上は h:mm:ss", () => {
+    expect(formatTimeDisplay(3723)).toBe("1:02:03");
+  });
+  it("0秒は 0:00", () => {
+    expect(formatTimeDisplay(0)).toBe("0:00");
   });
 });
 
