@@ -1,0 +1,23 @@
+{
+  "name": "review-match",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "YouTube+タイムスタンプ → yt-dlp区間DL → ffmpegフレーム抽出 → Claude Codeが分析 → ai_reviews書込 の決定論CLI（prep/submit/fail、ADR-0019 / docs/13）。LLM呼び出しはこのパッケージに含まれない。",
+  "scripts": {
+    "prep": "tsx src/prepare.ts",
+    "dry-run": "tsx src/prepare.ts --dry-run",
+    "submit": "tsx src/submit.ts",
+    "fail": "tsx src/fail.ts",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "tsx": "^4.19.2"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.0",
+    "typescript": "^6.0.3",
+    "vitest": "^3.0.5"
+  }
+}
