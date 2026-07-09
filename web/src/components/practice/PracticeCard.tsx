@@ -83,7 +83,8 @@ export function PracticeCard({ refreshKey }: { refreshKey: number }) {
       {tilt ? (
         <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-action/40 bg-action/10 px-4 py-2.5 text-sm text-ink-primary">
           <span>
-            直近で3連敗しています。<strong>一旦離れて別のことを</strong>——実証されているティルト対策は距離置きだけです（
+            直近で3連敗しています。<strong>一旦離れて別のことを</strong>
+            ——ティルト（連敗などで感情的になり判断が乱れた状態）に効くと実証されている対策は距離置きだけです（
             <Link to="/library/mental-game" className="text-action-strong underline decoration-action/40">
               対戦メンタルの科学
             </Link>
