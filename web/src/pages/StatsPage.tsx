@@ -188,6 +188,7 @@ export function StatsPage() {
               charById={charById}
               nameFor={resolver.displayNameForId}
               onDelete={onDeleteResult}
+              onChanged={() => setRefresh((x) => x + 1)}
             />
           </section>
         </div>

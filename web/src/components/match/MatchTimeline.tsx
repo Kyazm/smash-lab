@@ -1,9 +1,12 @@
 // 対戦履歴タイムライン（ADR-0015）。いつ・どのモードで・どの相手と当たって勝/負したかを時系列（新しい順）で表示。
-// 日付ごとに区切り、負けを赤で強調する。ポケトレ/ホムヒカは代表に正規化済みのため1キャラ名で出る。
+// 日付ごとに区切り、勝ちを赤(action)で強調する（キャラ一覧の記録ボタンと同じ配色に統一）。
+// ポケトレ/ホムヒカは代表に正規化済みのため1キャラ名で出る。
+// onChanged 指定時は各行に勝/負記録ボタン（WinLoseControl sm）を出し、その行と同キャラ・同モードで追記録できる。
 import { useState } from "react";
 import type { MatchResult } from "../../data/match/types";
 import { MATCH_MODE_LABELS } from "../../data/match/types";
 import { CharacterIcon } from "../shared/CharacterIcon";
+import { WinLoseControl } from "./WinLoseControl";
 import type { Character } from "../../types";
 
 const PAGE_SIZE = 10;
@@ -24,12 +27,15 @@ export function MatchTimeline({
   charById,
   nameFor,
   onDelete,
+  onChanged,
 }: {
   /** 表示対象（モードフィルタ後）。characterId はグループ代表に正規化済みでよい。 */
   results: MatchResult[];
   charById: Map<string, Character>;
   nameFor: (id: string) => string;
   onDelete?: (id: string) => void;
+  /** 指定時、各行に勝/負記録ボタンを表示（その行と同キャラ・同モードで追記録し、完了後に呼ぶ）。 */
+  onChanged?: () => void;
 }) {
   const [limit, setLimit] = useState(PAGE_SIZE);
   // 削除の確認はインライン2段階（× → 削除/やめる）。window.confirm はモバイルPWAで抑制され効かないことがあるため使わない。
@@ -67,7 +73,7 @@ export function MatchTimeline({
                   </span>
                   <span
                     className={`shrink-0 rounded px-1.5 py-0.5 text-[10px] font-bold ${
-                      lose ? "bg-action text-white" : "border border-border-subtle text-ink-secondary"
+                      lose ? "border border-border-subtle text-ink-secondary" : "bg-action text-white"
                     }`}
                   >
                     {lose ? "負" : "勝"}
@@ -76,9 +82,22 @@ export function MatchTimeline({
                   <span className="min-w-0 flex-1 truncate text-sm text-ink-primary">
                     {nameFor(r.characterId)}
                   </span>
-                  <span className="shrink-0 font-frame text-[10px] uppercase tracking-[0.1em] text-ink-muted">
+                  <span className="hidden shrink-0 font-frame text-[10px] uppercase tracking-[0.1em] text-ink-muted sm:inline">
                     {MATCH_MODE_LABELS[r.mode]}
                   </span>
+                  {onChanged ? (
+                    <WinLoseControl
+                      characterId={r.characterId}
+                      mode={r.mode}
+                      wins={0}
+                      losses={0}
+                      current={0}
+                      onChanged={onChanged}
+                      showRecord={false}
+                      noteHref={c ? `/c/${c.slug}?tab=notes` : undefined}
+                      size="sm"
+                    />
+                  ) : null}
                   {onDelete ? (
                     confirmId === r.id ? (
                       <span className="flex shrink-0 items-center gap-1">

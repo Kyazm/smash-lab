@@ -18,6 +18,7 @@ export function WinLoseControl({
   onChanged,
   showRecord = true,
   noteHref,
+  size = "md",
 }: {
   characterId: string;
   mode: MatchMode;
@@ -28,7 +29,11 @@ export function WinLoseControl({
   showRecord?: boolean;
   /** 負け記録直後に出すキャラ対メモへのリンク先（例: /c/mario?tab=notes）。省略時はリンク非表示。 */
   noteHref?: string;
+  /** sm=対戦履歴の行内などスペースが狭い場所向けのコンパクト表示。 */
+  size?: "md" | "sm";
 }) {
+  const btnSize = size === "sm" ? "min-h-8 min-w-8 px-2 text-xs" : "min-h-11 min-w-11 px-3 text-sm";
+  const subSize = size === "sm" ? "min-h-8 px-1.5 text-xs" : "min-h-11 px-2 text-xs";
   const [busy, setBusy] = useState(false);
   const [last, setLast] = useState<{ id: string; result: MatchOutcome } | null>(null);
   const timer = useRef<number | null>(null);
@@ -93,7 +98,7 @@ export function WinLoseControl({
           {last.result === "lose" && noteHref ? (
             <Link
               to={noteHref}
-              className="min-h-11 rounded-md border border-warning/40 bg-warning/10 px-2 py-2.5 text-xs font-medium text-warning hover:bg-warning/20"
+              className={`${subSize} inline-flex items-center rounded-md border border-warning/40 bg-warning/10 font-medium text-warning hover:bg-warning/20`}
             >
               メモ→
             </Link>
@@ -102,7 +107,7 @@ export function WinLoseControl({
             type="button"
             onClick={undo}
             disabled={busy}
-            className="min-h-11 rounded-md border border-border-subtle px-2 text-xs text-ink-muted hover:text-ink-primary disabled:opacity-50"
+            className={`${subSize} rounded-md border border-border-subtle text-ink-muted hover:text-ink-primary disabled:opacity-50`}
           >
             取消
           </button>
@@ -114,7 +119,7 @@ export function WinLoseControl({
             onClick={() => record("win")}
             disabled={busy}
             aria-label="勝ち"
-            className="min-h-11 min-w-11 rounded-md bg-action px-3 text-sm font-bold text-white hover:bg-action-strong disabled:opacity-50"
+            className={`${btnSize} rounded-md bg-action font-bold text-white hover:bg-action-strong disabled:opacity-50`}
           >
             勝
           </button>
@@ -123,7 +128,7 @@ export function WinLoseControl({
             onClick={() => record("lose")}
             disabled={busy}
             aria-label="負け"
-            className="min-h-11 min-w-11 rounded-md border border-border bg-surface-2 px-3 text-sm font-medium text-ink-secondary hover:text-ink-primary disabled:opacity-50"
+            className={`${btnSize} rounded-md border border-border bg-surface-2 font-medium text-ink-secondary hover:text-ink-primary disabled:opacity-50`}
           >
             負
           </button>

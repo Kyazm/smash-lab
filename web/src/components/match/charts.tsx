@@ -151,14 +151,14 @@ export function CumulativeWinRateChart({
         {cur ? (
           <line x1={cur.x} y1="0" x2={cur.x} y2={H} stroke="rgb(var(--color-action) / 0.4)" strokeWidth="1" vectorEffect="non-scaling-stroke" />
         ) : null}
-        {/* 各試合の点。勝=オフホワイト / 負=赤。 */}
+        {/* 各試合の点。勝=赤(action) / 負=オフホワイト（勝ちを赤で強調、記録ボタンと同じ配色）。 */}
         {pts.map((p, i) => (
           <circle
             key={i}
             cx={p.x}
             cy={p.y}
             r={active === i ? 3.5 : 2}
-            fill={p.result === "lose" ? "rgb(var(--color-action))" : "rgb(var(--text-primary))"}
+            fill={p.result === "win" ? "rgb(var(--color-action))" : "rgb(var(--text-primary))"}
           />
         ))}
         {/* 当たり判定（透明・広め）。ホバーとタップの両対応。 */}
@@ -185,7 +185,7 @@ export function CumulativeWinRateChart({
             {active! + 1}試合目 · {hhmm(cur.createdAt)}
           </div>
           <div className="font-medium text-ink-primary">
-            <span className={cur.result === "lose" ? "text-action" : "text-ink-secondary"}>
+            <span className={cur.result === "win" ? "text-action" : "text-ink-secondary"}>
               {cur.result === "lose" ? "負" : "勝"}
             </span>
             {nameFor ? ` ${nameFor(cur.characterId)}` : ""}
@@ -310,7 +310,7 @@ export function CharacterRanking({
   );
 }
 
-/** 直近フォーム。勝=○(白) / 負=●(赤) を古い→新しい順に並べ、直近勝率を出す。 */
+/** 直近フォーム。勝=●(赤) / 負=○(白) を古い→新しい順に並べ、直近勝率を出す（勝ちを赤で強調、記録ボタンと同じ配色）。 */
 export function RecentForm({ results, n = 20 }: { results: MatchResult[]; n?: number }) {
   const f = recentForm(results, n);
   if (f.total === 0) {
@@ -323,10 +323,10 @@ export function RecentForm({ results, n = 20 }: { results: MatchResult[]; n?: nu
           <span
             key={i}
             className={`inline-flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold ${
-              o === "lose" ? "bg-action text-white" : "border border-border-subtle text-ink-secondary"
+              o === "win" ? "bg-action text-white" : "border border-border-subtle text-ink-secondary"
             }`}
           >
-            {o === "lose" ? "●" : "○"}
+            {o === "win" ? "●" : "○"}
           </span>
         ))}
       </div>
