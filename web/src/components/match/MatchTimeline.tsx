@@ -3,6 +3,7 @@
 // ポケトレ/ホムヒカは代表に正規化済みのため1キャラ名で出る。
 // onChanged 指定時は各行に勝/負記録ボタン（WinLoseControl sm）を出し、その行と同キャラ・同モードで追記録できる。
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import type { MatchResult } from "../../data/match/types";
 import { MATCH_MODE_LABELS } from "../../data/match/types";
 import { CharacterIcon } from "../shared/CharacterIcon";
@@ -78,10 +79,19 @@ export function MatchTimeline({
                   >
                     {lose ? "負" : "勝"}
                   </span>
-                  {c ? <CharacterIcon character={c} size="sm" /> : null}
-                  <span className="min-w-0 flex-1 truncate text-sm text-ink-primary">
-                    {nameFor(r.characterId)}
-                  </span>
+                  {/* キャラ部分は対策ページ（/c/:slug）へのリンク。行内の勝/負・×ボタンとは分離。 */}
+                  {c ? (
+                    <Link to={`/c/${c.slug}`} className="flex min-w-0 flex-1 items-center gap-2 hover:opacity-80">
+                      <CharacterIcon character={c} size="sm" />
+                      <span className="min-w-0 flex-1 truncate text-sm text-ink-primary">
+                        {nameFor(r.characterId)}
+                      </span>
+                    </Link>
+                  ) : (
+                    <span className="min-w-0 flex-1 truncate text-sm text-ink-primary">
+                      {nameFor(r.characterId)}
+                    </span>
+                  )}
                   <span className="hidden shrink-0 font-frame text-[10px] uppercase tracking-[0.1em] text-ink-muted sm:inline">
                     {MATCH_MODE_LABELS[r.mode]}
                   </span>

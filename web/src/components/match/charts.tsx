@@ -2,6 +2,7 @@
 // 色: 勝ち=accent-red（このデザインの主アクセント＝ポジ）、負け=中立グレー（surface-2/border/muted）。
 // 数値は font-frame tabular-nums で桁を揃える（フレーム表と同じ流儀）。
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import type { MatchMode, MatchResult } from "../../data/match/types";
 import { MATCH_MODES, MATCH_MODE_LABELS } from "../../data/match/types";
 import {
@@ -296,8 +297,15 @@ export function CharacterRanking({
             const name = nameFor ? nameFor(e.characterId) : c?.name_ja ?? "不明";
             return (
               <li key={e.characterId} className="flex min-h-8 items-center gap-2">
-                {c ? <CharacterIcon character={c} size="sm" /> : null}
-                <span className="min-w-0 max-w-[8em] truncate text-sm text-ink-primary">{name}</span>
+                {/* キャラ部分は対策ページ（/c/:slug）へのリンク。数値部分はリンクにしない。 */}
+                {c ? (
+                  <Link to={`/c/${c.slug}`} className="flex min-w-0 items-center gap-2 hover:opacity-80">
+                    <CharacterIcon character={c} size="sm" />
+                    <span className="min-w-0 max-w-[8em] truncate text-sm text-ink-primary">{name}</span>
+                  </Link>
+                ) : (
+                  <span className="min-w-0 max-w-[8em] truncate text-sm text-ink-primary">{name}</span>
+                )}
                 <span className="ml-auto shrink-0 font-frame text-xs tabular-nums text-ink-secondary">
                   {pct(e.winRate)} <span className="text-ink-muted">{e.wins}-{e.losses}</span>
                 </span>
@@ -357,8 +365,15 @@ export function TopMatchups({
     const c = charById.get(e.characterId);
     return (
       <li key={e.characterId} className="flex items-center gap-2 py-1">
-        {c ? <CharacterIcon character={c} size="sm" /> : null}
-        <span className="min-w-0 flex-1 truncate text-sm text-ink-primary">{nameFor(e.characterId)}</span>
+        {/* キャラ部分は対策ページ（/c/:slug）へのリンク。 */}
+        {c ? (
+          <Link to={`/c/${c.slug}`} className="flex min-w-0 flex-1 items-center gap-2 hover:opacity-80">
+            <CharacterIcon character={c} size="sm" />
+            <span className="min-w-0 flex-1 truncate text-sm text-ink-primary">{nameFor(e.characterId)}</span>
+          </Link>
+        ) : (
+          <span className="min-w-0 flex-1 truncate text-sm text-ink-primary">{nameFor(e.characterId)}</span>
+        )}
         <span className="shrink-0 font-frame text-xs tabular-nums text-ink-secondary">
           {pct(e.winRate)} <span className="text-ink-muted">{e.wins}-{e.losses}</span>
         </span>
