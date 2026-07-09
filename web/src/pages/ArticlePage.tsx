@@ -35,10 +35,13 @@ export function ArticlePage() {
         </h1>
       </header>
 
-      <p className="mt-4 rounded-lg border border-border-subtle bg-surface-1 px-3 py-2 text-xs text-ink-muted">
-        これは制作メモ / リサーチノートです。個人ツール smash-lab の設計根拠として書かれたもので、
-        一部に内部向けの相互リンク（docs/06 参照 等）を含みます。
-      </p>
+      {/* 実践ガイド(guide)には注記不要。設計根拠を兼ねるノートのみ内部向け記述の断りを出す。 */}
+      {article.kind === "note" ? (
+        <p className="mt-4 rounded-lg border border-border-subtle bg-surface-1 px-3 py-2 text-xs text-ink-muted">
+          これは制作メモ / リサーチノートです。個人ツール smash-lab の設計根拠として書かれたもので、
+          一部に内部向けの相互リンク（docs/06 参照 等）を含みます。
+        </p>
+      ) : null}
 
       {/* renderMarkdown 既定の text-sm を、読み物向けに base サイズ・広めの行間で上書き。 */}
       <article className="mt-5 text-base leading-7 [&_*]:text-[15px] md:[&_*]:text-base">

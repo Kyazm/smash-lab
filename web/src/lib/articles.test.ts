@@ -41,8 +41,11 @@ describe("deriveArticleMeta", () => {
 });
 
 describe("articles（docs取り込み）", () => {
-  it("4記事を読む順（基礎→深掘り→メンタル→開発ノート）で公開する", () => {
+  it("7記事を読む順（試合振り返り→状態遷移→撃墜拒否→基礎→深掘り→メンタル→開発ノート）で公開する", () => {
     expect(articles.map((a) => a.slug)).toEqual([
+      "match-review-howto",
+      "state-transitions",
+      "surviving-and-percent",
       "practice-science",
       "practice-focus",
       "mental-game",
@@ -53,6 +56,12 @@ describe("articles（docs取り込み）", () => {
   it("新規2記事もh1タイトルが導出される", () => {
     expect(getArticle("mental-game")?.title).toContain("メンタル");
     expect(getArticle("practice-focus")?.title).toContain("練習と集中");
+  });
+
+  it("新規3記事（読み物）もh1タイトルが導出される", () => {
+    expect(getArticle("match-review-howto")?.title).toContain("振り返り");
+    expect(getArticle("state-transitions")?.title).toContain("状態遷移");
+    expect(getArticle("surviving-and-percent")?.title).toContain("撃墜拒否");
   });
 
   it("各記事はh1由来のタイトルと非空の本文を持つ", () => {

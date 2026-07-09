@@ -23,7 +23,7 @@ export function LibraryIndexPage() {
           ライブラリ<span className="text-action"> / </span>記事
         </h1>
         <p className="mt-2 text-sm text-ink-secondary">
-          スマブラSPの上達に関する練習科学・調査のリサーチノート。
+          スマブラSPの上達に関する実践ガイドと、練習科学・調査のリサーチノート。
         </p>
       </header>
 
@@ -34,7 +34,18 @@ export function LibraryIndexPage() {
               to={`/library/${a.slug}`}
               className="block rounded-xl border border-border-subtle bg-surface-1 p-4 transition-colors hover:border-action"
             >
-              <h2 className="font-display text-xl tracking-wide text-ink-primary">{a.title}</h2>
+              <div className="flex items-start justify-between gap-2">
+                <h2 className="font-display text-xl tracking-wide text-ink-primary">{a.title}</h2>
+                <span
+                  className={`mt-1 shrink-0 rounded px-1.5 py-0.5 text-[10px] font-medium ${
+                    a.kind === "guide"
+                      ? "bg-action text-white"
+                      : "border border-border-subtle text-ink-muted"
+                  }`}
+                >
+                  {a.kind === "guide" ? "ガイド" : "ノート"}
+                </span>
+              </div>
               {a.description ? (
                 <p className="mt-1.5 line-clamp-3 text-sm leading-relaxed text-ink-secondary">
                   {a.description}
