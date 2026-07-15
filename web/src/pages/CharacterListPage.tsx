@@ -229,7 +229,27 @@ export function CharacterListPage() {
         </nav>
       </div>
 
-      <div className="relative mt-3 w-full max-w-xl">
+      {/* モード選択（記録先＝戦績サマリ表示で共通・連動）。勝/負ボタンはこのモードに記録される（ADR-0015）。 */}
+      <div className="mt-3 flex items-center gap-2">
+        <span className="font-frame text-[10px] uppercase tracking-[0.18em] text-ink-muted">モード</span>
+        <ModeSelector />
+      </div>
+
+      {/* 今日の練習（意識ポイント・セッション・ティルト検知）。ADR-0018。 */}
+      <PracticeCard refreshKey={recordRefresh} />
+
+      {/* 戦績ダイジェスト（選択モードのサマリ＋モード別サマリ＋VIPランク）。上のモードに連動。折りたたみ可・既定は展開。 */}
+      <details open className="mt-3 max-w-4xl rounded-xl border border-border-subtle bg-surface-0">
+        <summary className="min-h-11 cursor-pointer list-none px-4 py-2.5 font-frame text-[10px] uppercase tracking-[0.18em] text-ink-secondary [&::-webkit-details-marker]:hidden">
+          ▾ 戦績サマリ
+        </summary>
+        <div className="px-3 pb-3">
+          <MatchDigest refreshKey={recordRefresh} />
+        </div>
+      </details>
+
+      {/* キャラ検索（一覧の直上に置く。リアルタイム曖昧一致、characterSearch.ts） */}
+      <div className="relative mt-4 w-full max-w-xl">
         <input
           type="text"
           placeholder="キャラ検索（例: がのん / zss）"
@@ -249,25 +269,6 @@ export function CharacterListPage() {
           </button>
         ) : null}
       </div>
-
-      {/* モード選択（記録先＝戦績サマリ表示で共通・連動）。勝/負ボタンはこのモードに記録される（ADR-0015）。 */}
-      <div className="mt-3 flex items-center gap-2">
-        <span className="font-frame text-[10px] uppercase tracking-[0.18em] text-ink-muted">モード</span>
-        <ModeSelector />
-      </div>
-
-      {/* 今日の練習（意識ポイント・セッション・ティルト検知）。ADR-0018。 */}
-      <PracticeCard refreshKey={recordRefresh} />
-
-      {/* 戦績ダイジェスト（選択モードのサマリ＋モード別サマリ＋VIPランク）。上のモードに連動。折りたたみ可・既定は展開。 */}
-      <details open className="mt-3 max-w-4xl rounded-xl border border-border-subtle bg-surface-0">
-        <summary className="min-h-11 cursor-pointer list-none px-4 py-2.5 font-frame text-[10px] uppercase tracking-[0.18em] text-ink-secondary [&::-webkit-details-marker]:hidden">
-          ▾ 戦績サマリ
-        </summary>
-        <div className="px-3 pb-3">
-          <MatchDigest refreshKey={recordRefresh} />
-        </div>
-      </details>
 
       {characters === null ? (
         <p className="mt-4 text-sm text-ink-muted">読み込み中…</p>
