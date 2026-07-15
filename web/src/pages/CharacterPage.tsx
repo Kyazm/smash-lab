@@ -13,6 +13,9 @@ import { OwnPlayTab } from "../components/notes/OwnPlayTab";
 import { OwnMoveTab } from "../components/notes/OwnMoveTab";
 import { OwnMatchTab } from "../components/notes/OwnMatchTab";
 import { CharacterStatsTab } from "../components/match/CharacterStatsTab";
+import { ModeSelector } from "../components/match/ModeSelector";
+import { WinLoseControl } from "../components/match/WinLoseControl";
+import { useMatchMode } from "../lib/matchModeContext";
 import { TabBar } from "../components/shared/TabBar";
 import { BrandMark } from "../components/BrandMark";
 import { CharacterIcon } from "../components/shared/CharacterIcon";
@@ -50,6 +53,7 @@ export function CharacterPage() {
   const [bundle, setBundle] = useState<CharacterBundle | null | undefined>(undefined);
   const [main, setMain] = useState<CharacterBundle | null | undefined>(undefined);
   const { mainCharacterId, setMainCharacter } = useMainCharacter();
+  const { mode } = useMatchMode();
   const [settingMain, setSettingMain] = useState(false);
   const [settingMainError, setSettingMainError] = useState<string | null>(null);
   // グループ（ポケトレ/ホムヒカ）の代表情報。戦績・メモを「1キャラ」に集約するために代表idへ寄せる。
@@ -222,6 +226,24 @@ export function CharacterPage() {
               </button>
             ))}
           </div>
+        </div>
+      ) : null}
+
+      {/* どのタブを見ていてもワンタップで勝敗記録できる常設バー（ADR-0015）。
+          戦績タブは自前の WinLoseControl を持つため二重表示を避けて非表示。記録先はグループ代表に集約。 */}
+      {tab !== "record" ? (
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-border-subtle bg-surface-1 px-3 py-2">
+          <ModeSelector />
+          <WinLoseControl
+            characterId={repInfo?.id ?? bundle.character.id}
+            mode={mode}
+            wins={0}
+            losses={0}
+            current={0}
+            onChanged={() => {}}
+            showRecord={false}
+            noteHref={`/c/${repInfo?.slug ?? bundle.character.slug}?tab=notes`}
+          />
         </div>
       ) : null}
 
