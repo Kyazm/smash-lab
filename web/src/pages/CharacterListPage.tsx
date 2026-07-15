@@ -16,6 +16,7 @@ import { WinLoseControl } from "../components/match/WinLoseControl";
 import { MatchDigest } from "../components/match/MatchDigest";
 import { PracticeCard } from "../components/practice/PracticeCard";
 import { groupForSlug, isMiiSlug, makeGroupResolver, type CharacterGroup } from "../lib/characterGroups";
+import { filterCharacters } from "../lib/characterSearch";
 import type { Character } from "../types";
 
 // 一覧の1行。ポケトレ/ホムヒカは代表ファイターを character に、group に定義を持つ（キャラ選択画面と同じ1枠）。
@@ -23,7 +24,6 @@ interface DisplayEntry {
   character: Character;
   displayName: string;
   group?: CharacterGroup;
-  searchText: string;
 }
 
 interface CharRecord {
@@ -146,28 +146,29 @@ export function CharacterListPage() {
       const g = groupForSlug(c.slug);
       if (g) {
         if (c.slug !== g.representativeSlug) continue; // 代表以外は畳む
-        out.push({
-          character: c,
-          displayName: g.displayName,
-          group: g,
-          // 検索は表示名+全メンバー名（ゼニガメ等）+英名を対象にする。
-          searchText: `${g.displayName} ${g.members.map((m) => m.label).join(" ")} ${c.name_en}`.toLowerCase(),
-        });
+        out.push({ character: c, displayName: g.displayName, group: g });
       } else {
-        out.push({
-          character: c,
-          displayName: c.name_ja,
-          searchText: `${c.name_ja} ${c.name_en}`.toLowerCase(),
-        });
+        out.push({ character: c, displayName: c.name_ja });
       }
     }
     return out;
   }, [characters]);
 
+  // 曖昧検索（characterSearch.ts）。グループ枠は表示名に加えメンバー名・メンバーslugも対象に含める
+  // （「リザードン」「mythra」等でポケトレ/ホムヒカ枠がヒットするように。連結後の部分一致で拾う）。
   const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return entries;
-    return entries.filter((e) => e.searchText.includes(q));
+    const searchable = entries.map((e) => ({
+      entry: e,
+      name_ja: e.group
+        ? `${e.displayName} ${e.group.members.map((m) => m.label).join(" ")}`
+        : e.displayName,
+      name_en: e.character.name_en,
+      slug: e.group
+        ? `${e.character.slug} ${e.group.members.map((m) => m.slug).join(" ")}`
+        : e.character.slug,
+      fighter_number: e.character.fighter_number,
+    }));
+    return filterCharacters(query, searchable).map((s) => s.entry);
   }, [entries, query]);
 
   return (
@@ -228,13 +229,26 @@ export function CharacterListPage() {
         </nav>
       </div>
 
-      <input
-        type="search"
-        placeholder="キャラ名で検索（日本語/英語）"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        className="mt-3 w-full max-w-xl min-h-11 rounded border border-border bg-surface-1 p-2 text-sm text-ink-primary"
-      />
+      <div className="relative mt-3 w-full max-w-xl">
+        <input
+          type="text"
+          placeholder="キャラ検索（例: がのん / zss）"
+          aria-label="キャラ検索"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          className="min-h-11 w-full rounded-md border border-border-subtle bg-surface-1 p-2 pr-9 text-sm text-ink-primary"
+        />
+        {query ? (
+          <button
+            type="button"
+            onClick={() => setQuery("")}
+            aria-label="検索をクリア"
+            className="absolute right-1 top-1/2 min-h-8 min-w-8 -translate-y-1/2 rounded px-2 text-base text-ink-muted hover:text-action-strong"
+          >
+            ×
+          </button>
+        ) : null}
+      </div>
 
       {/* モード選択（記録先＝戦績サマリ表示で共通・連動）。勝/負ボタンはこのモードに記録される（ADR-0015）。 */}
       <div className="mt-3 flex items-center gap-2">
@@ -258,7 +272,7 @@ export function CharacterListPage() {
       {characters === null ? (
         <p className="mt-4 text-sm text-ink-muted">読み込み中…</p>
       ) : filtered.length === 0 ? (
-        <p className="mt-4 py-3 text-sm text-ink-muted">該当するキャラが見つかりません。</p>
+        <p className="mt-4 py-3 text-sm text-ink-muted">該当キャラなし</p>
       ) : (
         // 12キャラずつ縦に並べ、13キャラ目から右の列へ流す（grid-flow-col + 12行固定）。
         // 89キャラなら 12×7列+5。窮屈回避のため英語名は非表示（詳細ページで見られる）。
