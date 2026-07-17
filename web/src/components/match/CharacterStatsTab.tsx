@@ -1,4 +1,5 @@
-// キャラ詳細の「戦績」タブ（ADR-0015）。character_id=このキャラ（対戦相手）としての vs 成績。
+// キャラ詳細の戦績ブロック（ADR-0015）。character_id=このキャラ（対戦相手）としての vs 成績。
+// 旧「戦績」タブを廃止し、キャラ名下に常設表示する（モード選択+勝/負は常時、詳細は折りたたみ可・既定展開）。
 // 現在のモード（matchModeContext）で連勝・時系列を出し、モード別サマリは3モード横断で見せる。
 import { useEffect, useState } from "react";
 import { matchProvider } from "../../data/match";
@@ -18,7 +19,14 @@ import {
   StreakBadges,
 } from "./charts";
 
-export function CharacterStatsTab({ characterId }: { characterId: string }) {
+export function CharacterStatsTab({
+  characterId,
+  noteHref,
+}: {
+  characterId: string;
+  /** 負け記録直後の「メモ→」導線（キャラ対メモタブ）。 */
+  noteHref?: string;
+}) {
   const { mode } = useMatchMode();
   const [results, setResults] = useState<MatchResult[] | null>(null);
   const [refresh, setRefresh] = useState(0);
@@ -52,8 +60,8 @@ export function CharacterStatsTab({ characterId }: { characterId: string }) {
   const onChanged = () => setRefresh((x) => x + 1);
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-2">
+    <div className="space-y-3">
+      <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-border-subtle bg-surface-1 px-3 py-2">
         <ModeSelector />
         <WinLoseControl
           characterId={characterId}
@@ -63,25 +71,34 @@ export function CharacterStatsTab({ characterId }: { characterId: string }) {
           current={streaks.current}
           onChanged={onChanged}
           showRecord={false}
+          noteHref={noteHref}
         />
       </div>
 
-      <section className="rounded-xl border border-border-subtle bg-surface-1 p-4">
-        <p className="mb-3 font-frame text-[10px] uppercase tracking-[0.18em] text-ink-muted">
-          {MATCH_MODE_LABELS[mode]} の成績
-        </p>
-        <StreakBadges current={streaks.current} maxWin={streaks.maxWin} maxLose={streaks.maxLose} />
-        <div className="mt-4">
-          <CumulativeWinRateChart results={modeResults} />
-        </div>
-      </section>
+      {/* 詳細（連勝・推移・モード別）は折りたたみ可・既定展開（トップの戦績サマリと同じ流儀）。 */}
+      <details open className="rounded-xl border border-border-subtle bg-surface-0">
+        <summary className="min-h-11 cursor-pointer list-none px-4 py-2.5 font-frame text-[10px] uppercase tracking-[0.18em] text-ink-secondary [&::-webkit-details-marker]:hidden">
+          ▾ 戦績（{MATCH_MODE_LABELS[mode]} {summary.wins}-{summary.losses}）
+        </summary>
+        <div className="space-y-3 px-3 pb-3">
+          <section className="rounded-xl border border-border-subtle bg-surface-1 p-4">
+            <p className="mb-3 font-frame text-[10px] uppercase tracking-[0.18em] text-ink-muted">
+              {MATCH_MODE_LABELS[mode]} の成績
+            </p>
+            <StreakBadges current={streaks.current} maxWin={streaks.maxWin} maxLose={streaks.maxLose} />
+            <div className="mt-4">
+              <CumulativeWinRateChart results={modeResults} />
+            </div>
+          </section>
 
-      <section className="rounded-xl border border-border-subtle bg-surface-1 p-4">
-        <p className="mb-3 font-frame text-[10px] uppercase tracking-[0.18em] text-ink-muted">
-          モード別サマリ
-        </p>
-        <ModeSummary byMode={byMode} />
-      </section>
+          <section className="rounded-xl border border-border-subtle bg-surface-1 p-4">
+            <p className="mb-3 font-frame text-[10px] uppercase tracking-[0.18em] text-ink-muted">
+              モード別サマリ
+            </p>
+            <ModeSummary byMode={byMode} />
+          </section>
+        </div>
+      </details>
     </div>
   );
 }

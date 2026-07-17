@@ -13,25 +13,21 @@ import { OwnPlayTab } from "../components/notes/OwnPlayTab";
 import { OwnMoveTab } from "../components/notes/OwnMoveTab";
 import { OwnMatchTab } from "../components/notes/OwnMatchTab";
 import { CharacterStatsTab } from "../components/match/CharacterStatsTab";
-import { ModeSelector } from "../components/match/ModeSelector";
-import { WinLoseControl } from "../components/match/WinLoseControl";
-import { useMatchMode } from "../lib/matchModeContext";
 import { TabBar } from "../components/shared/TabBar";
 import { BrandMark } from "../components/BrandMark";
 import { CharacterIcon } from "../components/shared/CharacterIcon";
 import { useMainCharacter } from "../lib/mainCharacterContext";
 import type { CharacterBundle } from "../types";
 
-type CommonTab = "frames" | "punish" | "notes" | "record";
+type CommonTab = "frames" | "punish" | "notes";
 type MainOnlyTab = "own" | "moves" | "matches";
 type Tab = CommonTab | MainOnlyTab;
 
-// 戦績（record）は全キャラ共通（相手キャラ単位の勝敗のため is_main 不問、ADR-0015）。
+// 戦績はタブでなくキャラ名下の常設ブロック（CharacterStatsTab）で表示する（旧「戦績」タブは廃止）。
 const COMMON_TABS: { key: CommonTab; label: string }[] = [
   { key: "frames", label: "フレーム表" },
   { key: "punish", label: "確定反撃" },
   { key: "notes", label: "キャラ対メモ" },
-  { key: "record", label: "戦績" },
 ];
 // docs/07 F-B: 順序は フレーム表/確定反撃/キャラ対メモ/立ち回り/技メモ/試合
 const MAIN_ONLY_TABS: { key: MainOnlyTab; label: string }[] = [
@@ -41,7 +37,8 @@ const MAIN_ONLY_TABS: { key: MainOnlyTab; label: string }[] = [
 ];
 
 function isValidTab(v: string | null, isMain: boolean): v is Tab {
-  if (v === "frames" || v === "punish" || v === "notes" || v === "record") return true;
+  // 旧 ?tab=record リンクは isValidTab を通らず既定（notes）へフォールバックする。
+  if (v === "frames" || v === "punish" || v === "notes") return true;
   if (isMain && (v === "own" || v === "moves" || v === "matches")) return true;
   return false;
 }
@@ -53,7 +50,6 @@ export function CharacterPage() {
   const [bundle, setBundle] = useState<CharacterBundle | null | undefined>(undefined);
   const [main, setMain] = useState<CharacterBundle | null | undefined>(undefined);
   const { mainCharacterId, setMainCharacter } = useMainCharacter();
-  const { mode } = useMatchMode();
   const [settingMain, setSettingMain] = useState(false);
   const [settingMainError, setSettingMainError] = useState<string | null>(null);
   // グループ（ポケトレ/ホムヒカ）の代表情報。戦績・メモを「1キャラ」に集約するために代表idへ寄せる。
@@ -229,23 +225,15 @@ export function CharacterPage() {
         </div>
       ) : null}
 
-      {/* どのタブを見ていてもワンタップで勝敗記録できる常設バー（ADR-0015）。
-          戦績タブは自前の WinLoseControl を持つため二重表示を避けて非表示。記録先はグループ代表に集約。 */}
-      {tab !== "record" ? (
-        <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-border-subtle bg-surface-1 px-3 py-2">
-          <ModeSelector />
-          <WinLoseControl
-            characterId={repInfo?.id ?? bundle.character.id}
-            mode={mode}
-            wins={0}
-            losses={0}
-            current={0}
-            onChanged={() => {}}
-            showRecord={false}
-            noteHref={`/c/${repInfo?.slug ?? bundle.character.slug}?tab=notes`}
-          />
-        </div>
-      ) : null}
+      {/* 戦績ブロック常設（旧「戦績」タブを廃止しキャラ名下へ、ADR-0015）。
+          モード選択+勝/負は常時表示、詳細（連勝・推移・モード別）は折りたたみ可。記録先はグループ代表に集約。 */}
+      <div className="mt-3">
+        <CharacterStatsTab
+          key={repInfo?.id ?? bundle.character.id}
+          characterId={repInfo?.id ?? bundle.character.id}
+          noteHref={`/c/${repInfo?.slug ?? bundle.character.slug}?tab=notes`}
+        />
+      </div>
 
       <div className="mt-4">
         <TabBar tabs={tabs} active={tab} onChange={setTab} />
@@ -264,12 +252,6 @@ export function CharacterPage() {
             characterId={repInfo?.id ?? bundle.character.id}
             characterNameJa={repInfo?.name ?? bundle.character.name_ja}
             characterSlug={repInfo?.slug ?? bundle.character.slug}
-          />
-        ) : tab === "record" ? (
-          // 戦績も代表に集約（サブキャラを切り替えても同じ戦績）。
-          <CharacterStatsTab
-            key={repInfo?.id ?? bundle.character.id}
-            characterId={repInfo?.id ?? bundle.character.id}
           />
         ) : tab === "own" ? (
           <OwnPlayTab mainCharacterId={bundle.character.id} />
