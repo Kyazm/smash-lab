@@ -1,7 +1,6 @@
 // 全体戦績ダッシュボード（"/stats"、ADR-0015）。全キャラ合算のモード別サマリ・キャラ別ランキング・連勝・時系列。
 // モードフィルタ（全体/各モード）で切替。アカウント分離はプロバイダ層が担保（owner=Supabase / guest=ローカル）。
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
 import { matchProvider } from "../data/match";
 import type { MatchMode, MatchResult } from "../data/match/types";
 import { MATCH_MODES, MATCH_MODE_LABELS } from "../data/match/types";
@@ -18,7 +17,6 @@ import {
 import { makeGroupResolver } from "../lib/characterGroups";
 import { MatchTimeline } from "../components/match/MatchTimeline";
 import { VipRankCalculator } from "../components/match/VipRankCalculator";
-import { BrandMark } from "../components/BrandMark";
 import {
   CharacterRanking,
   CumulativeWinRateChart,
@@ -92,13 +90,7 @@ export function StatsPage() {
 
   return (
     <div className="mx-auto max-w-5xl p-4">
-      <div className="flex items-center justify-between gap-2">
-        <Link to="/" className="text-xs text-ink-muted hover:text-ink-primary">
-          ← キャラ一覧
-        </Link>
-        <BrandMark size="sm" />
-      </div>
-      <h1 className="mt-2 text-lg font-semibold text-ink-secondary">戦績</h1>
+      <h1 className="text-lg font-semibold text-ink-secondary">戦績</h1>
 
       {/* モードフィルタ（全体 + 3モード） */}
       <div className="mt-3 inline-flex rounded-md border border-border-subtle bg-surface-1 p-0.5">

@@ -14,7 +14,6 @@ import { OwnMoveTab } from "../components/notes/OwnMoveTab";
 import { OwnMatchTab } from "../components/notes/OwnMatchTab";
 import { CharacterStatsTab } from "../components/match/CharacterStatsTab";
 import { TabBar } from "../components/shared/TabBar";
-import { BrandMark } from "../components/BrandMark";
 import { CharacterIcon } from "../components/shared/CharacterIcon";
 import { useMainCharacter } from "../lib/mainCharacterContext";
 import type { CharacterBundle } from "../types";
@@ -165,13 +164,7 @@ export function CharacterPage() {
 
   return (
     <div className="mx-auto max-w-3xl p-4">
-      <div className="flex items-center justify-between gap-2">
-        <Link to="/" className="text-xs text-ink-muted hover:text-ink-primary">
-          ← キャラ一覧
-        </Link>
-        <BrandMark size="sm" />
-      </div>
-      <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
         <CharacterIcon character={bundle.character} size="lg" />
         <div className="min-w-0">
           <h1 className="font-display text-4xl leading-none tracking-wide text-ink-primary sm:text-5xl">

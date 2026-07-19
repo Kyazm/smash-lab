@@ -8,7 +8,6 @@ import { useReview } from "../hooks/useReviews";
 import { useYouTubePlayer } from "../hooks/useYouTubePlayer";
 import { parseYouTube } from "../lib/youtube";
 import { renderMarkdown } from "../lib/markdown";
-import { BrandMark } from "../components/BrandMark";
 import { FindingCard } from "../components/review/FindingCard";
 import { updateFindingStatus, StaleReviewError } from "../data/review/reviewApi";
 import type { FocusVerdict } from "../data/review/types";
@@ -25,12 +24,9 @@ const STALL_MS = 60 * 60 * 1000;
 function PageShell({ children }: { children: ReactNode }) {
   return (
     <div className="mx-auto max-w-3xl p-4">
-      <div className="flex items-center justify-between">
-        <BrandMark size="sm" />
-        <Link to="/review" className="text-xs text-ink-muted hover:text-ink-primary">
-          ← レビュー一覧
-        </Link>
-      </div>
+      <Link to="/review" className="text-xs text-ink-muted hover:text-ink-primary">
+        ← レビュー一覧
+      </Link>
       {children}
     </div>
   );

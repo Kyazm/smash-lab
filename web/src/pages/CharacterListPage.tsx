@@ -8,8 +8,6 @@ import { matchProvider } from "../data/match";
 import { computeStreaks, computeSummary } from "../lib/matchStats";
 import { useMainCharacter } from "../lib/mainCharacterContext";
 import { useMatchMode } from "../lib/matchModeContext";
-import { useIsGuest } from "../lib/guestContext";
-import { BrandMark } from "../components/BrandMark";
 import { CharacterIcon } from "../components/shared/CharacterIcon";
 import { ModeSelector } from "../components/match/ModeSelector";
 import { WinLoseControl } from "../components/match/WinLoseControl";
@@ -35,11 +33,8 @@ interface CharRecord {
 export function CharacterListPage() {
   const { mainCharacterId } = useMainCharacter();
   const { mode } = useMatchMode();
-  const isGuest = useIsGuest();
   const [characters, setCharacters] = useState<Character[] | null>(null);
   const [query, setQuery] = useState("");
-  // 承認待ち(pending+stale)件数バッジ（docs/07 F-A）。
-  const [pendingCount, setPendingCount] = useState<number | null>(null);
   // 現モードの対戦相手キャラ別戦績（ADR-0015）。勝敗記録・undo後に再取得する。
   const [recordsByChar, setRecordsByChar] = useState<Map<string, CharRecord>>(new Map());
   const [recordRefresh, setRecordRefresh] = useState(0);
@@ -115,25 +110,6 @@ export function CharacterListPage() {
     };
   }, [mainCharacterId]);
 
-  useEffect(() => {
-    let cancelled = false;
-    notesProvider
-      .listPendingProposals()
-      .then((list) => {
-        if (!cancelled) setPendingCount(list.length);
-      })
-      .catch((e) => {
-        // バッジは補助情報。取得失敗時は非表示(null)にとどめ、致命的エラーにはしない。
-        if (!cancelled) {
-          console.error("[CharacterListPage] listPendingProposals 失敗", e);
-          setPendingCount(null);
-        }
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
   // グループ（ポケトレ/ホムヒカ）を代表位置の1枠に畳み込む。メンバー個別は一覧から除外する。
   const entries = useMemo<DisplayEntry[]>(() => {
     if (!characters) return [];
@@ -173,62 +149,8 @@ export function CharacterListPage() {
 
   return (
     // 12行×列流しグリッド（下記）が横に伸びるため、このページはコンテナを広めに取る。
+    // ヘッダー（BrandMark・ナビ）は共通AppHeader（App.tsx）に統一済み。
     <div className="mx-auto max-w-6xl p-4">
-      {/* ヘッダーは1行に（BrandMark左・ナビ右）。右上の空きを解消。 */}
-      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-        <BrandMark size="sm" />
-        <nav className="flex flex-wrap gap-2 text-sm">
-          <Link
-            to="/me"
-            className="flex min-h-11 items-center rounded bg-action px-3 py-1.5 font-medium text-white hover:bg-action-strong"
-          >
-            自キャラ
-          </Link>
-          <Link
-            to="/search"
-            className="flex min-h-11 items-center rounded bg-surface-2 px-3 py-1.5 font-medium text-ink-secondary hover:text-ink-primary"
-          >
-            横断検索
-          </Link>
-          {/* 承認待ち提案はオーナー個人のレビューキュー（migration 0006でRLSもオーナー限定）。ゲストには出さない。 */}
-          {!isGuest ? (
-            <Link
-              to="/proposals"
-              className="flex min-h-11 items-center gap-1.5 rounded bg-surface-2 px-3 py-1.5 font-medium text-ink-secondary hover:text-ink-primary"
-            >
-              承認待ち
-              {pendingCount !== null && pendingCount > 0 ? (
-                <span className="rounded-full bg-warning px-1.5 py-0.5 text-xs font-bold text-surface-0">
-                  {pendingCount}
-                </span>
-              ) : null}
-            </Link>
-          ) : null}
-          {/* AIレビューもオーナー個人のレビューキュー（Macパイプライン依存・ADR-0019）。ゲストには出さない。 */}
-          {!isGuest ? (
-            <Link
-              to="/review"
-              className="flex min-h-11 items-center rounded bg-surface-2 px-3 py-1.5 font-medium text-ink-secondary hover:text-ink-primary"
-            >
-              AIレビュー
-            </Link>
-          ) : null}
-          {/* 戦績ダッシュボードはゲストにも表示（自分のローカル戦績を試せる。個人情報漏洩はない）。 */}
-          <Link
-            to="/stats"
-            className="flex min-h-11 items-center rounded bg-surface-2 px-3 py-1.5 font-medium text-ink-secondary hover:text-ink-primary"
-          >
-            戦績
-          </Link>
-          <Link
-            to="/library"
-            className="flex min-h-11 items-center rounded bg-surface-2 px-3 py-1.5 font-medium text-ink-secondary hover:text-ink-primary"
-          >
-            ライブラリ
-          </Link>
-        </nav>
-      </div>
-
       {/* モード選択（記録先＝戦績サマリ表示で共通・連動）。勝/負ボタンはこのモードに記録される（ADR-0015）。 */}
       <div className="mt-3 flex items-center gap-2">
         <span className="font-frame text-[10px] uppercase tracking-[0.18em] text-ink-muted">モード</span>

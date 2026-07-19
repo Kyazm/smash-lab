@@ -160,10 +160,7 @@ export function ProposalsPage() {
 
   return (
     <div className="mx-auto max-w-3xl p-4">
-      <Link to="/" className="text-xs text-ink-muted hover:text-ink-primary">
-        ← キャラ一覧
-      </Link>
-      <h1 className="mt-1 font-display text-2xl tracking-wide text-ink-primary">承認待ちの提案</h1>
+      <h1 className="font-display text-2xl tracking-wide text-ink-primary">承認待ちの提案</h1>
       <p className="mt-1 text-sm text-ink-secondary">
         AI整頓の提案をキャラ別にまとめて確認・承認/却下できます。
         {items ? (

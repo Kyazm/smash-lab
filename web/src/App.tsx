@@ -4,6 +4,7 @@
 // mockモードでは AuthGate が素通しする（providerMode の解決に従う）ので挙動は不変。
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import { AuthGate } from "./components/auth/AuthGate";
+import { AppHeader } from "./components/AppHeader";
 import { MainCharacterProvider } from "./lib/mainCharacterContext";
 import { MatchModeProvider } from "./lib/matchModeContext";
 import { CharacterListPage } from "./pages/CharacterListPage";
@@ -23,6 +24,7 @@ function AuthLayout() {
     <AuthGate>
       <MainCharacterProvider>
         <MatchModeProvider>
+          <AppHeader />
           <Outlet />
         </MatchModeProvider>
       </MainCharacterProvider>

@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import { useIsGuest } from "../lib/guestContext";
 import { useReviews } from "../hooks/useReviews";
 import { dataProvider } from "../data";
-import { BrandMark } from "../components/BrandMark";
 import { CharacterIcon } from "../components/shared/CharacterIcon";
 import { ReviewRequestForm } from "../components/review/ReviewRequestForm";
 import { ReviewStatusBadge } from "../components/review/ReviewStatusBadge";
@@ -19,23 +18,13 @@ export function ReviewListPage() {
 }
 
 function PageShell({ children }: { children: ReactNode }) {
-  return (
-    <div className="mx-auto max-w-5xl p-4">
-      <div className="flex items-center justify-between">
-        <BrandMark size="sm" />
-        <Link to="/" className="text-xs text-ink-muted hover:text-ink-primary">
-          ← キャラ一覧
-        </Link>
-      </div>
-      {children}
-    </div>
-  );
+  return <div className="mx-auto max-w-5xl p-4">{children}</div>;
 }
 
 function ReviewGuestNotice() {
   return (
     <PageShell>
-      <h1 className="mt-3 font-display text-2xl tracking-wide text-ink-primary">AIレビュー</h1>
+      <h1 className="font-display text-2xl tracking-wide text-ink-primary">AIレビュー</h1>
       <p className="mt-2 text-sm text-ink-secondary">オーナー専用機能。ゲストでは利用できません。</p>
       <p className="mt-1 text-sm text-ink-muted">
         YouTubeの試合動画とタイムスタンプを送信すると、Mac側のClaude
@@ -73,7 +62,7 @@ function ReviewListPageOwner() {
 
   return (
     <PageShell>
-      <div className="mt-3 flex items-center justify-between gap-2">
+      <div className="flex items-center justify-between gap-2">
         <h1 className="font-display text-2xl tracking-wide text-ink-primary">AIレビュー</h1>
         <button
           type="button"
