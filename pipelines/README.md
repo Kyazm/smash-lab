@@ -11,6 +11,7 @@ docs/02_architecture.md のとおり、閲覧系（`web/`）と AI 処理系（�
 | `import-framedata` | ultimateframedata.com をスクレイプ → characters/moves/oos_options 投入（一度きり、ADR-0003 / ADR-0006） | Phase 1 のデータ投入（別途） |
 | `import-discord` | Discord REST API v10 で対象カテゴリを直接エクスポート → notes/note_media へ移行（一度きり、docs/02 移行手順）**実装済み** | Phase 2 |
 | `review-match` | YouTube URL+タイムスタンプ登録 → yt-dlp区間取得 → ffmpegフレーム抽出 → Claude Codeセッションが分析 → ai_reviews 書込（ADR-0007 / ADR-0019） | 実装中（Phase 3） |
+| `player-study` | トッププレイヤー動画をフルDL→フレーム化→Claude Codeセッションが場面別行動をラベリング→統計化。動画・中間フレームはsubmit成功時に削除（ADR-0020 / docs/14） | Phase 3以降 |
 | `intel-collect` | 週次 launchd / オンデマンド検索 → intel_items 投入（ADR-0004） | Phase 4 |
 
 `review-match` は prepare（動画取得・フレーム抽出・MANIFEST生成の決定論的処理）と submit（Claude Codeの分析結果をスキーマ検証・集約してai_reviews更新）の2段CLIで構成する。LLM呼び出しはパイプラインコードに含まれない（詳細: docs/13_match-review.md）。
@@ -38,6 +39,37 @@ result.json                         # Claude Codeセッションが書く分析�
 ```
 
 処理フロー: `prep` で MANIFEST とフレームを生成 → Claude Code セッションがフレームを Read し方法論（docs/13）で分析して `result.json` を書く → `submit` で検証・集約して `ai_reviews` を done 更新。中断・放棄時は `fail` で error に戻す（processing 座礁防止）。
+
+### player-study の使い方
+
+`cd pipelines/player-study` で以下を実行する（ADR-0020 / docs/14）。smash-tube 収集 → フルDL+フレーム化 → Claude Code セッションがラベリング → 統計化。
+
+```
+npm run collect -- --player Marss --char ゼロスーツサムス [--pages N] [--dry]
+                                               # smash-tube検索→パース→study_videos投入。--dryはJSON出力のみ（DB書込なし）
+npm run prep -- <video_id>                     # cataloged動画をフルDL→1fpsスキャン→ストックアンカー→3x3グリッド→MANIFEST生成
+npm run prep -- --next                          # status=cataloged の最古1件を処理
+npm run prep -- <video_id> --local [--player P --char C --title "…" --url URL]
+                                               # DBなしでMANIFESTをローカル生成（監査/開発用）
+npm run zoom -- <video_id> --t <sec> [--fps 10 --span 4 --before 2]
+                                               # 指定時刻の密バースト（実時刻保持）→ bursts/t<sec>/ + index.json
+npm run submit -- <video_id> [--file labels.json]
+                                               # labels.json検証→代表フレームをnote-media/study/へアップ→study_interactions投入
+                                               #  →status=done→workdir丸ごと削除（動画・scan・bursts全部）
+npm run fail -- <video_id> --message "…"        # status=error+error_message。workdirは残す
+```
+
+作業ディレクトリ `<repo>/.context/player-study/<video_id>/`:
+
+```
+video.mp4                           # フルDL（zoomで使用。submit成功時に削除）
+scan/grid_NN.jpg                    # 場面窓特定用の3x3スキャングリッド（1440x810、セル⇔t_secはMANIFESTに記録）
+bursts/t<sec>/frame_NNN.jpg         # zoomが出す密バースト + index.json（各frameの実t_sec）
+MANIFEST.json                       # video_id/title/duration/studied_*/opp_chars_hint/kill_anchors/grids/output_contract
+labels.json                         # Claude Codeセッションが書くラベル結果（submitの検証対象。prepは生成しない）
+```
+
+処理フロー: `collect` で対戦動画カタログを収集 → `prep` で MANIFEST・グリッド・アンカーを生成 → Claude Code セッションがグリッドで候補窓を列挙し `zoom` で密バーストを出してラベリング → `labels.json` を書く → `submit` で検証・アップ・DB投入し workdir を掃除。`collect` の HTML は `.context/player-study/catalog-cache/` にキャッシュし再取得しない。
 
 ## 実装上の制約（ADR-0004・コードレビュー項目）
 

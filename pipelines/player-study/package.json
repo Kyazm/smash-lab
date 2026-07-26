@@ -1,0 +1,24 @@
+{
+  "name": "player-study",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "プレイヤー研究パイプライン（Marss/ZSS等）。smash-tube収集(collect) → yt-dlpフルDL+フレーム化+ストックアンカー+スキャングリッド(prep) → 密バースト(zoom) → labels.json検証+Storage/DB書込(submit)。LLM呼び出しは含まない決定論CLI（ADR-0020 / docs/14 / migration 0011）。review-match の prepare/submit 二段パターンを踏襲。",
+  "scripts": {
+    "collect": "tsx src/collect.ts",
+    "prep": "tsx src/prep.ts",
+    "zoom": "tsx src/zoom.ts",
+    "submit": "tsx src/submit.ts",
+    "fail": "tsx src/fail.ts",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "tsx": "^4.19.2"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.0",
+    "typescript": "^6.0.3",
+    "vitest": "^3.0.5"
+  }
+}

@@ -16,6 +16,7 @@
 │   ├ import-framedata  … UFDスクレイプ→moves投入(一度きり) │
 │   ├ import-discord    … Discordエクスポート移行(一度きり)  │
 │   ├ review-match      … URL登録→yt-dlp→ffmpeg抽出→Claude Code分析→ai_reviews │
+│   ├ player-study      … 他プレイヤー動画をDL→フレーム化→Claude Codeラベリング→統計(ADR-0020) │
 │   └ intel-collect     … 週次/オンデマンド検索→intel_items  │
 │  実行: Claude Code(対話/オンデマンド) + launchd(定期/監視) │
 └────────────────────────────────────────────────────┘
