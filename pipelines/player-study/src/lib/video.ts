@@ -71,6 +71,10 @@ export async function downloadFull(videoUrl: string, outPath: string): Promise<v
     `bv*[height<=${MAX_HEIGHT}]+ba/b[height<=${MAX_HEIGHT}]/best`,
     "--merge-output-format",
     "mp4",
+    // web(default)クライアントのDASH URLがSABR限定配信で403になることがある（2026-07実測）。
+    // androidクライアントをフォールバックに加えるとURL付きformatが得られる。
+    "--extractor-args",
+    "youtube:player_client=default,android",
     "-o",
     outPath,
     "--no-warnings",

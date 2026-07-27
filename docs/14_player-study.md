@@ -1,6 +1,6 @@
 # プレイヤー研究（player-study）— 行動辞書とラベリング基準
 
-**DRAFT — 行動辞書（③）と判定基準（④）はパイロット2セット（W2、ADR-0020）後に凍結する。それ以外の節（①②⑤⑥）は実装契約として先に固定する。**
+**FROZEN (2026-07-27) — W2パイロット2セット（e76F_fDNjf8 vs シュルク 27件 / ZyOYAOsfD6U vs スネーク 38件、計65 interactions）の実測を経て③④を凍結。** 凍結時の判別性実測と根拠は `.context/player-study/pilot-01-feedback.md` / `pilot-02-feedback.md` および ADR-0020 Consequences を参照。以後の変更はADR更新とセットで行う。
 
 `pipelines/player-study`・Web UIの`/study`ページ・`.claude/skills/smash-player-study/`（未実装）が共通で参照する正本。①②は考え方、③④はラベリング基準（凍結対象）、⑤⑥は実装契約。基準を変える時はここを更新してから各実装に反映する。設計の経緯・調査結論はADR-0020および`.context/design-player-study-draft.md`を参照。
 
@@ -30,7 +30,7 @@ player-studyのsituationは9種。docs/13（review-match）の6種とは**意図
 
 `habit_tags`（docs/13のhabit_tag語彙、15語）とも別語彙。両者を混同しない。
 
-## ③ 崖の語彙（正準6分類+攻め側行動）— DRAFT
+## ③ 崖の語彙（正準6分類+攻め側行動）— FROZEN
 
 一貫規則: **`action`=研究対象プレイヤー自身の選択、`sub_situation`=相手側の択・状況の補足**。崖ではこうなる。
 
@@ -45,12 +45,12 @@ player-studyのsituationは9種。docs/13（review-match）の6種とは**意図
 | `ledge_drop` | 崖離し行動（崖離し→ジャンプ/回避/攻撃/ステップ等の派生） |
 | `ledge_stall` | 崖待機・崖離し崖掴み直し（無敵時間の管理） |
 
-- **`ledge_defense`**（研究対象が崖を掴んでいる側）: `action`に上記6分類のslugを入れる（=本人の上がり択を数える）。`sub_situation`は相手の待ち位置等の補足（任意）
+- **`ledge_defense`**（研究対象が崖を掴んでいる側）: `action`に上記6分類のslugを入れる（=本人の上がり択を数える）。`sub_situation`は相手の待ち位置等の補足（任意）。**崖を掴んでいない崖際の被圧力は`ledge_defense`にしない**（`disadvantage`か`recovery`を使う。パイロットで混同事例あり）
 - **`ledge_offense`**(研究対象が崖を攻める側): `action`に攻め側の選択を入れる — 技slug（`down_smash`等）、`ledge_trump`（崖奪い）、`wait_center`（位置取り待機）等。2フレ狙いは技slug+`action_detail`に「2フレ」と書く。`sub_situation`には**相手が選んだ上がり択（上記6分類）**を入れる（=どの択に勝った/負けたかを集計するため）
 
-この語彙はpilotで判別可能性を見て、必要なら統合・追加してdocs/14を凍結する。
+**凍結記録（W2実測）**: 崖行動slug（6分類+`ledge_trump`+`wait_center`）は`labels-schema.ts`の`ACTION_LEDGE_SLUGS`として正式収録済み（W1時点の収録漏れをパイロットで発見・修正）。トップレベルの崖攻防は「復帰技への空中迎撃=`edgeguard`」が主体で、静的な崖上がり読み合いは2セットで2件しか発生しなかった。相手の復帰が崖掴みを経ない場合（スネークのサイファー等）は`edgeguard`とし、`sub_situation`に復帰形を書く（推奨語彙: `cypher_recovery` / `tether_recovery` / `high_recovery`。自由記述のまま、enumにはしない）。上がり6択の細分類は10fpsでは`jump_getup`以外判別困難のため、崖掴みを検知したら高fps再バースト（⑩参照）を推奨。
 
-## ④ ZSS行動辞書 v1 — DRAFT
+## ④ ZSS行動辞書 v1 — FROZEN
 
 `action`は粗カテゴリを必須、個別技slugは視認が容易なものだけ許可する二層構成にする（v1で全技を個別slug化すると判別コストが高く、pilotで一致率を見てから昇格させる方針）。
 
@@ -62,16 +62,21 @@ player-studyのsituationは9種。docs/13（review-match）の6種とは**意図
 
 | slug | 技 | 備考 |
 |---|---|---|
-| `zair` | 空N（鞭）先端差し込み | 鞭の視覚的特徴が明瞭で判別しやすい |
+| `zair` | 空N（鞭）先端差し込み | 鞭の視覚的特徴が明瞭で判別しやすい（実測conf 0.6） |
 | `down_smash` | 下スマッシュ | 崖の2フレ択の主力 |
-| `boost_kick` | 上B | |
+| `boost_kick` | 上B | 青い縦柱の多段ヒットトレイル+本人も一緒に上昇、が判別根拠（実測conf 0.65-0.85） |
 | `flip_jump` | 下B | |
-| `plasma_whip` | 横B | |
+| `plasma_whip` | 横B | 10fpsでは掴み（テザー）と混同しやすい。断定できない時は`special`+`action_detail` |
 | `paralyzer` | NB（スタンガン） | |
+| `up_smash` | 上スマッシュ | W2で追加。接地したまま上方向の電撃バーストが判別根拠。`boost_kick`（本人が上昇）との違いに注意 |
 
-**空中技の扱い**: `nair`/`bair`等の空中通常技は個別slug化せず、v1では`aerial` + `action_detail`に向き（前/後）をメモする形から開始する。pilotで判別の一致率を確認できたら個別slugへ昇格させる。
+このほか崖行動slug（③の6分類+`ledge_trump`+`wait_center`）も`action`に使える（`ACTION_LEDGE_SLUGS`）。
 
-**判別不能時**: `action='unknown'` + `confidence`を記録する（④参照、統計からは除外）。
+**空中技の扱い（凍結）**: `nair`/`bair`/`uair`等の個別slug昇格は**否決**。2セットの実測で、10fps/480p+撃墜時のカメラ引き・ヒットエフェクトにより個別判別は不可能と確認（円形エフェクト等で推定できても conf 0.5前後止まり）。`aerial` + `action_detail`に推定と根拠を書く運用を正とする。
+
+**撃墜技の運用注記（凍結）**: `kill=true`（撃墜の事実）はストック差オーバーレイ/GAME!で高信頼に取れるが、撃墜技のslug判別は別問題。無理に個別slugを付けず粗カテゴリ+`action_detail`でよい。統計の主軸は situation×outcome×kill であり、技分布は`confidence>=0.6`が溜まった場面から読む。
+
+**判別不能時**: `action='unknown'` + `confidence`を記録する（⑤参照、統計からは除外）。
 
 ## ⑤ confidenceとunknownの扱い（凍結規則）
 
@@ -83,6 +88,9 @@ player-studyのsituationは9種。docs/13（review-match）の6種とは**意図
 - **side確定**: 各ゲーム開始時にHUDのプレイヤータグ（P1/P2表示）でどちらがstudied_playerかを判定し、`side('p1'|'p2')`をゲーム単位で記録する
 - **opp_char確定**: `opp_char`はゲーム単位でラベリング時に目視確定する（カウンターピック対応。動画タイトルのキャラ名パースは`opp_chars_hint`としてヒント止まりにし、正としない）
 - **outcome判定基準**: studied_player視点で、読み合い直後にダメージまたは位置優位を取った側を`won`、取られた側を`lost`、優劣つかずを`even`とする。撃墜に至った場合は`kill=true`を別フラグで立てる（`outcome`とは独立。例: 不利な状況から一発逆転で撃墜しても`outcome='lost', kill=true`はあり得る）
+- **kill_confirmの境界（W2で凍結）**: `kill_confirm`は「撃墜を確定させた最後の読み合い1件」のみ。撃墜前の布石（お手玉・場外への運び）は`advantage`または`edgeguard`として別interactionにする
+- **edgeguardのoutcome（W2で凍結）**: 撃墜狙いのedgeguard（目安: 相手が撃墜%帯≒100%以上）で相手に生存されたら、ダメージを与えていても`even`。撃墜%帯未満のダメージ/位置目的のedgeguardは通常基準（ダメージを取れば`won`）
+- **リスポーン無敵絡み**: 相手の無敵時間に絡んで一方的に負けた場面はMarssの択が観測できず`action='unknown'`になりやすい。無理に埋めず`confidence`で正直に落とす
 
 ## ⑦ labels.json契約
 
@@ -130,8 +138,13 @@ labels.json           # Claude Codeセッションが書くラベリング結果
 
 ## ⑩ コンテキスト予算とトリアージ
 
-- **1セッション=1セットを目安**とする（詳細な予算試算はADR-0020 / `.context/design-player-study-draft.md`）
-- 窓のトリアージ順: **撃墜（スキャングリッドから目視特定。撃墜エフェクト・リスポーン演出が目印）→ 崖 → 着地 → 残り**。コンテキストが尽きたら残りは次セッションに回す（統計は蓄積型のため分割してよい）
+- **1セッション=1セットを目安**とする（詳細な予算試算はADR-0020 / `.context/design-player-study-draft.md`）。サブエージェント分業（スキャン2体+ゲーム別ラベリング）の場合は1セッションで1セット全体を回せる（W2実績）
+- 窓のトリアージ順: **撃墜（スキャングリッドから目視特定。撃墜エフェクト・リスポーン演出・ストック差オーバーレイが目印）→ 崖 → 着地 → 残り**。コンテキストが尽きたら残りは次セッションに回す（統計は蓄積型のため分割してよい）
+- **zoomパラメータ（W2で凍結した運用値）**:
+  - KO窓: ストック差オーバーレイ秒を`--t`に、`--before 5 --span 6`（[t-5, t+1]）。布石とKO確定を1バーストで捉えられる
+  - 技判別は撃墜ヒット時でなく**その0.3〜0.5秒前（カメラズーム前）のフレーム**を主眼にする
+  - 崖掴みを検知したら、掴み時刻+3〜4秒に後続バーストを1本追加。上がり6択の細分類が必要なら`--fps 20`で再取得
+  - フレームは間引き読み（3枚おき→決定的瞬間のみ密に）。全読みしない
 
 ## ⑪ 統計表示
 

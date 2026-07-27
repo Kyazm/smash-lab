@@ -34,7 +34,24 @@ export const ACTION_EASY_SLUGS = [
   "plasma_whip",
   "paralyzer",
 ] as const;
-export const ACTION_VALUES = [...ACTION_CATEGORIES, ...ACTION_EASY_SLUGS, "unknown"] as const;
+// 崖行動slug（docs/14 ③）。ledge_defense=本人の上がり択6分類、ledge_offense=ledge_trump/wait_center等。
+// W1時点でACTION_VALUESに漏れておりdocs/14③と不整合だった（W2パイロットで発覚、修正）。
+export const ACTION_LEDGE_SLUGS = [
+  "normal_getup",
+  "jump_getup",
+  "roll_getup",
+  "attack_getup",
+  "ledge_drop",
+  "ledge_stall",
+  "ledge_trump",
+  "wait_center",
+] as const;
+export const ACTION_VALUES = [
+  ...ACTION_CATEGORIES,
+  ...ACTION_EASY_SLUGS,
+  ...ACTION_LEDGE_SLUGS,
+  "unknown",
+] as const;
 export type ActionValue = (typeof ACTION_VALUES)[number];
 
 export const OUTCOMES = ["won", "lost", "even"] as const;
