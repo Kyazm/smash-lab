@@ -81,7 +81,7 @@ const ROSTER: Array<[string, ...string[]]> = [
   ["リドリー", "Ridley"],
   ["シモン", "Simon"],
   ["リヒター", "Richter"],
-  ["キングクルール", "King K. Rool", "K. Rool", "K Rool", "Krool"],
+  ["キングクルール", "King K. Rool", "K. Rool", "K Rool", "Krool", "K.ルール", "Kルール", "クルール", "キング・クルール"],
   ["しずえ", "Isabelle"],
   ["ガオガエン", "Incineroar", "Incin"],
   ["パックンフラワー", "Piranha Plant", "Plant", "PP"],
