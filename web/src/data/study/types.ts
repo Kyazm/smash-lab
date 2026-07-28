@@ -14,6 +14,7 @@ export const STUDY_SITUATIONS = [
   "ledge_offense",
   "ledge_defense",
   "landing",
+  "landing_trap",
   "edgeguard",
   "recovery",
   "kill_confirm",
@@ -27,6 +28,7 @@ export const STUDY_SITUATION_LABELS: Record<StudySituation, string> = {
   ledge_offense: "崖攻め",
   ledge_defense: "崖上がり",
   landing: "着地",
+  landing_trap: "着地狩り",
   edgeguard: "復帰阻止",
   recovery: "復帰",
   kill_confirm: "撃墜確定",
@@ -34,12 +36,13 @@ export const STUDY_SITUATION_LABELS: Record<StudySituation, string> = {
 
 /** 場面の1行説明（初出の専門用語に説明を添えるユーザー標準要求）。フィルタチップのtitle等で使う。 */
 export const STUDY_SITUATION_HINTS: Record<StudySituation, string> = {
-  neutral: "どちらも有利を取っていない読み合いの状態",
-  advantage: "自分が攻めている（相手を浮かせている等）状態",
-  disadvantage: "自分が攻められている（浮かされている等）状態",
+  neutral: "どちらも有利を取っていない対等な読み合いの状態",
+  advantage: "自分が攻めている状態（相手を浮かせてお手玉・追撃している等、読み合いの主導権が自分側）。ライン＝位置取りの話ではない",
+  disadvantage: "自分が攻められている状態（浮かされて着地や脱出を迫られている等）。こちらもラインの話ではない",
   ledge_offense: "相手が崖を掴んでいて、その上がりを狩りにいく側",
   ledge_defense: "自分が崖を掴んでいて、そこから上がる側",
-  landing: "空中から着地する／相手の着地を狩る場面",
+  landing: "自分が空中から着地する側の場面（狩られる側）",
+  landing_trap: "相手の着地を狩りにいく側の場面（2026-07以降のデータで分離。それ以前は「有利」に混在）",
   edgeguard: "場外に出た相手の復帰を阻止しにいく場面",
   recovery: "自分が場外から復帰する場面",
   kill_confirm: "撃墜を確定させた最後の読み合い1件（布石は含めない）",
@@ -154,9 +157,17 @@ export interface StudyInteraction {
   confidence: number | null;
   /** note-media バケット内の代表フレームのobject path（例 study/<video_id>/1.jpg）。 */
   frame_path: string | null;
+  /** ライン（位置取り）の有利/五分/不利。0012以降の任意記録で、旧データは null。 */
+  line: "adv" | "even" | "disadv" | null;
   note: string | null;
   created_at: string;
 }
+
+export const STUDY_LINE_LABELS: Record<"adv" | "even" | "disadv", string> = {
+  adv: "ライン有利",
+  even: "ライン五分",
+  disadv: "ライン不利",
+};
 
 /** interaction に動画メタをクライアントJOINした形（統計・ギャラリー表示の基本単位）。 */
 export interface StudyInteractionWithVideo extends StudyInteraction {

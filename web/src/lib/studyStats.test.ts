@@ -69,6 +69,7 @@ function row(o: RowOverrides = {}): StudyInteractionWithVideo {
     kill: o.kill ?? false,
     confidence: o.confidence === undefined ? 0.8 : o.confidence,
     frame_path: `study/${v.video_id}/${seq}.jpg`,
+    line: null,
     note: null,
     created_at: "2026-07-01T00:00:00Z",
     video: v,
@@ -208,11 +209,11 @@ describe("facets", () => {
     ]);
   });
 
-  it("場面別件数は9種すべてのキーを持つ", () => {
+  it("場面別件数は10種すべてのキーを持つ", () => {
     const counts = situationCounts([row({ situation: "landing" }), row({ situation: "landing" })]);
     expect(counts.landing).toBe(2);
     expect(counts.neutral).toBe(0);
-    expect(Object.keys(counts)).toHaveLength(9);
+    expect(Object.keys(counts)).toHaveLength(10);
   });
 });
 
@@ -285,14 +286,14 @@ describe("actionDistribution", () => {
 });
 
 describe("situationSummaries", () => {
-  it("9種すべて返し、除外件数を場面別に持つ", () => {
+  it("10種すべて返し、除外件数を場面別に持つ", () => {
     const counted = [
       row({ situation: "edgeguard", outcome: "won" }),
       row({ situation: "edgeguard", outcome: "lost" }),
     ];
     const excluded = [row({ situation: "edgeguard", action: "unknown", confidence: 0.4 })];
     const summaries = situationSummaries(counted, excluded);
-    expect(summaries).toHaveLength(9);
+    expect(summaries).toHaveLength(10);
     const eg = summaries.find((s) => s.situation === "edgeguard")!;
     expect(eg.n).toBe(2);
     expect(eg.excluded).toBe(1);

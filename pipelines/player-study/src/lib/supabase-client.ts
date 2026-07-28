@@ -54,6 +54,7 @@ export interface StudyInteractionInsert {
   kill: boolean;
   confidence: number;
   frame_path: string;
+  line: string | null;
   note: string | null;
 }
 

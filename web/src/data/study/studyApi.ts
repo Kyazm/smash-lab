@@ -17,7 +17,7 @@ const VIDEO_COLUMNS =
   "id,video_id,title,tournament,round,studied_player,studied_char,opp_player,played_on,status,needs_review";
 
 const INTERACTION_COLUMNS =
-  "id,video_ref,game_index,t_sec,opp_char,situation,sub_situation,action,action_detail,outcome,kill,confidence,frame_path,note,created_at";
+  "id,video_ref,game_index,t_sec,opp_char,situation,sub_situation,action,action_detail,outcome,kill,confidence,frame_path,line,note,created_at";
 
 /**
  * ラベリング完了（status='done'）の動画と、その interaction 全件を取得してクライアントJOINする。

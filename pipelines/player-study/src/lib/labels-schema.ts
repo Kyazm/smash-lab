@@ -9,6 +9,7 @@ export const SITUATIONS = [
   "ledge_offense",
   "ledge_defense",
   "landing",
+  "landing_trap",
   "edgeguard",
   "recovery",
   "kill_confirm",
@@ -58,6 +59,10 @@ export type ActionValue = (typeof ACTION_VALUES)[number];
 export const OUTCOMES = ["won", "lost", "even"] as const;
 export type Outcome = (typeof OUTCOMES)[number];
 
+// ライン（位置取り）の有利/五分/不利。situation（読み合いの主導権）とは独立の軸（0012で追加、任意）。
+export const LINE_VALUES = ["adv", "even", "disadv"] as const;
+export type LineValue = (typeof LINE_VALUES)[number];
+
 export const SIDES = ["p1", "p2"] as const;
 export type Side = (typeof SIDES)[number];
 
@@ -79,6 +84,7 @@ export interface LabelInteraction {
   action_detail?: string;
   kill?: boolean;
   opp_char?: string;
+  line?: LineValue;
   note?: string;
 }
 
@@ -167,6 +173,9 @@ function validateInteraction(
   }
   if (v.opp_char !== undefined && typeof v.opp_char !== "string") {
     errors.push(`${path}.opp_char: 文字列が必要です`);
+  }
+  if (v.line !== undefined && !LINE_VALUES.includes(v.line as LineValue)) {
+    errors.push(`${path}.line: ${LINE_VALUES.join("|")} のいずれか（受領: ${String(v.line)}）`);
   }
   if (v.note !== undefined && typeof v.note !== "string") {
     errors.push(`${path}.note: 文字列が必要です`);

@@ -39,7 +39,7 @@ description: >
 - `docs/14_player-study.md` の③④⑤⑥を最初にReadさせる（凍結基準）
 - zoomは自走させる: KO窓は `--before 5 --span 6`（オーバーレイ秒を--tに）。技判別は撃墜ヒットの0.3〜0.5秒前フレーム主眼。崖掴み検知時は+3〜4秒に後続バースト、上がり択の細分類が要るなら `--fps 20`
 - 読みは間引き（3枚おき→決定的瞬間のみ密）。150枚以内/zoom15回以内目安
-- ルール: kill_confirm=撃墜確定の最後の読み合い1件のみ / 撃墜狙いedgeguard(相手~100%+)で生存されたらeven / confidenceは正直に（<0.6は統計除外、無理に埋めない）/ 技slugは無理せず粗カテゴリ+action_detail
+- ルール: kill_confirm=撃墜確定の最後の読み合い1件のみ（場外=edgeguard+kill、ステージ上=kill_confirm）/ kill=trueはstudied_playerが取った撃墜のみ / 撃墜狙いedgeguard(相手~100%+)で生存されたらeven / 場外追撃見送り=edgeguard+wait_center / 着地狩り（攻め側）=landing_trap、自分の着地=landing / `line`（adv/even/disadv、位置取り）を可能な限り記録 / confidenceは正直に（<0.6は統計除外、無理に埋めない）/ 技slugは無理せず粗カテゴリ+action_detail / KO%はバースト実測を正とする
 - 出力: labels.json契約（⑦）に沿った断片を**workdirに `labels-g<N>.json` として書かせ**、最終メッセージは件数+問題点の短い要約のみ
 
 ### 4. 結合・監査・submit（メインセッション）

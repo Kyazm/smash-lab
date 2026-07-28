@@ -5,6 +5,7 @@ import { useState } from "react";
 import { formatTimeDisplay } from "../../lib/youtube";
 import { resolveFrameUrl } from "../../data/study/studyApi";
 import {
+  STUDY_LINE_LABELS,
   STUDY_OUTCOME_LABELS,
   studyActionLabel,
   type StudyInteractionWithVideo,
@@ -85,6 +86,11 @@ export function StudyGallery({
                 {r.kill ? (
                   <span className="rounded bg-accent-yellow/20 px-1.5 py-0.5 text-[10px] font-medium text-accent-yellow">
                     撃墜
+                  </span>
+                ) : null}
+                {r.line ? (
+                  <span className="rounded bg-surface-2 px-1.5 py-0.5 text-[10px] font-medium text-ink-secondary">
+                    {STUDY_LINE_LABELS[r.line]}
                   </span>
                 ) : null}
                 <span className="ml-auto font-frame text-[10px] tabular-nums text-ink-muted">

@@ -103,6 +103,7 @@ async function main(): Promise<void> {
       kill: it.kill ?? false,
       confidence: it.confidence,
       frame_path: objectPath,
+      line: it.line ?? null,
       note: it.note ?? null,
     });
   }

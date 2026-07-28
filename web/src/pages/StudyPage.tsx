@@ -100,9 +100,16 @@ function Glossary() {
         <div>
           <dt className="font-medium text-ink-primary">場面（9種）</dt>
           <dd className="text-ink-muted">
-            {STUDY_SITUATIONS.map((s) => `${STUDY_SITUATION_LABELS[s]}=${STUDY_SITUATION_HINTS[s]}`).join(
-              " / ",
-            )}
+            <ul className="mt-1 space-y-1">
+              {STUDY_SITUATIONS.map((s) => (
+                <li key={s}>
+                  <span className="font-medium text-ink-secondary">
+                    {STUDY_SITUATION_LABELS[s]}
+                  </span>
+                  ＝{STUDY_SITUATION_HINTS[s]}
+                </li>
+              ))}
+            </ul>
           </dd>
         </div>
       </dl>
@@ -288,9 +295,17 @@ function StudyPageOwner() {
               件
             </span>
             <span className="text-ink-muted">
-              判別不能・低確度（確度&lt;{MIN_CONFIDENCE}）{" "}
-              <span className="font-frame tabular-nums">{excluded.length}</span>件
-              {includeExcluded ? "（分母に含めて表示中）" : "（分母から除外中）"}
+              除外{" "}
+              <span className="font-frame tabular-nums">{excluded.length}</span>件（内訳:
+              行動を特定できず{" "}
+              <span className="font-frame tabular-nums">
+                {excluded.filter((it) => it.action === "unknown").length}
+              </span>
+              件・確度&lt;{MIN_CONFIDENCE}{" "}
+              <span className="font-frame tabular-nums">
+                {excluded.filter((it) => it.action !== "unknown").length}
+              </span>
+              件）{includeExcluded ? "→ いま分母に含めて表示中" : ""}
             </span>
             <label className="ml-auto inline-flex min-h-11 cursor-pointer items-center gap-2 text-ink-secondary">
               <input

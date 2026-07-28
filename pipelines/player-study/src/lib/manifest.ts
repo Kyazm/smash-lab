@@ -68,6 +68,7 @@ export function buildOutputContract(): unknown {
           kill: "boolean（任意。撃墜を取ったか）",
           confidence: "number 0.0〜1.0",
           opp_char: "string（任意。ゲーム値を上書きしたい場合）",
+          line: "adv | even | disadv（任意。ライン=位置取りの有利/五分/不利。situationとは独立の軸）",
           frame: "string（必須。バースト内フレームの相対パス。例: bursts/t123/frame_015.jpg）",
           note: "string（任意）",
         },

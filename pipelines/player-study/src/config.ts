@@ -29,7 +29,9 @@ export const BROWSER_USER_AGENT =
 export const REQUEST_DELAY_MS = 2000; // 1リクエスト2秒以上あける
 
 // ---- ダウンロード ----
-export const MAX_HEIGHT = 480; // yt-dlp: bv*[height<=480]+ba/b[height<=480]/best
+// 720p試験（2026-07-27 ユーザーレビュー）: 空中技の個別判別が480pで不可能と実測されたため引き上げ。
+// DL容量は2-3倍になる。1セット実測して判別精度が改善しなければ480に戻す。
+export const MAX_HEIGHT = 720;
 
 // ---- スキャンリール（場面窓の位置特定専用。技の判別はしない）----
 export const SCAN_FPS = 1;

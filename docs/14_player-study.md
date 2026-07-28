@@ -27,6 +27,9 @@ player-studyのsituationは9種。docs/13（review-match）の6種とは**意図
 | `edgeguard` | `edgeguard` | 同じ |
 | `recovery` | `recovery` | 同じ |
 | `kill_confirm` | なし（advantageに内包） | 撃墜起点の行動（confirm技〜撃墜技）を独立集計したいため新設 |
+| `landing_trap` | なし（advantageに内包） | 攻め側の着地狩りを独立集計するため0012で追加（ledge_offense/defenseと同じ攻守分離。`landing`=自分が着地する側、`landing_trap`=相手の着地を狩る側）。0012以前のデータでは着地狩りはadvantageに混在 |
+
+**ライン（0012で追加）**: interactionに任意フィールド`line`（`adv`/`even`/`disadv`）を持てる。ライン＝ステージ上の位置取りの有利/五分/不利で、situation（読み合いの主導権）とは独立の軸。判別が容易（画面上の位置関係）なのでラベリング時に可能な限り記録する。0012以前のデータはnull。
 
 `habit_tags`（docs/13のhabit_tag語彙、15語）とも別語彙。両者を混同しない。
 
@@ -108,6 +111,7 @@ player-studyのsituationは9種。docs/13（review-match）の6種とは**意図
     interactions: [{
       t_sec, situation, sub_situation?, action, action_detail?,
       outcome('won'|'lost'|'even'), kill?, confidence,
+      line?,   -- 'adv'|'even'|'disadv'（ライン=位置取り。0012で追加、任意だが可能な限り記録）
       frame,   -- バースト内相対パス（zoomで生成したフレームファイル名）
       note?
     }]
