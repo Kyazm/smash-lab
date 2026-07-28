@@ -22,6 +22,7 @@ const OUTCOME_CLASS: Record<string, string> = {
 
 function FrameImage({ path, alt }: { path: string | null; alt: string }) {
   const [failed, setFailed] = useState(false);
+  const [loaded, setLoaded] = useState(false);
   // Storage の public URL 解決は getSupabaseClient() 経由。未設定環境では例外になるので握り潰す。
   let url: string | null = null;
   try {
@@ -32,18 +33,29 @@ function FrameImage({ path, alt }: { path: string | null; alt: string }) {
   if (!url || failed) {
     return (
       <div className="flex aspect-video w-full items-center justify-center rounded bg-surface-2 text-[10px] text-ink-muted">
-        フレーム画像なし
+        画像なし
       </div>
     );
   }
+  // 読み込み中はパルスするプレースホルダを重ね、「読み込み中なのか無いのか」を区別できるようにする
   return (
-    <img
-      src={url}
-      alt={alt}
-      loading="lazy"
-      onError={() => setFailed(true)}
-      className="aspect-video w-full rounded object-cover"
-    />
+    <div className="relative aspect-video w-full overflow-hidden rounded bg-surface-2">
+      {!loaded ? (
+        <div className="absolute inset-0 flex animate-pulse items-center justify-center text-[10px] text-ink-muted">
+          読み込み中…
+        </div>
+      ) : null}
+      <img
+        src={url}
+        alt={alt}
+        loading="lazy"
+        onLoad={() => setLoaded(true)}
+        onError={() => setFailed(true)}
+        className={`h-full w-full object-cover transition-opacity duration-200 ${
+          loaded ? "opacity-100" : "opacity-0"
+        }`}
+      />
+    </div>
   );
 }
 

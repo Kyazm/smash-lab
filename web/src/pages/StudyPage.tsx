@@ -235,10 +235,15 @@ function StudyPageOwner() {
             {/* YT API はマウント先divをiframeに置換しclassNameを引き継がないため、
                 生成されたiframeを親の aspect-video に合わせる（子セレクタで上書き）。
                 高さは画面を占有しすぎないよう 40vh を上限にする。 */}
-            <div
-              ref={hostRef}
-              className="mx-auto aspect-video max-h-[40vh] w-full max-w-2xl [&>iframe]:h-full [&>iframe]:w-full"
-            />
+            <div className="relative mx-auto aspect-video max-h-[40vh] w-full max-w-2xl">
+              {/* プレイヤー起動前のプレースホルダ（iframeが差し替わるまで見えている） */}
+              {!player ? (
+                <div className="absolute inset-0 flex animate-pulse items-center justify-center rounded bg-surface-2 text-xs text-ink-muted">
+                  動画プレイヤーを読み込み中…
+                </div>
+              ) : null}
+              <div ref={hostRef} className="h-full w-full [&>iframe]:h-full [&>iframe]:w-full" />
+            </div>
             <button
               type="button"
               onClick={() => setActive(null)}
