@@ -93,8 +93,12 @@ function Glossary() {
         <div>
           <dt className="font-medium text-ink-primary">勝敗（勝ち／負け／五分）</dt>
           <dd className="text-ink-muted">
-            研究対象プレイヤー視点で、その読み合い直後にダメージか位置の優位を取ったかどうか。
-            撃墜したかどうかは別カウント（不利な状況からの一発逆転は「負け＋撃墜」もありうる）。
+            <span className="font-medium text-ink-secondary">
+              セットや試合の勝敗ではなく、読み合い1回ごとの勝敗
+            </span>
+            。研究対象プレイヤー視点で、
+            その読み合いの直後にダメージか位置の優位を取ったら「勝ち」、取られたら「負け」、互角なら「五分」。
+            撃墜したかどうかは別バッジ（不利な状況からの一発逆転は「負け＋撃墜」もありうる）。
           </dd>
         </div>
         <div>
@@ -318,35 +322,39 @@ function StudyPageOwner() {
             </label>
           </div>
 
-          <Section
-            title="場面別サマリ"
-            aside={
-              <span className="text-[10px] text-ink-muted">
-                行をタップでその場面に絞り込み（{REFERENCE_N_THRESHOLD}件未満は参考値）
-              </span>
-            }
-          >
-            <SituationSummaryList
-              summaries={summaries}
-              selected={filter.situation}
-              onSelect={(s) => setFilter((f) => ({ ...f, situation: s }))}
-            />
-          </Section>
+          {/* 場面別サマリ（目次）と行動分布（選択場面の内訳）は親子関係。
+              縦長対策で lg 以上は横並び2カラムにする（モバイルは従来どおり縦積み）。 */}
+          <div className="grid items-start gap-3 lg:grid-cols-2">
+            <Section
+              title="場面別サマリ"
+              aside={
+                <span className="text-[10px] text-ink-muted">
+                  行をタップで右の行動分布を絞り込み（{REFERENCE_N_THRESHOLD}件未満は参考値）
+                </span>
+              }
+            >
+              <SituationSummaryList
+                summaries={summaries}
+                selected={filter.situation}
+                onSelect={(s) => setFilter((f) => ({ ...f, situation: s }))}
+              />
+            </Section>
 
-          <Section
-            title={`行動分布 — ${
-              filter.situation ? STUDY_SITUATION_LABELS[filter.situation] : "全場面"
-            }（分母 ${distribution.total}件）`}
-            aside={
-              <span className="text-[10px] text-ink-muted">行動をタップでスクショと動画へ</span>
-            }
-          >
-            <ActionDistributionBars
-              distribution={distribution}
-              selectedAction={selectedAction}
-              onSelect={setSelectedAction}
-            />
-          </Section>
+            <Section
+              title={`行動分布 — ${
+                filter.situation ? STUDY_SITUATION_LABELS[filter.situation] : "全場面"
+              }（分母 ${distribution.total}件）`}
+              aside={
+                <span className="text-[10px] text-ink-muted">行動をタップでスクショと動画へ</span>
+              }
+            >
+              <ActionDistributionBars
+                distribution={distribution}
+                selectedAction={selectedAction}
+                onSelect={setSelectedAction}
+              />
+            </Section>
+          </div>
 
           {selectedAction ? (
             <Section
