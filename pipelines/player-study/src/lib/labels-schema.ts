@@ -29,6 +29,7 @@ export const ACTION_CATEGORIES = [
 export const ACTION_EASY_SLUGS = [
   "zair",
   "down_smash",
+  "up_smash",
   "boost_kick",
   "flip_jump",
   "plasma_whip",

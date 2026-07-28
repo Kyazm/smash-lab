@@ -1,7 +1,7 @@
 // zoom: prep 済み動画から指定時刻の密バーストを抽出する（ラベリング用。実時刻保持）。
 //   npm run zoom -- <video_id> --t <sec> [--fps 10 --span 4 --before 2]
 // 出力: <workdir>/bursts/t<sec>/frame_NNN.jpg + index.json。動画が削除済み(submit後)ならエラー案内。
-import { access, writeFile } from "node:fs/promises";
+import { access, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { BURST_BEFORE, BURST_FPS, BURST_SPAN, WORK_ROOT } from "./config.js";
 import { extractBurst } from "./lib/video.js";
@@ -65,6 +65,8 @@ async function main(): Promise<void> {
     `[zoom] ${args.videoId} t=${args.t}s → [${start}, ${start + args.span}]s @${args.fps}fps → bursts/${label}/`,
   );
 
+  // 同一 --t の再実行時に前回の残骸フレームが index.json と食い違うのを防ぐ（W4実測の誤読事例あり）
+  await rm(burstDir, { recursive: true, force: true });
   const frames = await extractBurst(videoPath, start, args.span, args.fps, burstDir);
   const index = {
     video_id: args.videoId,

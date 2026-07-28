@@ -1,6 +1,7 @@
 // 全ページ共通ヘッダー（ADR対象: ヘッダー統一）。左: BrandMark（"/"へ）、右: ナビ。
-// 旧CharacterListPageのナビ（自キャラ/横断検索/承認待ち/AIレビュー/戦績/ライブラリ）をそのまま移植し、
-// NavLinkで現在地をアクティブ表示（下線）する。ゲスト時はオーナー専用リンク（承認待ち・AIレビュー）を非表示。
+// 旧CharacterListPageのナビ（自キャラ/横断検索/承認待ち/AIレビュー/研究/戦績/ライブラリ）をそのまま移植し、
+// NavLinkで現在地をアクティブ表示（下線）する。
+// ゲスト時はオーナー専用リンク（承認待ち・AIレビュー・研究）を非表示。
 import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { notesProvider } from "../data/notes";
@@ -90,6 +91,17 @@ export function AppHeader() {
               }
             >
               AIレビュー
+            </NavLink>
+          ) : null}
+          {/* プレイヤー研究もオーナー専用（0011のRLSがselectもis_writer()限定でゲストは読めない）。 */}
+          {!isGuest ? (
+            <NavLink
+              to="/study"
+              className={({ isActive }) =>
+                `${SECONDARY_NAV_CLASS} ${isActive ? SECONDARY_ACTIVE_NAV_CLASS : ""}`
+              }
+            >
+              研究
             </NavLink>
           ) : null}
           {/* 戦績ダッシュボードはゲストにも表示（自分のローカル戦績を試せる。個人情報漏洩はない）。 */}

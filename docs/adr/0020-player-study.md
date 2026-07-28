@@ -20,3 +20,4 @@ Status: Accepted (2026-07-25)
 - 行動辞書がW2パイロット後に変わりうる。W1はmigration/pipeline実装のみでラベリングはW2から開始するため、辞書変更による既存ラベルの再分類は発生しない設計にしている
 - review-matchと同じく、Macで自分がClaude Codeセッションを開いた時にだけ進む非同期UX（自動化ではない）
 - **W2パイロット結果（2026-07-27、2セット65 interactions、docs/14 ③④を凍結）**: situation 9種・outcome/kill判定・KO特定（ストック差オーバーレイ+GAME!目視）は10fps/480pで安定。個別技slugはconf>=0.6が全体の約31%にとどまり、空中技（nair/bair/uair）の個別slug昇格は否決、up_smashのみ追加。崖上がり6分類は2セットで2件しか発生せず（トップレベルの崖攻防は復帰技への空中迎撃=edgeguardが主体）、統計主軸はsituation×outcome×killとする。W1の契約バグ（docs/14③の崖行動slugがACTION_VALUES漏れ）をパイロットで発見しACTION_LEDGE_SLUGSとして修正。yt-dlpのSABR 403対策（player_client=default,androidフォールバック）をvideo.tsへ追加
+- **W4初期バッチ完了（2026-07-27、10セット・493 interactions投入）**: 相手10キャラ（シュルク/スネーク/G&W/ロックマン/ベヨネッタ/カムイ/ソニック/R.O.B.×2/K.ルール/カズヤ）、Marssセット成績6勝4敗で勝敗両面のデータを確保。分業ワークフロー（スキャン2-3体+ゲーム別ラベラー、結果はworkdirファイル退避）を.claude/skills/smash-player-studyに手順書化。W4で発見・修正: up_smash slugのスキーマ収録漏れ、zoom再実行時の残骸フレーム混入、Web側PostgREST 1000行制限のページング。運用規則の明文化はdocs/14⑥⑩に追記

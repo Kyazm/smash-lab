@@ -17,6 +17,7 @@ import { ArticlePage } from "./pages/ArticlePage";
 import { StatsPage } from "./pages/StatsPage";
 import { ReviewListPage } from "./pages/ReviewListPage";
 import { ReviewDetailPage } from "./pages/ReviewDetailPage";
+import { StudyPage } from "./pages/StudyPage";
 
 // 認証必須ルート群のレイアウト。AuthGate 配下で MainCharacterProvider を有効化し、Outlet に子ルートを描画する。
 function AuthLayout() {
@@ -44,6 +45,7 @@ export function App() {
           <Route path="/proposals" element={<ProposalsPage />} />
           <Route path="/review" element={<ReviewListPage />} />
           <Route path="/review/:reviewId" element={<ReviewDetailPage />} />
+          <Route path="/study" element={<StudyPage />} />
           <Route path="/c/:slug" element={<CharacterPage />} />
           <Route path="/stats" element={<StatsPage />} />
           <Route path="/library" element={<LibraryIndexPage />} />
