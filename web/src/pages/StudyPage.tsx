@@ -215,22 +215,27 @@ function StudyPageOwner() {
 
   return (
     <PageShell>
-      {/* 動画ジャンプ用プレイヤー。カードをタップするまでは場所を取らない。 */}
+      {/* 動画ジャンプ用プレイヤー。カードをタップするまでは場所を取らない。
+          ギャラリーを深くスクロールした位置からタップしても必ず画面の上に見えるよう、
+          sticky でなく fixed で画面上部に固定する（スクロール位置・マウント順に依存しない）。 */}
       {active ? (
-        <div className="sticky top-0 z-20 -mx-4 mb-3 bg-surface-0 px-4 pb-3">
-          {/* YT API はマウント先divをiframeに置換しclassNameを引き継がないため、
-              生成されたiframeを親の aspect-video に合わせる（子セレクタで上書き）。 */}
-          <div
-            ref={hostRef}
-            className="aspect-video w-full [&>iframe]:h-full [&>iframe]:w-full"
-          />
-          <button
-            type="button"
-            onClick={() => setActive(null)}
-            className="mt-1 min-h-9 text-xs text-ink-muted hover:text-ink-primary"
-          >
-            プレイヤーを閉じる
-          </button>
+        <div className="fixed inset-x-0 top-0 z-40 border-b border-border-subtle bg-surface-0 shadow-lg">
+          <div className="mx-auto max-w-5xl px-4 pb-2 pt-2">
+            {/* YT API はマウント先divをiframeに置換しclassNameを引き継がないため、
+                生成されたiframeを親の aspect-video に合わせる（子セレクタで上書き）。
+                高さは画面を占有しすぎないよう 40vh を上限にする。 */}
+            <div
+              ref={hostRef}
+              className="mx-auto aspect-video max-h-[40vh] w-full max-w-2xl [&>iframe]:h-full [&>iframe]:w-full"
+            />
+            <button
+              type="button"
+              onClick={() => setActive(null)}
+              className="mt-1 min-h-9 text-xs text-ink-muted hover:text-ink-primary"
+            >
+              プレイヤーを閉じる
+            </button>
+          </div>
         </div>
       ) : null}
 

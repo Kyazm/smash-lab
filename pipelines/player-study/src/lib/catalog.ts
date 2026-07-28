@@ -75,13 +75,14 @@ export function parsePagination(html: string): Pagination | null {
   };
 }
 
-/** 収集リクエストの URL を組み立てる（純関数）。 */
-export function buildCatalogUrl(player: string, char: string, page: number): string {
+/** 収集リクエストの URL を組み立てる（純関数）。char2 指定時は相手キャラ（character2）でも絞り込む。 */
+export function buildCatalogUrl(player: string, char: string, page: number, char2?: string): string {
   const params = new URLSearchParams({
     player1: player,
     character1: char,
     page_id: String(page),
   });
+  if (char2) params.set("character2", char2);
   return `${SMASH_TUBE_BASE}?${params.toString()}`;
 }
 
@@ -107,9 +108,9 @@ export async function fetchCatalogPage(
   player: string,
   char: string,
   page: number,
-  opts: { cacheDir: string; delayMs?: number },
+  opts: { cacheDir: string; delayMs?: number; char2?: string },
 ): Promise<FetchResult> {
-  const url = buildCatalogUrl(player, char, page);
+  const url = buildCatalogUrl(player, char, page, opts.char2);
   const cachePath = join(opts.cacheDir, `${cacheKey(url)}.html`);
 
   try {

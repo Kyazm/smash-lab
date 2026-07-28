@@ -18,6 +18,7 @@ import { insertCatalog, type StudyVideoInsert, type SupabaseConfig } from "./lib
 interface CollectArgs {
   player: string;
   char: string;
+  char2: string | null;
   pages: number;
   dry: boolean;
 }
@@ -37,7 +38,7 @@ function parseArgs(argv: string[]): CollectArgs {
   const pagesRaw = valueOf("--pages");
   const pages = pagesRaw ? Math.max(1, Number.parseInt(pagesRaw, 10)) : 1;
   if (!Number.isFinite(pages)) throw new Error("--pages は整数で指定してください");
-  return { player, char, pages, dry: argv.includes("--dry") };
+  return { player, char, char2: valueOf("--char2"), pages, dry: argv.includes("--dry") };
 }
 
 function sanitize(s: string): string {
@@ -77,7 +78,8 @@ async function main(): Promise<void> {
   const args = parseArgs(process.argv.slice(2));
   const studiedChar = normalizeChar(args.char);
   console.log(
-    `[collect] player=${args.player} char="${args.char}"→"${studiedChar}" pages=${args.pages} dry=${args.dry}`,
+    `[collect] player=${args.player} char="${args.char}"→"${studiedChar}"` +
+      `${args.char2 ? ` char2="${args.char2}"` : ""} pages=${args.pages} dry=${args.dry}`,
   );
 
   await mkdir(CATALOG_CACHE_DIR, { recursive: true });
@@ -88,7 +90,10 @@ async function main(): Promise<void> {
   for (let page = 1; page <= Math.min(args.pages, totalPages); page++) {
     let fetched;
     try {
-      fetched = await fetchCatalogPage(args.player, args.char, page, { cacheDir: CATALOG_CACHE_DIR });
+      fetched = await fetchCatalogPage(args.player, args.char, page, {
+        cacheDir: CATALOG_CACHE_DIR,
+        char2: args.char2 ?? undefined,
+      });
     } catch (e) {
       console.error(`[collect] page ${page} 取得失敗: ${(e as Error).message}`);
       if (page === 1) {
